@@ -1927,7 +1927,7 @@ class HippocampalRAG:
 
 **Deliverables**:
 - [ ] Documentation website live
-- [ ] URL: https://yourusername.github.io/Hippocampal-CA1-LAM
+- [ ] URL: https://neuron7x.github.io/Hippocampal-CA1-LAM
 - [ ] Auto-updating with releases
 
 **Exit**: Website deployed and accessible

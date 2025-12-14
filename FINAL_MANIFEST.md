@@ -264,7 +264,7 @@ Compressed (.tar.gz): ~105 KB (code only)
    git add .
    git commit -m "Initial release v2.0"
    git branch -M main
-   git remote add origin https://github.com/yourusername/Hippocampal-CA1-LAM.git
+   git remote add origin https://github.com/neuron7x/Hippocampal-CA1-LAM.git
    git push -u origin main
    ```
 
@@ -288,8 +288,8 @@ Compressed (.tar.gz): ~105 KB (code only)
 
 ## SUPPORT
 
-- **Issues**: https://github.com/yourusername/Hippocampal-CA1-LAM/issues
-- **Discussions**: https://github.com/yourusername/Hippocampal-CA1-LAM/discussions
+- **Issues**: https://github.com/neuron7x/Hippocampal-CA1-LAM/issues
+- **Discussions**: https://github.com/neuron7x/Hippocampal-CA1-LAM/discussions
 - **Email**: your.email@example.com
 
 ---

@@ -29,7 +29,7 @@ authors:
     given-names: "Name"
     email: your.email@example.com
     orcid: "https://orcid.org/0000-0000-0000-0000"
-repository-code: "https://github.com/yourusername/Hippocampal-CA1-LAM"
+repository-code: "https://github.com/neuron7x/Hippocampal-CA1-LAM"
 license: MIT
 keywords:
   - hippocampus

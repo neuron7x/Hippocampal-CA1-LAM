@@ -91,7 +91,7 @@ All parameters from peer-reviewed sources:
   author = {Your Name},
   year = {2025},
   doi = {10.5281/zenodo.XXXXXXX},
-  url = {https://github.com/yourusername/Hippocampal-CA1-LAM}
+  url = {https://github.com/neuron7x/Hippocampal-CA1-LAM}
 }
 ```
 
@@ -101,7 +101,7 @@ MIT License - see [LICENSE](LICENSE)
 
 ## Contact
 
-- Issues: [GitHub Issues](https://github.com/yourusername/Hippocampal-CA1-LAM/issues)
+- Issues: [GitHub Issues](https://github.com/neuron7x/Hippocampal-CA1-LAM/issues)
 - Email: your.email@example.com
 """
 
@@ -121,7 +121,7 @@ This project adheres to a [Code of Conduct](CODE_OF_CONDUCT.md). By participatin
 
 ### Reporting Bugs
 
-1. Check [existing issues](https://github.com/yourusername/Hippocampal-CA1-LAM/issues)
+1. Check [existing issues](https://github.com/neuron7x/Hippocampal-CA1-LAM/issues)
 2. Create new issue with:
    - Clear title
    - Steps to reproduce
@@ -131,7 +131,7 @@ This project adheres to a [Code of Conduct](CODE_OF_CONDUCT.md). By participatin
 
 ### Suggesting Features
 
-1. Check [discussions](https://github.com/yourusername/Hippocampal-CA1-LAM/discussions)
+1. Check [discussions](https://github.com/neuron7x/Hippocampal-CA1-LAM/discussions)
 2. Open feature request with:
    - Use case description
    - Proposed API
@@ -143,7 +143,7 @@ This project adheres to a [Code of Conduct](CODE_OF_CONDUCT.md). By participatin
 
 ```bash
 # Fork and clone
-git clone https://github.com/yourusername/Hippocampal-CA1-LAM.git
+git clone https://github.com/neuron7x/Hippocampal-CA1-LAM.git
 cd Hippocampal-CA1-LAM
 
 # Create branch
@@ -259,7 +259,7 @@ hippocampal_ca1_lam/
 
 ## Questions?
 
-- Open a [Discussion](https://github.com/yourusername/Hippocampal-CA1-LAM/discussions)
+- Open a [Discussion](https://github.com/neuron7x/Hippocampal-CA1-LAM/discussions)
 - Email: your.email@example.com
 
 Thank you for contributing! 🧠

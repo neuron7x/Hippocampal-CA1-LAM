@@ -373,7 +373,7 @@ setup(
     description="Production-grade CA1 hippocampus model for AI memory and neuroscience",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/Hippocampal-CA1-LAM",
+    url="https://github.com/neuron7x/Hippocampal-CA1-LAM",
     packages=find_packages(exclude=["tests", "examples", "docs"]),
     classifiers=[
         "Development Status :: 5 - Production/Stable",

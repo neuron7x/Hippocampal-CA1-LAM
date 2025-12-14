@@ -156,7 +156,7 @@ All parameters from peer-reviewed sources:
   author = {Your Name},
   year = {2025},
   doi = {10.5281/zenodo.XXXXXXX},
-  url = {https://github.com/yourusername/Hippocampal-CA1-LAM}
+  url = {https://github.com/neuron7x/Hippocampal-CA1-LAM}
 }
 ```
 
@@ -166,5 +166,5 @@ MIT License - see [LICENSE](LICENSE)
 
 ## Contact
 
-- Issues: [GitHub Issues](https://github.com/yourusername/Hippocampal-CA1-LAM/issues)
+- Issues: [GitHub Issues](https://github.com/neuron7x/Hippocampal-CA1-LAM/issues)
 - Email: your.email@example.com

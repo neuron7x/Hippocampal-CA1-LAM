@@ -368,7 +368,7 @@ hippocampal_ca1_lam/
   year = {2025},
   version = {2.0.0},
   doi = {10.5281/zenodo.XXXXXXX},
-  url = {https://github.com/yourusername/Hippocampal-CA1-LAM}
+  url = {https://github.com/neuron7x/Hippocampal-CA1-LAM}
 }
 ```
 

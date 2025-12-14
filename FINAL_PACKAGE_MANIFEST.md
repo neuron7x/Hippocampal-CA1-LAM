@@ -495,8 +495,8 @@ bash deploy_to_github.sh
 - Makefile help: `make help`
 
 **GitHub**:
-- Issues: https://github.com/yourusername/Hippocampal-CA1-LAM/issues
-- Discussions: https://github.com/yourusername/Hippocampal-CA1-LAM/discussions
+- Issues: https://github.com/neuron7x/Hippocampal-CA1-LAM/issues
+- Discussions: https://github.com/neuron7x/Hippocampal-CA1-LAM/discussions
 
 ---
 
