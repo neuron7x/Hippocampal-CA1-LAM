@@ -68,4 +68,4 @@ Bidirectional and hidden Unicode characters can:
 
 ---
 
-*Generated during docs-ci-linkcheck fixes*
+*Generated during docs-ci-linkcheck fixes (Phase 7.2 Documentation Audit)*
