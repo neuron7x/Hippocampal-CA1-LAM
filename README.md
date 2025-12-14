@@ -137,7 +137,7 @@ python examples/demo_unified_weights.py
 ## Scientific Foundation
 
 All parameters from peer-reviewed sources:
-- **13 DOI references** (see [Bibliography](#bibliography))
+- **13 DOI references** (see [Bibliography](docs/BIBLIOGRAPHY.md))
 - **58,065 cells** (Pachicano Nature Comm 2025)
 - **Ca²⁺ thresholds** θ_d=1.0μM, θ_p=2.0μM (Graupner PNAS 2012)
 

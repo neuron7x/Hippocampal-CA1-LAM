@@ -13,7 +13,7 @@
 
 Instead:
 
-1. Email: security@yourproject.com
+1. Email: Report via GitHub Issues (mark as security vulnerability) - TBD: dedicated security email
 2. Include:
    - Description of vulnerability
    - Steps to reproduce

@@ -5,6 +5,30 @@
     },
     {
       "pattern": "^https://doi\\.org/"
+    },
+    {
+      "pattern": "^https://img\\.shields\\.io/"
+    },
+    {
+      "pattern": "^https://www\\.python\\.org/"
+    },
+    {
+      "pattern": "^https://keepachangelog\\.com/"
+    },
+    {
+      "pattern": "^https://semver\\.org/"
+    },
+    {
+      "pattern": "^https://opensource\\.org/"
+    },
+    {
+      "pattern": "^https://www\\.conventionalcommits\\.org/"
+    },
+    {
+      "pattern": "^https://git-scm\\.com/"
+    },
+    {
+      "pattern": "^https://www\\.contributor-covenant\\.org/"
     }
   ],
   "replacementPatterns": [
@@ -13,5 +37,7 @@
       "replacement": "https://github.com/neuron7x/Hippocampal-CA1-LAM/blob/main/"
     }
   ],
-  "aliveStatusCodes": [200, 206, 429]
+  "aliveStatusCodes": [200, 206, 403, 429],
+  "timeout": "10s",
+  "retryCount": 2
 }
