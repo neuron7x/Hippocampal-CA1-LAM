@@ -4,21 +4,34 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+permissions:
+  contents: read
+
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check PR links to Phase Issue
+      - name: Check PR references Phase Issue
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
         run: |
-          if ! grep -q "Closes #" "$GITHUB_EVENT_PATH" && ! grep -q "Phase:" "$GITHUB_EVENT_PATH"; then
-            echo "⚠️  PR should reference a Phase issue from Evolution Plan"
+          if [[ -z "$PR_BODY" ]]; then
+            echo "⚠️  PR has no body description"
             exit 1
           fi
+          if ! echo "$PR_BODY" | grep -qE "(Closes #[0-9]+|Phase:)" ; then
+            echo "⚠️  PR should reference a Phase issue from Evolution Plan (e.g., 'Closes #123' or 'Phase: X.Y')"
+            exit 1
+          fi
+          echo "✓ PR references a Phase issue or section"
 
-      - name: Validate checklist completion
+      - name: Verify PR template exists
         run: |
-          if grep -q "\- \[ \]" .github/PULL_REQUEST_TEMPLATE.md; then
-            echo "✓ Checklist template found"
+          if [[ -f .github/PULL_REQUEST_TEMPLATE.md ]]; then
+            echo "✓ PR template found"
+          else
+            echo "⚠️  PR template not found"
+            exit 1
           fi
