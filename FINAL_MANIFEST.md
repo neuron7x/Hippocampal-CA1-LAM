@@ -289,7 +289,6 @@ Compressed (.tar.gz): ~105 KB (code only)
 ## SUPPORT
 
 - **Issues**: https://github.com/neuron7x/Hippocampal-CA1-LAM/issues
-- **Email**: your.email@example.com
 
 ---
 

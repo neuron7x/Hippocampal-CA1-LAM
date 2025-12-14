@@ -368,8 +368,7 @@ with open("README.md", "r", encoding="utf-8") as f:
 setup(
     name="Hippocampal-CA1-LAM",
     version="2.0.0",
-    author="Your Name",
-    author_email="your.email@example.com",
+    author="neuron7x",
     description="Production-grade CA1 hippocampus model for AI memory and neuroscience",
     long_description=long_description,
     long_description_content_type="text/markdown",

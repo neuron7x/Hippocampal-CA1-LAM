@@ -149,6 +149,5 @@ hippocampal_ca1_lam/
 ## Questions?
 
 - Open an [Issue](https://github.com/neuron7x/Hippocampal-CA1-LAM/issues)
-- Email: your.email@example.com
 
 Thank you for contributing! 🧠

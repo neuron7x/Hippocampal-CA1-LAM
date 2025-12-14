@@ -364,10 +364,9 @@ hippocampal_ca1_lam/
 ```bibtex
 @software{hippocampal_ca1_lam_2025,
   title = {CA1 Hippocampus Framework v2.0},
-  author = {Your Name},
+  author = {neuron7x},
   year = {2025},
   version = {2.0.0},
-  doi = {10.5281/zenodo.XXXXXXX},
   url = {https://github.com/neuron7x/Hippocampal-CA1-LAM}
 }
 ```

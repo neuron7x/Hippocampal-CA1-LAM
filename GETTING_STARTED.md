@@ -336,7 +336,6 @@ python utils/create_release.py            # Створити реліз
 **Проблеми?**
 - GitHub Issues: https://github.com/neuron7x/Hippocampal-CA1-LAM/issues
 - Документація: `docs/`
-- Email: your.email@example.com
 
 **Питання про використання?**
 - GitHub Issues: https://github.com/neuron7x/Hippocampal-CA1-LAM/issues

@@ -88,9 +88,8 @@ All parameters from peer-reviewed sources:
 ```bibtex
 @software{hippocampal_ca1_lam_2025,
   title = {CA1 Hippocampus Framework v2.0},
-  author = {Your Name},
+  author = {neuron7x},
   year = {2025},
-  doi = {10.5281/zenodo.XXXXXXX},
   url = {https://github.com/neuron7x/Hippocampal-CA1-LAM}
 }
 ```
@@ -102,7 +101,6 @@ MIT License - see [LICENSE](LICENSE)
 ## Contact
 
 - Issues: [GitHub Issues](https://github.com/neuron7x/Hippocampal-CA1-LAM/issues)
-- Email: your.email@example.com
 """
 
 # ============================================================================
@@ -259,8 +257,7 @@ hippocampal_ca1_lam/
 
 ## Questions?
 
-- Open a [Discussion](https://github.com/neuron7x/Hippocampal-CA1-LAM/discussions)
-- Email: your.email@example.com
+- Open an [Issue](https://github.com/neuron7x/Hippocampal-CA1-LAM/issues)
 
 Thank you for contributing! 🧠
 """
@@ -300,7 +297,7 @@ This Code of Conduct applies within project spaces and in public spaces when rep
 
 ## Enforcement
 
-Instances of abusive behavior may be reported to project maintainers at your.email@example.com. All complaints will be reviewed and investigated.
+Instances of abusive behavior may be reported via [GitHub Issues](https://github.com/neuron7x/Hippocampal-CA1-LAM/issues). All complaints will be reviewed and investigated.
 
 ## Attribution
 
@@ -369,7 +366,7 @@ Last updated: December 14, 2025
 
 LICENSE = """MIT License
 
-Copyright (c) 2025 [Your Name]
+Copyright (c) 2025 neuron7x
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

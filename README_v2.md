@@ -384,10 +384,10 @@ To add new features:
 ```bibtex
 @software{hippocampal_ca1_lam_v2_2025,
   title = {CA1 Hippocampus v2.0: Unified Plasticity and Hierarchical Inference},
-  author = {[Your Name]},
+  author = {neuron7x},
   year = {2025},
   version = {2.0},
-  url = {[repository_url]}
+  url = {https://github.com/neuron7x/Hippocampal-CA1-LAM}
 }
 ```
 
