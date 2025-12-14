@@ -256,7 +256,7 @@ class SpectralStability:
         return is_stable, rho
 
 
-def create_ca1_network(layer_structure, seed=42):
+def create_ca1_network(layer_structure, seed=42, verbose=False):
     """
     Create CA1 network with laminar connectivity and spectral stability.
     
@@ -266,6 +266,8 @@ def create_ca1_network(layer_structure, seed=42):
         Layer structure object with cell positions
     seed : int, default=42
         Random seed
+    verbose : bool, default=False
+        Whether to print progress messages
         
     Returns
     -------
@@ -298,9 +300,10 @@ def create_ca1_network(layer_structure, seed=42):
     W_stable, rho_orig, scale_factor = stability.enforce_stability(W)
     network.W = W_stable
     
-    print(f"Network created: {network.n_neurons} neurons")
-    print(f"Original spectral radius: ρ(W) = {rho_orig:.6f}")
-    print(f"Scaled by factor: {scale_factor:.6f}")
-    print(f"Final spectral radius: ρ(W) = {stability.compute_spectral_radius(W_stable):.6f}")
+    if verbose:
+        print(f"Network created: {network.n_neurons} neurons")
+        print(f"Original spectral radius: ρ(W) = {rho_orig:.6f}")
+        print(f"Scaled by factor: {scale_factor:.6f}")
+        print(f"Final spectral radius: ρ(W) = {stability.compute_spectral_radius(W_stable):.6f}")
     
     return network, stability
