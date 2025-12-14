@@ -11,10 +11,16 @@
 
 **DO NOT** open public issues for security vulnerabilities.
 
-Instead:
+Instead, use one of the following methods:
 
-1. Email: Report via GitHub Issues (mark as security vulnerability) - TBD: dedicated security email
-2. Include:
+1. **Preferred**: If this repository has GitHub Security Advisories enabled, use the
+   "Report a vulnerability" button on the Security tab to submit a private report.
+2. **Fallback**: Open a GitHub issue WITHOUT any vulnerability details, stating only
+   that you have a security concern and requesting a private communication channel.
+
+**Note**: A dedicated security email/contact is TBD. Until then, use the methods above.
+
+When reporting, include (privately):
    - Description of vulnerability
    - Steps to reproduce
    - Potential impact
