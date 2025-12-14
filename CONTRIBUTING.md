@@ -20,7 +20,7 @@ This project adheres to a [Code of Conduct](CODE_OF_CONDUCT.md). By participatin
 
 ### Suggesting Features
 
-1. Check [discussions](https://github.com/neuron7x/Hippocampal-CA1-LAM/discussions)
+1. Check [existing issues](https://github.com/neuron7x/Hippocampal-CA1-LAM/issues)
 2. Open feature request with:
    - Use case description
    - Proposed API
@@ -148,7 +148,7 @@ hippocampal_ca1_lam/
 
 ## Questions?
 
-- Open a [Discussion](https://github.com/neuron7x/Hippocampal-CA1-LAM/discussions)
+- Open an [Issue](https://github.com/neuron7x/Hippocampal-CA1-LAM/issues)
 - Email: your.email@example.com
 
 Thank you for contributing! 🧠

@@ -380,7 +380,7 @@ When using this framework in publications:
 
 All DOI links verified: December 14, 2025
 
-To verify a DOI: https://doi.org/{DOI}
+To verify a DOI: visit https://doi.org/ and enter the DOI identifier
 
 ---
 

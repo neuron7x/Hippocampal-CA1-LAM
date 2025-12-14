@@ -25,7 +25,7 @@ We're following a comprehensive **8-phase evolution plan** to build v3.0:
 | 7 | Quality & Release | 📋 Planned |
 | 8 | Community & Impact | 📋 Planned |
 
-**📖 [Full Evolution Plan](docs/EVOLUTION_PLAN.md)** | **🎯 [Current Issues](../../issues?q=is%3Aissue+is%3Aopen+label%3Aroadmap)** | **📊 [Project Board](../../projects)**
+**📖 [Full Evolution Plan](docs/EVOLUTION_PLAN.md)** | **🎯 [Current Issues](https://github.com/neuron7x/Hippocampal-CA1-LAM/issues?q=is%3Aissue+is%3Aopen+label%3Aroadmap)** | **📊 [Project Board](https://github.com/neuron7x/Hippocampal-CA1-LAM/projects)**
 
 ### Contributing to the Roadmap
 1. Check the [Evolution Plan](docs/EVOLUTION_PLAN.md) for available tasks

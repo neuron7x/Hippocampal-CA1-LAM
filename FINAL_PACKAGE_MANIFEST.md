@@ -496,7 +496,6 @@ bash deploy_to_github.sh
 
 **GitHub**:
 - Issues: https://github.com/neuron7x/Hippocampal-CA1-LAM/issues
-- Discussions: https://github.com/neuron7x/Hippocampal-CA1-LAM/discussions
 
 ---
 

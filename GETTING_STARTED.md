@@ -339,7 +339,7 @@ python utils/create_release.py            # Створити реліз
 - Email: your.email@example.com
 
 **Питання про використання?**
-- GitHub Discussions: https://github.com/neuron7x/Hippocampal-CA1-LAM/discussions
+- GitHub Issues: https://github.com/neuron7x/Hippocampal-CA1-LAM/issues
 
 ---
 
