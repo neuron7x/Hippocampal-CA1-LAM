@@ -1,31 +1,17 @@
-# Link Check Output (Before Fixes)
-# Generated: 2025-12-14
-# Config: original .github/markdown-link-check-config.json with broad ignorePatterns
+# Link Check Output - Before Fixes
+# Generated: December 14, 2025
+# Command: markdown-link-check -c .github/markdown-link-check-config.json
 
-Note: This file documents the link check state with broad ignorePatterns.
-Many external domains were masked (marked with [/]) due to bot-blocking.
+Note: This file documents the state before configuration updates.
+The original config had broad ignorePatterns that masked link checking for
+many external domains.
 
-FILE: ./CHANGELOG.md
-  [/] https://keepachangelog.com/en/1.0.0/
-  [/] https://semver.org/
-  [✓] https://github.com/neuron7x/Hippocampal-CA1-LAM/releases
+Previous config issues:
+- doi.org was completely ignored via ignorePattern (not checked at all)
+- Many external domains bypassed via ignorePatterns
 
-FILE: ./README.md
-  [/] https://opensource.org/licenses/MIT
-  [/] https://www.python.org/downloads/
-  [/] https://img.shields.io/badge/* (multiple badges)
-  [✓] All internal links verified
+External links that were being skipped:
+- https://doi.org/* (all DOI links)
+- Other domains handled via httpHeaders but some failed
 
-FILE: ./docs/BIBLIOGRAPHY.md
-  [/] https://doi.org/* (all DOI links ignored)
-  [/] https://doi.org/  (bare DOI placeholder - FIXED: converted to plain text)
-
-FILE: ./SECURITY.md
-  ISSUE: Line 16 contained "Report via GitHub Issues (mark as security vulnerability)"
-  This was a security disclosure risk - vulnerability details could be exposed publicly.
-  FIXED: Updated to use private reporting methods.
-
-# Bot-blocking domains (Status: 0 or 403):
-# - doi.org (returns 403 - handled via aliveStatusCodes)
-# - shields.io (returns 0 - ignored via pattern, images are flaky)
-# - python.org, semver.org, keepachangelog.com, etc. (variable, httpHeaders added)
+See linkcheck_after.txt for the current state after fixes.

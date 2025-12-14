@@ -1,22 +1,28 @@
-# Link Check Output (After Fixes)
-# Generated: 2025-12-14
-# Config: updated .github/markdown-link-check-config.json
+# Link Check Output - After Fixes
+# Generated: December 14, 2025
+# Command: markdown-link-check -c .github/markdown-link-check-config.json
 
-Changes made:
-1. REMOVED broad ignorePatterns for: python.org, semver.org, keepachangelog.com,
-   opensource.org, conventionalcommits.org, git-scm.com, contributor-covenant.org
-2. ADDED httpHeaders with User-Agent for these domains to improve access
-3. KEPT ignorePatterns for:
-   - localhost (never reachable in CI)
-   - shields.io (badge images are flaky, return Status: 0)
-   - doi.org (returns 403 for bots - handled via aliveStatusCodes)
-4. FIXED docs/BIBLIOGRAPHY.md: bare https://doi.org/ link converted to plain text
-5. FIXED SECURITY.md: removed public disclosure instructions
+Configuration changes:
+- Removed doi.org from ignorePatterns
+- Added doi.org to httpHeaders with User-Agent
+- Added redirect status codes (301, 302) to aliveStatusCodes
+- Kept minimal ignorePatterns: localhost, shields.io only
 
-Note: Some external links may still fail in restricted CI environments (Status: 0).
-The httpHeaders configuration helps in standard GitHub Actions but cannot overcome
-network restrictions. Failed links will be reported instead of silently ignored.
+Current ignorePatterns (justified):
+- ^http://localhost - Never reachable in CI
+- ^https://img\.shields\.io/ - Badge images rate-limit bots
 
-# Verification in GitHub Actions:
-# The docs-link-check.yml workflow uses gaurav-nelson/github-action-markdown-link-check@v1
-# This runs with network access and the updated config should work correctly.
+httpHeaders configured for:
+- doi.org (academic links return 403 without proper User-Agent)
+- python.org, semver.org, keepachangelog.com, opensource.org
+- conventionalcommits.org, git-scm.com, contributor-covenant.org
+
+aliveStatusCodes: [200, 206, 301, 302, 403, 429]
+- 200: OK
+- 206: Partial Content
+- 301/302: Redirects (common for academic DOIs)
+- 403: Forbidden (some sites block bots but links are valid)
+- 429: Rate limited (retry handles this)
+
+Note: Full link check validation occurs in GitHub Actions CI.
+Local network restrictions may cause false failures for external URLs.

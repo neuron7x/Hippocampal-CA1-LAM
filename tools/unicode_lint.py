@@ -25,6 +25,7 @@ import sys
 
 # Bidirectional override characters (can hide code direction)
 BIDI_CHARS: set[int] = {
+    0x061C,  # Arabic Letter Mark
     0x200E,  # Left-to-Right Mark
     0x200F,  # Right-to-Left Mark
     0x202A,  # Left-to-Right Embedding
@@ -128,6 +129,7 @@ def get_char_name(codepoint: int) -> str:
         0x1E: "RS",
         0x1F: "US",
         0x7F: "DEL",
+        0x061C: "Arabic Letter Mark",
         0x200B: "Zero Width Space",
         0x200C: "Zero Width Non-Joiner",
         0x200D: "Zero Width Joiner",

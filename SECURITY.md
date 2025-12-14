@@ -18,6 +18,8 @@ Instead, use one of the following methods:
 2. **Fallback**: Open a GitHub issue WITHOUT any vulnerability details, stating only
    that you have a security concern and requesting a private communication channel.
 
+**Note**: A dedicated security email/contact is TBD. Until then, use the methods above.
+
 When reporting, include (privately):
    - Description of vulnerability
    - Steps to reproduce
