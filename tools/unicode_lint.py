@@ -20,10 +20,11 @@ Usage:
 import os
 import subprocess
 import sys
-from typing import List, Set, Tuple
+
+# Type hints: Using built-in generics for Python 3.9+ compatibility
 
 # Bidirectional override characters (can hide code direction)
-BIDI_CHARS: Set[int] = {
+BIDI_CHARS: set[int] = {
     0x200E,  # Left-to-Right Mark
     0x200F,  # Right-to-Left Mark
     0x202A,  # Left-to-Right Embedding
@@ -38,7 +39,7 @@ BIDI_CHARS: Set[int] = {
 }
 
 # Zero-width characters (invisible, can hide content)
-ZERO_WIDTH_CHARS: Set[int] = {
+ZERO_WIDTH_CHARS: set[int] = {
     0x200B,  # Zero Width Space
     0x200C,  # Zero Width Non-Joiner
     0x200D,  # Zero Width Joiner
@@ -46,13 +47,13 @@ ZERO_WIDTH_CHARS: Set[int] = {
 }
 
 # Control characters (excluding normal whitespace)
-CONTROL_CHARS: Set[int] = set(range(0x00, 0x09)) | {0x0B, 0x0C} | set(range(0x0E, 0x20)) | {0x7F}
+CONTROL_CHARS: set[int] = set(range(0x00, 0x09)) | {0x0B, 0x0C} | set(range(0x0E, 0x20)) | {0x7F}
 
 # Combine all dangerous characters
-DANGEROUS_CHARS: Set[int] = BIDI_CHARS | ZERO_WIDTH_CHARS | CONTROL_CHARS
+DANGEROUS_CHARS: set[int] = BIDI_CHARS | ZERO_WIDTH_CHARS | CONTROL_CHARS
 
 # File extensions to scan
-TEXT_EXTENSIONS: Set[str] = {
+TEXT_EXTENSIONS: set[str] = {
     '.md', '.txt', '.py', '.js', '.ts', '.jsx', '.tsx',
     '.yml', '.yaml', '.json', '.xml', '.html', '.css',
     '.sh', '.bash', '.zsh', '.fish',
@@ -63,7 +64,7 @@ TEXT_EXTENSIONS: Set[str] = {
 }
 
 
-def get_git_tracked_files(repo_path: str) -> List[str]:
+def get_git_tracked_files(repo_path: str) -> list[str]:
     """Get list of git-tracked files in the repository."""
     try:
         result = subprocess.run(
@@ -73,7 +74,10 @@ def get_git_tracked_files(repo_path: str) -> List[str]:
             text=True,
             check=True
         )
-        return [os.path.join(repo_path, f) for f in result.stdout.strip().split('\n') if f]
+        stdout = result.stdout.strip()
+        if not stdout:
+            return []
+        return [os.path.join(repo_path, f) for f in stdout.split('\n') if f]
     except subprocess.CalledProcessError:
         # Fallback: walk directory and filter by extension
         files = []
@@ -94,6 +98,36 @@ def should_scan_file(filepath: str) -> bool:
 def get_char_name(codepoint: int) -> str:
     """Get a human-readable name for a character."""
     names = {
+        0x00: "NUL",
+        0x01: "SOH",
+        0x02: "STX",
+        0x03: "ETX",
+        0x04: "EOT",
+        0x05: "ENQ",
+        0x06: "ACK",
+        0x07: "BEL",
+        0x08: "BS",
+        0x0B: "VT",
+        0x0C: "FF",
+        0x0E: "SO",
+        0x0F: "SI",
+        0x10: "DLE",
+        0x11: "DC1",
+        0x12: "DC2",
+        0x13: "DC3",
+        0x14: "DC4",
+        0x15: "NAK",
+        0x16: "SYN",
+        0x17: "ETB",
+        0x18: "CAN",
+        0x19: "EM",
+        0x1A: "SUB",
+        0x1B: "ESC",
+        0x1C: "FS",
+        0x1D: "GS",
+        0x1E: "RS",
+        0x1F: "US",
+        0x7F: "DEL",
         0x200B: "Zero Width Space",
         0x200C: "Zero Width Non-Joiner",
         0x200D: "Zero Width Joiner",
@@ -109,24 +143,23 @@ def get_char_name(codepoint: int) -> str:
         0x2068: "First Strong Isolate",
         0x2069: "Pop Directional Isolate",
         0xFEFF: "Zero Width No-Break Space (BOM)",
-        0x7F: "DEL",
     }
     if codepoint in names:
         return names[codepoint]
     if codepoint < 0x20:
-        return f"Control-{chr(codepoint + 0x40)}"
+        return f"Control-0x{codepoint:02X}"
     return "Unknown"
 
 
-def scan_file(filepath: str) -> List[Tuple[int, int, int, str]]:
+def scan_file(filepath: str) -> list[tuple[int, int, int, str]]:
     """
     Scan a file for dangerous characters.
     
     Returns list of tuples: (line_number, column, codepoint, char_name)
     """
-    findings = []
+    findings: list[tuple[int, int, int, str]] = []
     try:
-        with open(filepath, 'r', encoding='utf-8', errors='replace') as f:
+        with open(filepath, 'r', encoding='utf-8', errors='surrogateescape') as f:
             for line_num, line in enumerate(f, 1):
                 for col, char in enumerate(line, 1):
                     codepoint = ord(char)
@@ -137,6 +170,8 @@ def scan_file(filepath: str) -> List[Tuple[int, int, int, str]]:
                         findings.append((line_num, col, codepoint, get_char_name(codepoint)))
     except (OSError, IOError) as e:
         print(f"Warning: Could not read {filepath}: {e}", file=sys.stderr)
+    except UnicodeDecodeError as e:
+        print(f"Warning: Invalid UTF-8 in {filepath}: {e}", file=sys.stderr)
     return findings
 
 
