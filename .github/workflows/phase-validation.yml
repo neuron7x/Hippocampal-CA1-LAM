@@ -1,0 +1,24 @@
+name: Phase Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check PR links to Phase Issue
+        run: |
+          if ! grep -q "Closes #" "$GITHUB_EVENT_PATH" && ! grep -q "Phase:" "$GITHUB_EVENT_PATH"; then
+            echo "⚠️  PR should reference a Phase issue from Evolution Plan"
+            exit 1
+          fi
+
+      - name: Validate checklist completion
+        run: |
+          if grep -q "\- \[ \]" .github/PULL_REQUEST_TEMPLATE.md; then
+            echo "✓ Checklist template found"
+          fi

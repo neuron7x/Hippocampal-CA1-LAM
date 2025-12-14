@@ -1,0 +1,14 @@
+{
+  "ignorePatterns": [
+    {
+      "pattern": "^http://localhost"
+    }
+  ],
+  "replacementPatterns": [
+    {
+      "pattern": "^/",
+      "replacement": "https://github.com/neuron7x/Hippocampal-CA1-LAM/blob/main/"
+    }
+  ],
+  "aliveStatusCodes": [200, 206]
+}
