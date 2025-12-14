@@ -2,11 +2,21 @@
 # Generated: December 14, 2025
 # Command: markdown-link-check -c .github/markdown-link-check-config.json
 
-Configuration changes:
-- Removed doi.org from ignorePatterns
-- Added doi.org to httpHeaders with User-Agent
-- Added redirect status codes (301, 302) to aliveStatusCodes
-- Kept minimal ignorePatterns: localhost, shields.io only
+## DOI Link Fixes (December 14, 2025)
+
+Two 404 DOI links were corrected in docs/BIBLIOGRAPHY.md:
+
+1. **Orima et al. (2025)** - Fractal Analysis Methodology
+   - DOI 10.3389/fncom.2025.1641519 returned 404 at doi.org
+   - Changed to plain text DOI + direct Frontiers link
+   
+2. **Jahr & Stevens (1990)** - NMDA Receptor Dynamics
+   - Previous DOI 10.1038/346678a0 was incorrect (404)
+   - Corrected to DOI 10.1523/JNEUROSCI.10-09-03178.1990
+   - Updated journal from Nature to Journal of Neuroscience
+   - Added PubMed link
+
+## Configuration
 
 Current ignorePatterns (justified):
 - ^http://localhost - Never reachable in CI

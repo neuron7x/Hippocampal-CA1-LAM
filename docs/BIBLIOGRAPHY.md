@@ -162,7 +162,8 @@ DOI: [10.1023/A:1008925309027](https://doi.org/10.1023/A:1008925309027)
 **Orima T., Shigematsu N., Koyama S., Jimbo Y.** (2025)  
 *Fractal memory structure in the spatiotemporal learning rule*  
 **Frontiers in Computational Neuroscience**  
-DOI: [10.3389/fncom.2025.1641519](https://doi.org/10.3389/fncom.2025.1641519)
+DOI: 10.3389/fncom.2025.1641519  
+Full text: https://www.frontiersin.org/journals/computational-neuroscience/articles/10.3389/fncom.2025.1641519/full
 
 **Methodology reference:**
 - Box-counting dimension calculation
@@ -188,8 +189,9 @@ DOI: [10.48550/arXiv.2405.14831](https://doi.org/10.48550/arXiv.2405.14831)
 
 **Jahr C.E., Stevens C.F.** (1990)  
 *Voltage dependence of NMDA-activated macroscopic conductances predicted by single-channel kinetics*  
-**Nature**, 346:678-681  
-DOI: [10.1038/346678a0](https://doi.org/10.1038/346678a0)
+**Journal of Neuroscience**, 10(9):3178-3182  
+DOI: [10.1523/JNEUROSCI.10-09-03178.1990](https://doi.org/10.1523/JNEUROSCI.10-09-03178.1990)  
+PubMed: https://pubmed.ncbi.nlm.nih.gov/1697902/
 
 **Mg²⁺ block parameters:**
 - [Mg²⁺] = 1.0 mM
@@ -350,11 +352,12 @@ DOI: [10.1038/nature00854](https://doi.org/10.1038/nature00854)
 @article{jahr1990nmda,
   title = {Voltage dependence of NMDA-activated macroscopic conductances predicted by single-channel kinetics},
   author = {Jahr, C. E. and Stevens, C. F.},
-  journal = {Nature},
+  journal = {Journal of Neuroscience},
   year = {1990},
-  volume = {346},
-  pages = {678--681},
-  doi = {10.1038/346678a0}
+  volume = {10},
+  number = {9},
+  pages = {3178--3182},
+  doi = {10.1523/JNEUROSCI.10-09-03178.1990}
 }
 ```
 
