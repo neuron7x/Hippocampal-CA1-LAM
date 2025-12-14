@@ -365,7 +365,7 @@ When using this framework in publications:
 1. **Cite the framework**:
    ```
    CA1 Hippocampus Framework v2.0 (2025)
-   DOI: 10.5281/zenodo.XXXXXXX
+   https://github.com/neuron7x/Hippocampal-CA1-LAM
    ```
 
 2. **Cite primary references** for mechanisms used:
@@ -380,7 +380,7 @@ When using this framework in publications:
 
 All DOI links verified: December 14, 2025
 
-To verify a DOI: https://doi.org/{DOI}
+To verify a DOI: visit https://doi.org/ and enter the DOI identifier
 
 ---
 

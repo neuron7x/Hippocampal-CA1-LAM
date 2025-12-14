@@ -9,6 +9,32 @@
 
 **Production-grade neurobiological model of CA1 hippocampus for AI memory and computational neuroscience.**
 
+## 📋 Development Roadmap
+
+We're following a comprehensive **8-phase evolution plan** to build v3.0:
+
+| Phase | Focus | Status |
+|-------|-------|--------|
+| 0 | Foundation Audit | 🔄 In Progress |
+| 1 | Atomic Primitives | 📋 Planned |
+| 2 | Fractal Regions | 📋 Planned |
+| 3 | AI Memory Engine | 📋 Planned |
+| 4 | Performance & Scale | 📋 Planned |
+| 5 | Biological Fidelity | 📋 Planned |
+| 6 | Framework Layer | 📋 Planned |
+| 7 | Quality & Release | 📋 Planned |
+| 8 | Community & Impact | 📋 Planned |
+
+**📖 [Full Evolution Plan](docs/EVOLUTION_PLAN.md)** | **🎯 [Current Issues](https://github.com/neuron7x/Hippocampal-CA1-LAM/issues?q=is%3Aissue+is%3Aopen+label%3Aroadmap)** | **📊 [Project Board](https://github.com/neuron7x/Hippocampal-CA1-LAM/projects)**
+
+### Contributing to the Roadmap
+1. Check the [Evolution Plan](docs/EVOLUTION_PLAN.md) for available tasks
+2. Create an issue using the **Phase Task** template
+3. Submit a PR referencing the issue
+4. Ensure all exit criteria are met
+
+---
+
 ## Overview
 
 Biophysically accurate CA1 model with:
@@ -127,10 +153,9 @@ All parameters from peer-reviewed sources:
 ```bibtex
 @software{hippocampal_ca1_lam_2025,
   title = {CA1 Hippocampus Framework v2.0},
-  author = {Your Name},
+  author = {neuron7x},
   year = {2025},
-  doi = {10.5281/zenodo.XXXXXXX},
-  url = {https://github.com/yourusername/Hippocampal-CA1-LAM}
+  url = {https://github.com/neuron7x/Hippocampal-CA1-LAM}
 }
 ```
 
@@ -140,5 +165,4 @@ MIT License - see [LICENSE](LICENSE)
 
 ## Contact
 
-- Issues: [GitHub Issues](https://github.com/yourusername/Hippocampal-CA1-LAM/issues)
-- Email: your.email@example.com
+- Issues: [GitHub Issues](https://github.com/neuron7x/Hippocampal-CA1-LAM/issues)

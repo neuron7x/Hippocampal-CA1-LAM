@@ -81,7 +81,7 @@ tar -xzf Hippocampal-CA1-LAM-v2.0.tar.gz
 cd Hippocampal-CA1-LAM
 
 # Або якщо завантажили з GitHub
-git clone https://github.com/yourusername/Hippocampal-CA1-LAM.git
+git clone https://github.com/neuron7x/Hippocampal-CA1-LAM.git
 cd Hippocampal-CA1-LAM
 ```
 
@@ -334,12 +334,11 @@ python utils/create_release.py            # Створити реліз
 ## 📞 Підтримка
 
 **Проблеми?**
-- GitHub Issues: https://github.com/yourusername/Hippocampal-CA1-LAM/issues
+- GitHub Issues: https://github.com/neuron7x/Hippocampal-CA1-LAM/issues
 - Документація: `docs/`
-- Email: your.email@example.com
 
 **Питання про використання?**
-- GitHub Discussions: https://github.com/yourusername/Hippocampal-CA1-LAM/discussions
+- GitHub Issues: https://github.com/neuron7x/Hippocampal-CA1-LAM/issues
 
 ---
 

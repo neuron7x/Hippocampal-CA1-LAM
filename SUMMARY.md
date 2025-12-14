@@ -342,8 +342,8 @@ This is **not a conceptual framework** - it's a **working implementation**.
 
 **Version:** 1.1  
 **Date:** December 14, 2025  
-**Author:** [Your Name]  
-**Contact:** [Your Email]
+**Author:** neuron7x  
+**Contact:** [GitHub Issues](https://github.com/neuron7x/Hippocampal-CA1-LAM/issues)
 
 ---
 

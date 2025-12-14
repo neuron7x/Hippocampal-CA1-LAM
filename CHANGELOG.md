@@ -43,5 +43,5 @@ Versioning: [Semantic Versioning](https://semver.org/)
 - Extended validation suite
 - Spatial place cell analysis
 
-[2.0.0]: https://github.com/yourusername/Hippocampal-CA1-LAM/releases/tag/v2.0.0
-[1.1.0]: https://github.com/yourusername/Hippocampal-CA1-LAM/releases/tag/v1.1.0
+[2.0.0]: https://github.com/neuron7x/Hippocampal-CA1-LAM/releases
+[1.1.0]: https://github.com/neuron7x/Hippocampal-CA1-LAM/releases

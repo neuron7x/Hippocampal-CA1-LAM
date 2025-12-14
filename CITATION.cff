@@ -4,11 +4,8 @@ title: "CA1 Hippocampus Framework"
 version: 2.0.0
 date-released: 2025-12-14
 authors:
-  - family-names: "Your"
-    given-names: "Name"
-    email: your.email@example.com
-    orcid: "https://orcid.org/0000-0000-0000-0000"
-repository-code: "https://github.com/yourusername/Hippocampal-CA1-LAM"
+  - name: "neuron7x"
+repository-code: "https://github.com/neuron7x/Hippocampal-CA1-LAM"
 license: MIT
 keywords:
   - hippocampus
