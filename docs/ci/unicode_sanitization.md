@@ -46,14 +46,23 @@ None required - the codebase is clean.
 ## Why This Matters
 
 Bidirectional and hidden Unicode characters can:
-- Hide malicious code in source files (CVE-2021-42574, "Trojan Source")
-- Cause security vulnerabilities in string handling
-- Create confusing diffs that hide changes
-- Break text rendering in documentation
+- hide malicious code in source files (CVE-2021-42574, "Trojan Source")
+- cause security vulnerabilities in string handling
+- create confusing diffs that hide changes
+- break text rendering in documentation
 
 ## Recommendations
 
-1. **Pre-commit hooks**: Consider adding a pre-commit hook to scan for these characters
+1. **Pre-commit hooks**: Consider adding a pre-commit hook using `grep` or the `blocklint` tool:
+   ```bash
+   # Example using grep in .pre-commit-config.yaml
+   - repo: local
+     hooks:
+       - id: check-bidi
+         name: Check for bidirectional Unicode
+         entry: bash -c 'grep -rPn "[\x{200B}-\x{200F}\x{202A}-\x{202E}\x{2066}-\x{2069}]" --include="*.py" --include="*.md" . && exit 1 || exit 0'
+         language: system
+   ```
 2. **CI checks**: The markdown-link-check workflow now runs regularly
 3. **Editor settings**: Configure editors to show invisible characters
 
