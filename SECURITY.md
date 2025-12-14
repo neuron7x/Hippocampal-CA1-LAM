@@ -28,6 +28,20 @@ When reporting, include (privately):
 
 Expected response time: **48 hours**
 
+## Secrets Policy
+
+**⚠️ IMPORTANT: Never share credentials in public channels**
+
+1. **Do NOT paste credentials, API keys, or tokens in issues or pull requests.**
+2. **Do NOT commit secrets to the repository** - use environment variables instead.
+3. If you accidentally expose a secret:
+   - Immediately revoke/rotate the compromised credential
+   - Report it privately using the methods above
+   - Do NOT try to "hide" it with a force push (it's already in git history)
+
+All commits are scanned with [gitleaks](https://github.com/gitleaks/gitleaks) to detect
+accidentally committed secrets before they reach the main branch.
+
 ## Security Measures
 
 ### Code Security
