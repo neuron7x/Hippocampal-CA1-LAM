@@ -4,31 +4,18 @@
       "pattern": "^http://localhost"
     },
     {
-      "pattern": "^https://doi\\.org/"
-    },
-    {
       "pattern": "^https://img\\.shields\\.io/"
     },
     {
-      "pattern": "^https://www\\.python\\.org/"
-    },
+      "pattern": "^https://doi\\.org/"
+    }
+  ],
+  "httpHeaders": [
     {
-      "pattern": "^https://keepachangelog\\.com/"
-    },
-    {
-      "pattern": "^https://semver\\.org/"
-    },
-    {
-      "pattern": "^https://opensource\\.org/"
-    },
-    {
-      "pattern": "^https://www\\.conventionalcommits\\.org/"
-    },
-    {
-      "pattern": "^https://git-scm\\.com/"
-    },
-    {
-      "pattern": "^https://www\\.contributor-covenant\\.org/"
+      "urls": ["https://www.python.org", "https://keepachangelog.com", "https://semver.org", "https://opensource.org", "https://www.conventionalcommits.org", "https://git-scm.com", "https://www.contributor-covenant.org"],
+      "headers": {
+        "User-Agent": "Mozilla/5.0 (compatible; markdown-link-check/3.0)"
+      }
     }
   ],
   "replacementPatterns": [
@@ -38,6 +25,6 @@
     }
   ],
   "aliveStatusCodes": [200, 206, 403, 429],
-  "timeout": "10s",
-  "retryCount": 2
+  "timeout": "15s",
+  "retryCount": 3
 }
