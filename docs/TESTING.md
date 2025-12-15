@@ -2,6 +2,16 @@
 
 Complete testing documentation for CA1 Hippocampus Framework.
 
+## Security Gates (required for merge)
+
+- **Unicode scan**: `python scripts/unicode_scan.py`
+- **Secrets scan (gitleaks)**: `gitleaks detect --config .gitleaks.toml --report-format sarif --report-path gitleaks.sarif`
+- **Dependency audit (pip-audit)**: `pip install pip-audit==2.7.3 && pip-audit -r requirements.txt && pip-audit -r requirements-dev.txt`
+- **Actionlint**: Download actionlint v1.7.9 and run `actionlint .github/workflows/*.yml` (ensure the binary is on your PATH or reference its full location)
+- **Config validation**: `pip install PyYAML==6.0.2 && python scripts/validate_configs.py .`
+- **CI policy check**: `pip install PyYAML==6.0.2 && python scripts/ci_policy_check.py`
+- **PR metadata check**: Ensure the PR body includes either `Phase: X.Y` or `Closes #123`, and also contains a `Verification:` section with commands executed (use the PR template).
+
 ## Test Suite Overview
 
 ```
