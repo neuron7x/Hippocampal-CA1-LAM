@@ -67,6 +67,7 @@ class NetworkStateController:
         self.state = NetworkState.THETA
         self.time_in_state = 0.0
         self.SWR_duration = 0.0  # Will be sampled when entering SWR
+        self._previous_state = self.state
         
         # State history
         self.state_history = []
@@ -83,6 +84,7 @@ class NetworkStateController:
             state_changed: bool (whether transition occurred)
         """
         state_changed = False
+        prev_state = self.state
         
         # Increment time in current state
         self.time_in_state += self.dt
@@ -91,6 +93,7 @@ class NetworkStateController:
         if self.state == NetworkState.THETA:
             # Theta → SWR transition
             if np.random.rand() < self.p.P_theta_to_SWR * self.dt:
+                self._previous_state = self.state
                 self.state = NetworkState.TRANSITION
                 self.time_in_state = 0.0
                 state_changed = True
@@ -99,7 +102,7 @@ class NetworkStateController:
             # Wait for transition duration
             if self.time_in_state >= self.p.P_transition_duration:
                 # Determine next state (based on previous)
-                if self.state_history[-1] == NetworkState.THETA:
+                if self._previous_state == NetworkState.THETA:
                     # Entering SWR
                     self.state = NetworkState.SWR
                     # Sample SWR duration
@@ -117,6 +120,7 @@ class NetworkStateController:
         elif self.state == NetworkState.SWR:
             # SWR → theta transition
             if self.time_in_state >= self.SWR_duration:
+                self._previous_state = self.state
                 self.state = NetworkState.TRANSITION
                 self.time_in_state = 0.0
                 state_changed = True
@@ -246,6 +250,21 @@ class ReplayDetector:
         
         # Add current spikes to candidate
         self.candidate_spikes.extend(spikes)
+
+        if self.in_candidate and not spikes:
+            duration = t - self.candidate_start
+            if duration >= self.min_duration and len(set(s[1] for s in self.candidate_spikes)) >= self.min_neurons:
+                neuron_seq = [s[1] for s in sorted(self.candidate_spikes)]
+                spike_times = [s[0] for s in sorted(self.candidate_spikes)]
+                event = ReplayEvent(
+                    start_time=self.candidate_start,
+                    end_time=t,
+                    neuron_sequence=neuron_seq,
+                    spike_times=spike_times
+                )
+                self.in_candidate = False
+                self.candidate_spikes = []
+                return event
         
         # Compute current rate
         if len(spikes) > 0:

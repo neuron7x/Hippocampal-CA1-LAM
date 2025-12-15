@@ -15,6 +15,46 @@ def set_seed(seed=GOLDEN_SEED):
     np.random.seed(seed)
 
 # ============================================================================
+# TEST 0: Laminar Inference (lightweight)
+# ============================================================================
+
+
+def test_laminar_inference():
+    """Test: laminar responsibilities are normalized and balanced."""
+    set_seed()
+
+    from core.hierarchical_laminar import CellDataHier, HierarchicalLaminarModel
+
+    cells = []
+    for i in range(200):
+        z = np.random.rand()
+        layer = min(int(z * 4), 3)
+        transcripts = np.zeros(4)
+        transcripts[layer] = np.random.poisson(5)
+        cells.append(
+            CellDataHier(
+                cell_id=i,
+                animal_id=0,
+                x=0.0,
+                y=0.0,
+                z=z,
+                s=0.0,
+                transcripts=transcripts,
+            )
+        )
+
+    model = HierarchicalLaminarModel(lambda_mrf=0.0)
+    q = model.fit_em_vectorized(cells, max_iter=10, verbose=False)
+    assignments = model.assign_layers(cells, q)
+
+    assert q.shape == (len(cells), 4)
+    assert np.allclose(q.sum(axis=1), 1.0)
+    counts = np.bincount(assignments, minlength=4)
+    assert counts.size == 4
+    assert counts.min() > 0
+    return {"counts": counts.tolist()}
+
+# ============================================================================
 # TEST 1: Network Stability
 # ============================================================================
 
@@ -243,6 +283,7 @@ if __name__ == "__main__":
     print(f"Seed: {GOLDEN_SEED}\n")
     
     tests = [
+        ("Laminar Inference", test_laminar_inference),
         ("Network Stability", test_network_stability),
         ("Ca2+ Plasticity", test_calcium_plasticity),
         ("Input-Specific", test_input_specific),

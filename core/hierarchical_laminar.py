@@ -190,6 +190,9 @@ class HierarchicalLaminarModel:
             
             # Normalize (vectorized)
             q = np.exp(log_q - logsumexp(log_q, axis=1, keepdims=True))
+            # Guard against numerical issues
+            q = np.nan_to_num(q, nan=1.0 / self.n_layers, posinf=1.0 / self.n_layers, neginf=1.0 / self.n_layers)
+            q = q / q.sum(axis=1, keepdims=True)
             
             # === M-STEP (VECTORIZED) ===
             
@@ -268,7 +271,8 @@ class HierarchicalLaminarModel:
                 
                 self.alpha[ell, k] = np.log(mean_count + 0.1)
                 self.beta_population[ell, k] = 0.0
-                self.theta[ell, k] = mean_count**2 / max(var_count - mean_count, 0.1)
+                theta_val = mean_count**2 / max(var_count - mean_count, 0.1)
+                self.theta[ell, k] = max(theta_val, 1e-3)
     
     def _compute_elbo(self, 
                       cells: List[CellDataHier],
