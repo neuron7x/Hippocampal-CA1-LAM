@@ -23,4 +23,15 @@ jobs:
           python-version: '3.x'
 
       - name: Run Unicode lint
-        run: python tools/unicode_lint.py .
+        id: unicode_lint
+        run: |
+          python tools/unicode_lint.py . 2>&1 | tee unicode_scan_report.txt
+          exit ${PIPESTATUS[0]}
+
+      - name: Upload scan report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: unicode-scan-report
+          path: unicode_scan_report.txt
+          retention-days: 30
