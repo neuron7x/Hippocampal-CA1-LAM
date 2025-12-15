@@ -6,12 +6,12 @@ Complete testing documentation for CA1 Hippocampus Framework.
 
 ```
 tests/
-├── test_golden_standalone.py    # 5 golden tests (reproducibility)
-├── test_unified_weights.py      # Unit tests for plasticity
+├── test_ca1_network_api.py      # Public API smoke tests
+├── test_golden_suite.py         # Imports validation/golden_tests (6 checks)
 ├── test_hierarchical_laminar.py # Unit tests for inference
-├── test_theta_swr.py            # Unit tests for state switching
 ├── test_memory_module.py        # Unit tests for AI integration
-└── test_integration.py          # Full pipeline integration
+├── test_theta_swr_switching.py  # Unit tests for state switching/replay
+└── test_unified_weights.py      # Plasticity unit tests
 ```
 
 ## Quick Start
@@ -22,11 +22,8 @@ tests/
 # Golden tests (must pass)
 python test_golden_standalone.py
 
-# Unit tests
-python -m pytest tests/ -v
-
-# With coverage
-python -m pytest tests/ --cov=. --cov-report=html
+# Unit tests (including golden suite)
+python -m pytest -q
 ```
 
 ## Golden Tests (Seed=42)

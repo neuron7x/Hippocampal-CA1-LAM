@@ -216,9 +216,10 @@ def test_theta_swr_switching_golden():
     
     from core.theta_swr_switching import NetworkStateController, StateTransitionParams, NetworkState
     
+    # Tuned for deterministic theta-dominant occupancy in the synthetic model
     params = StateTransitionParams(
-        P_theta_to_SWR=0.01,
-        P_SWR_to_theta=0.05
+        P_theta_to_SWR=0.005,
+        P_SWR_to_theta=0.1
     )
     
     controller = NetworkStateController(params, dt=0.1)

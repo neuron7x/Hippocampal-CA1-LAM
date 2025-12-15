@@ -3,9 +3,8 @@
 **🧠 Production-Grade CA1 Hippocampal Laminar Architecture Model**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Tests](https://img.shields.io/badge/tests-5%2F5%20passing-brightgreen.svg)]()
-[![Code Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen.svg)]()
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Tests](https://github.com/neuron7x/Hippocampal-CA1-LAM/actions/workflows/python-tests.yml/badge.svg)](https://github.com/neuron7x/Hippocampal-CA1-LAM/actions/workflows/python-tests.yml)
 
 **Production-grade neurobiological model of CA1 hippocampus for AI memory and computational neuroscience.**
 
@@ -60,7 +59,7 @@ This will:
 4. ✓ Run golden tests
 5. ✓ Verify everything works
 
-**Expected output**: `5/5 PASSED ✓`
+**Expected output**: `6/6 PASSED ✓` (golden suite)
 
 ---
 
@@ -119,7 +118,7 @@ pip install -r requirements.txt
 
 # Verify
 python test_golden_standalone.py
-# Expected: 5/5 PASSED
+# Expected: 6/6 PASSED
 
 # Run demo
 python examples/demo_unified_weights.py
@@ -143,9 +142,9 @@ All parameters from peer-reviewed sources:
 
 ## Features
 
-✅ **Complete Implementation** - No pseudo-code or placeholders  
-✅ **Reproducible** - Seed=42 guarantees identical results  
-✅ **Validated** - 5 golden tests, all parameters from experiments  
+✅ **Public API scaffold** - Minimal CA1Network for quick-start usage  
+✅ **Reproducible** - Seed=42 guarantees identical regression signals  
+✅ **Validated** - 6 deterministic golden tests  
 ✅ **Production-Ready** - Type hints, tests, CI/CD, documentation  
 
 ## Citation

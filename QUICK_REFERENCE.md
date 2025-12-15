@@ -16,7 +16,7 @@ cd Hippocampal-CA1-LAM
 # Установка + тестування
 bash quick_start.sh
 
-# Очікується: 5/5 PASSED ✓
+# Очікується: 6/6 PASSED ✓
 ```
 
 **Готово!** Далі: `python examples/demo_basic_usage.py`
@@ -99,7 +99,7 @@ python test_golden_standalone.py
 # ✓ Input-Specific
 # ✓ Theta-SWR
 # ✓ Reproducibility
-# 5/5 PASSED ✓
+# 6/6 PASSED ✓
 ```
 
 ---

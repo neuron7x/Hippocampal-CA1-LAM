@@ -8,7 +8,7 @@
 
 Перед початком переконайтеся, що у вас є:
 
-- ✅ **Python 3.8 або новіше** ([завантажити](https://www.python.org/downloads/))
+- ✅ **Python 3.10 або новіше** ([завантажити](https://www.python.org/downloads/))
 - ✅ **Git** ([завантажити](https://git-scm.com/downloads)) - опційно, для GitHub
 - ✅ **Terminal/Command Prompt** - вбудовано в OS
 - ✅ **4 GB RAM** (рекомендовано 16 GB)
@@ -24,7 +24,7 @@ python3 --version
 python --version
 ```
 
-Має бути Python 3.8 або новіше.
+Має бути Python 3.10 або новіше.
 
 ---
 
@@ -62,7 +62,7 @@ python quick_start.py
 
 **Очікуваний результат**:
 ```
-✅ ГОТОВО! 5/5 PASSED
+✅ ГОТОВО! 6/6 PASSED
 ```
 
 **Що далі?** Перейдіть до [Запуск прикладів](GETTING_STARTED.md#run-examples)
@@ -258,7 +258,7 @@ pip install -r requirements.txt
 ### Проблема: Тести не проходять
 
 **Рішення**:
-1. Перевірте версію Python: `python3 --version` (має бути ≥3.8)
+1. Перевірте версію Python: `python3 --version` (має бути ≥3.10)
 2. Перевстановіть залежності: `pip install -r requirements.txt --force-reinstall`
 3. Перевірте віртуальне середовище активне: `(venv)` має бути видно
 
@@ -348,10 +348,10 @@ python utils/create_release.py            # Створити реліз
 
 Перевірте що все працює:
 
-- [ ] Python 3.8+ встановлено
+- [ ] Python 3.10+ встановлено
 - [ ] Віртуальне середовище створено
 - [ ] Залежності встановлені
-- [ ] Golden tests проходять (5/5)
+- [ ] Golden tests проходять (6/6)
 - [ ] Приклад запускається без помилок
 
 **Все ✓?** Ви готові використовувати Hippocampal-CA1-LAM! 🎉
