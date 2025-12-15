@@ -25,8 +25,8 @@ jobs:
       - name: Run Unicode lint
         id: unicode_lint
         run: |
-          python tools/unicode_lint.py . 2>&1 | tee unicode_scan_report.txt
-          exit ${PIPESTATUS[0]}
+          python tools/unicode_lint.py "." 2>&1 | tee unicode_scan_report.txt
+          exit "${PIPESTATUS[0]}"
 
       - name: Upload scan report
         if: always()
