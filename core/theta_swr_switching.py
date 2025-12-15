@@ -254,8 +254,9 @@ class ReplayDetector:
         if self.in_candidate and not spikes:
             duration = t - self.candidate_start
             if duration >= self.min_duration and len(set(s[1] for s in self.candidate_spikes)) >= self.min_neurons:
-                neuron_seq = [s[1] for s in sorted(self.candidate_spikes)]
-                spike_times = [s[0] for s in sorted(self.candidate_spikes)]
+                sorted_spikes = sorted(self.candidate_spikes)
+                neuron_seq = [s[1] for s in sorted_spikes]
+                spike_times = [s[0] for s in sorted_spikes]
                 event = ReplayEvent(
                     start_time=self.candidate_start,
                     end_time=t,
