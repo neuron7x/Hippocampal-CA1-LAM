@@ -65,7 +65,7 @@ python quick_start.py
 ✅ ГОТОВО! 5/5 PASSED
 ```
 
-**Що далі?** Перейдіть до [Запуск прикладів](#запуск-прикладів)
+**Що далі?** Перейдіть до [Запуск прикладів](#run-examples)
 
 ---
 
@@ -140,6 +140,8 @@ RESULTS: 5/5 PASSED
 **Якщо є помилки** ❌ - див. [Troubleshooting](#troubleshooting)
 
 ---
+
+<a id="run-examples"></a>
 
 ## Запуск прикладів
 
