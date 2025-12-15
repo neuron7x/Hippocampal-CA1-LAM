@@ -65,7 +65,7 @@ python quick_start.py
 ✅ ГОТОВО! 5/5 PASSED
 ```
 
-**Що далі?** Перейдіть до [Запуск прикладів](#-запуск-прикладів)
+**Що далі?** Перейдіть до [Запуск прикладів](#запуск-прикладів)
 
 ---
 
@@ -137,11 +137,11 @@ RESULTS: 5/5 PASSED
 
 **Якщо тести пройшли** ✅ - все працює!
 
-**Якщо є помилки** ❌ - див. [Troubleshooting](#-troubleshooting)
+**Якщо є помилки** ❌ - див. [Troubleshooting](#troubleshooting)
 
 ---
 
-## 🎯 Запуск прикладів
+## Запуск прикладів
 
 Після успішної установки спробуйте приклади:
 
@@ -238,7 +238,7 @@ Hippocampal-CA1-LAM/
 
 ---
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Проблема: "ModuleNotFoundError: No module named 'numpy'"
 
