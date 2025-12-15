@@ -65,7 +65,7 @@ python quick_start.py
 ✅ ГОТОВО! 5/5 PASSED
 ```
 
-**Що далі?** Перейдіть до [Запуск прикладів](#run-examples)
+**Що далі?** Перейдіть до [Запуск прикладів](GETTING_STARTED.md#run-examples)
 
 ---
 
@@ -137,13 +137,13 @@ RESULTS: 5/5 PASSED
 
 **Якщо тести пройшли** ✅ - все працює!
 
-**Якщо є помилки** ❌ - див. [Troubleshooting](#troubleshooting)
+**Якщо є помилки** ❌ - див. [Troubleshooting](GETTING_STARTED.md#troubleshooting)
 
 ---
 
 ## Run Examples
 
-**Запуск прикладів**
+_(Запуск прикладів)_
 
 Після успішної установки спробуйте приклади:
 
