@@ -205,6 +205,7 @@ def test_theta_swr():
 
     from core.theta_swr_switching import NetworkStateController, StateTransitionParams, NetworkState
 
+    # P_theta_to_SWR=0.001 yields ~91% theta fraction (expected range 0.7-0.95)
     params = StateTransitionParams(P_theta_to_SWR=0.001, P_SWR_to_theta=0.05)
 
     controller = NetworkStateController(params, dt=0.1)
