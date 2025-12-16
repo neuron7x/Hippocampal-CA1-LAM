@@ -94,15 +94,12 @@ def stress_test_sparse(
     Uses a CSR adjacency matrix to avoid dense O(N^2) memory while probing throughput.
     """
     rng = np.random.default_rng(seed)
-
-    def rand32(k: int):
-        return rng.random(k).astype(np.float32)
     conn = sp.random(
         neurons,
         neurons,
         density=conn_prob,
         format="csr",
-        data_rvs=rand32,
+        data_rvs=rng.random,
     )
     spikes = rng.random((steps, neurons)) < 0.001
 
