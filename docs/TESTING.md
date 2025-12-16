@@ -37,6 +37,7 @@ Run these locally before opening a PR:
 - Dependency audit: `pip-audit -r requirements.txt` (and `pip-audit -r requirements-dev.txt` if present)
 - Actionlint: `actionlint -color` (install from https://github.com/rhysd/actionlint/releases)
 - PR metadata: ensure the PR body includes “Phase: X.Y” or “Closes #123” **and** a “Verification:” section listing the commands you ran.
+- Install PyYAML locally (`pip install pyyaml`) before running the config or CI policy checks.
 
 ## Golden Tests (Seed=42)
 

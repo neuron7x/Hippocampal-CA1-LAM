@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Validate JSON/YAML configs and GitHub Issue Forms."""
+"""Validate JSON/YAML configs and GitHub Issue Forms.
+
+Requires PyYAML for YAML parsing; exits with an error if it is missing so the
+gate cannot silently skip YAML validation.
+"""
 
 from __future__ import annotations
 

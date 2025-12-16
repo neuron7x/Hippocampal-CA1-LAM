@@ -2,6 +2,10 @@
 
 This document describes the security and quality gates that run on every PR.
 
+> **Note**: Legacy workflow names referenced below have been superseded by the
+> `security-*` workflows and scripts added in `scripts/`. See `docs/TESTING.md`
+> and `docs/ci/*` for the current gates and local commands.
+
 ## Gates Overview
 
 | Gate | Workflow | Purpose | How to Run Locally |

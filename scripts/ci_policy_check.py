@@ -9,7 +9,11 @@ import re
 import sys
 from typing import Any, Dict, List, Tuple
 
-import yaml
+try:
+    import yaml
+except ImportError:
+    print("PyYAML is required for CI policy checks. Install with `pip install pyyaml`.")
+    sys.exit(1)
 
 WORKFLOW_DIR = os.path.join(".github", "workflows")
 

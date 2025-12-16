@@ -38,7 +38,8 @@ ZERO_WIDTH_CODES = {
     0xFEFF,  # Zero Width No-Break Space (BOM)
 }
 
-# No allowlisted Cf characters by default.
+# No allowlisted Cf characters by default; policy requires blocking all format
+# characters unless explicitly reviewed.
 ALLOWLIST: set[int] = set()
 
 TARGET_EXTS = {
