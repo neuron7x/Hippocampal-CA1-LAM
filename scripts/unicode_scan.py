@@ -115,7 +115,7 @@ def scan_file(root: str, path: str) -> List[Tuple[int, int, int, str, str]]:
         with open(abs_path, "r", encoding="utf-8", errors="strict") as handle:
             return _scan_lines(handle)
     except (OSError, UnicodeDecodeError) as exc:
-        return [(1, 1, 0, "READ_ERROR", f"Could not read file: {exc}")]
+        return [(-1, -1, -1, "READ_ERROR", f"Could not read file: {exc}")]
 
 
 def main() -> int:

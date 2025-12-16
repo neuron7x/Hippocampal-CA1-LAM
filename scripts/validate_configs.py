@@ -15,7 +15,7 @@ from typing import Dict, List
 
 try:
     import yaml
-except ImportError as exc:  # pragma: no cover
+except ImportError:  # pragma: no cover
     print("PyYAML is required for config validation. Install via `pip install pyyaml`.", file=sys.stderr)
     sys.exit(1)
 
