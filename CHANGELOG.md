@@ -2,7 +2,7 @@
 
 All notable changes to CA1 Hippocampus Framework.
 
-Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
+Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 Versioning: [Semantic Versioning](https://semver.org/)
 
 ## [2.0.0] - 2025-12-14

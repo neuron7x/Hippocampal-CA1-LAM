@@ -1,7 +1,7 @@
 # ⚡ HIPPOCAMPAL-CA1-LAM - ШВИДКИЙ ДОВІДНИК
 
-**Версія**: 2.0.0  
-**Пакет**: Hippocampal-CA1-LAM_v2.0_COMPLETE_WITH_BONUSES.tar.gz (201 KB)  
+**Версія**: 2.0.0
+**Пакет**: Hippocampal-CA1-LAM_v2.0_COMPLETE_WITH_BONUSES.tar.gz (201 KB)
 **Статус**: PRODUCTION READY + 7 AUTOMATION BONUSES ✓
 
 ---
@@ -95,7 +95,7 @@ python test_golden_standalone.py
 
 # Очікуваний результат:
 # ✓ Network Stability
-# ✓ Ca2+ Plasticity  
+# ✓ Ca2+ Plasticity
 # ✓ Input-Specific
 # ✓ Theta-SWR
 # ✓ Reproducibility
@@ -106,13 +106,13 @@ python test_golden_standalone.py
 
 ## 🛠️ TROUBLESHOOTING
 
-**Проблема**: Команда не працює  
+**Проблема**: Команда не працює
 **Рішення**: `chmod +x *.sh` + повторити
 
-**Проблема**: Python не знайдено  
+**Проблема**: Python не знайдено
 **Рішення**: Встановити Python 3.8+ з python.org
 
-**Проблема**: Тести не проходять  
+**Проблема**: Тести не проходять
 **Рішення**: `pip install -r requirements.txt --force-reinstall`
 
 **Детальніше**: Див. GETTING_STARTED.md
@@ -128,8 +128,8 @@ python test_golden_standalone.py
 
 ## 🎯 USE CASES
 
-**Науковець**: `bash quick_start.sh` → примклади → docs/  
-**ML інженер**: `bash setup_dev_environment.sh` → кодити  
+**Науковець**: `bash quick_start.sh` → примклади → docs/
+**ML інженер**: `bash setup_dev_environment.sh` → кодити
 **Контриб'ютор**: `make check` → `make deploy`
 
 ---

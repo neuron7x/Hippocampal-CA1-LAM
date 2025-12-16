@@ -108,9 +108,7 @@ def stress_test_sparse(
         _ = conn @ spikes[step].astype(np.float32)
     elapsed = time.time() - start
 
-    bytes_used = (
-        conn.data.nbytes + conn.indptr.nbytes + conn.indices.nbytes + spikes.nbytes
-    )
+    bytes_used = conn.data.nbytes + conn.indptr.nbytes + conn.indices.nbytes + spikes.nbytes
     return elapsed, conn.nnz, bytes_used / (1024 * 1024)
 
 
@@ -177,9 +175,7 @@ if __name__ == "__main__":
     print(f"   {elapsed / n_iter * 1000:.2f} ms/iteration")
 
     # Laminar EM
-    print(
-        f"\n2. Laminar EM ({args.laminar_cells} cells, {args.laminar_iter} iterations)..."
-    )
+    print(f"\n2. Laminar EM ({args.laminar_cells} cells, {args.laminar_iter} iterations)...")
     elapsed, N, _ = benchmark_laminar_em(N=args.laminar_cells, max_iter=args.laminar_iter)
     print(f"   {N} cells in {elapsed:.2f}s")
 

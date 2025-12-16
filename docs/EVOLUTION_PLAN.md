@@ -727,11 +727,11 @@ class HippocampalRAG:
         self.episodic = EpisodicMemory(ca1_network)
         self.semantic = SemanticMemory()
         self.working = WorkingMemory()
-    
+
     async def generate(self, prompt, use_memory=True):
         # Add to working memory
         self.working.add(prompt)
-        
+
         if use_memory:
             # Retrieve relevant memories
             episodic_memories = self.episodic.retrieve(
@@ -740,19 +740,19 @@ class HippocampalRAG:
             semantic_facts = self.semantic.retrieve_facts(
                 self.llm.embed(prompt), k=10
             )
-            
+
             # Augment prompt
             context = self.format_context(
-                episodic_memories, 
+                episodic_memories,
                 semantic_facts
             )
             augmented_prompt = f"{context}\n\n{prompt}"
         else:
             augmented_prompt = prompt
-        
+
         # Generate
         response = await self.llm.generate(augmented_prompt)
-        
+
         # Store interaction
         self.episodic.encode({
             'prompt': prompt,
@@ -760,12 +760,12 @@ class HippocampalRAG:
             'timestamp': now(),
             'context': context
         })
-        
+
         # Update working memory
         self.working.add(response)
-        
+
         return response
-    
+
     async def consolidate(self):
         # Offline consolidation (during "sleep")
         self.episodic.consolidate()  # SWR replay
@@ -910,14 +910,14 @@ class HippocampalRAG:
   ```python
   import jax.numpy as jnp
   from jax import jit, vmap, grad
-  
+
   @jit
   def update_neuron(state, I, dt, params):
       V, Ca = state
       dV = (-params.g_l*(V - params.E_l) + I) / params.C_m
       dCa = -Ca / params.tau_Ca + params.Ca_in * (V > params.V_thresh)
       return (V + dt*dV, Ca + dt*dCa)
-  
+
   # Vectorize over population
   update_population = vmap(update_neuron, in_axes=(0, 0, None, None))
   ```
@@ -1305,7 +1305,7 @@ class HippocampalRAG:
       ├─ add_plasticity(rule, params)
       ├─ add_inference(model, params)
       └─ build() → Region
-  
+
   NetworkBuilder
       ├─ add_region(name, region)
       ├─ connect_regions(source, target, rule)
@@ -1357,7 +1357,7 @@ class HippocampalRAG:
 - [ ] Example usage
   ```python
   from framework import RegionBuilder
-  
+
   # Build custom region
   builder = RegionBuilder(name='MyRegion')
   builder.add_neurons(
@@ -1379,7 +1379,7 @@ class HippocampalRAG:
       model='zinb',
       max_iter=100
   )
-  
+
   region = builder.build()
   ```
 
@@ -1416,12 +1416,12 @@ class HippocampalRAG:
 - [ ] Backend selection
   ```python
   from framework import Simulator
-  
+
   # Auto-select backend
   sim = Simulator(network, backend='auto')
   # Force specific backend
   sim = Simulator(network, backend='jax')
-  
+
   # Run
   results = sim.run(T=1000, dt=0.1, inputs=my_inputs)
   ```
@@ -1459,21 +1459,21 @@ class HippocampalRAG:
 - [ ] Plugin development guide
   ```python
   from framework.plugins import Plugin
-  
+
   class MyCustomRegion(Plugin):
       name = 'my_custom_region'
       version = '1.0.0'
-      
+
       def create_network(self, params):
           # Build network using framework primitives
           builder = RegionBuilder()
           # ... configure
           return builder.build()
-      
+
       def encode(self, input_data):
           # Convert input to neural activity
           return neural_activity
-      
+
       def decode(self, neural_activity):
           # Convert neural activity to output
           return output
@@ -1787,36 +1787,36 @@ class HippocampalRAG:
      - Problem: LLMs lack biologically-inspired memory
      - Solution: Hippocampal CA1 framework
      - Contributions: 4 key innovations
-  
+
   2. Background
      - Neurobiology of CA1
      - Computational models
      - LLM memory systems
-  
+
   3. Methods
      - Primitive architecture
      - Fractal region composition
      - AI memory integration
      - Framework design
-  
+
   4. Validation
      - Biological: Experimental data match (>0.85)
      - Computational: Golden tests (5/5)
      - AI: LongBench (+15%)
      - Scale: 100K neurons
-  
+
   5. Results
      - Biological fidelity
      - AI performance
      - Framework extensibility
      - Ablation studies
-  
+
   6. Discussion
      - Implications for AI
      - Neuroscience insights
      - Limitations
      - Future work
-  
+
   7. Conclusion
      - Summary of contributions
      - Broader impact
@@ -2097,7 +2097,7 @@ PHASE 7 (Quality & Release)
 PHASE 8 (Community & Impact)
 ```
 
-**Critical Path**: 0→1→2→3→4→5→6→7→8 (sequential)  
+**Critical Path**: 0→1→2→3→4→5→6→7→8 (sequential)
 **Parallelizable**: Phases 3, 4, 5 can overlap partially
 
 ---

@@ -9,7 +9,7 @@ Two 404 DOI links were corrected in docs/BIBLIOGRAPHY.md:
 1. **Orima et al. (2025)** - Fractal Analysis Methodology
    - DOI 10.3389/fncom.2025.1641519 returned 404 at doi.org
    - Changed to plain text DOI + direct Frontiers link
-   
+
 2. **Jahr & Stevens (1990)** - NMDA Receptor Dynamics
    - Previous DOI 10.1038/346678a0 was incorrect (404)
    - Corrected to DOI 10.1523/JNEUROSCI.10-09-03178.1990

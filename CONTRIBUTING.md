@@ -68,19 +68,19 @@ pre-commit install
 def my_function(param: float, flag: bool = True) -> np.ndarray:
     """
     Brief description.
-    
+
     Detailed description with scientific context and DOI if applicable.
-    
+
     Args:
         param: Description of param
         flag: Description of flag (default: True)
-    
+
     Returns:
         Description of return value
-    
+
     Raises:
         ValueError: When param is negative
-    
+
     Examples:
         >>> result = my_function(1.5)
         >>> print(result.shape)
@@ -88,7 +88,7 @@ def my_function(param: float, flag: bool = True) -> np.ndarray:
     """
     if param < 0:
         raise ValueError("param must be non-negative")
-    
+
     # Implementation
     return np.zeros(10)
 ```

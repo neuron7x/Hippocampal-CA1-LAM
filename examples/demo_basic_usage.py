@@ -15,9 +15,9 @@ from plasticity.unified_weights import UnifiedWeightMatrix, create_source_type_m
 # Set seed
 np.random.seed(42)
 
-print("="*70)
+print("=" * 70)
 print("CA1 MODEL - BASIC USAGE EXAMPLE")
-print("="*70)
+print("=" * 70)
 
 # Load parameters
 print("\n1. Loading parameters...")
@@ -56,19 +56,19 @@ n_steps = int(T / dt)
 
 for step in range(n_steps):
     t = step * dt
-    
+
     # Random spikes
     spikes_pre = np.random.rand(N) < 0.01
     spikes_post = np.random.rand(N) < 0.01
     V_dend = np.random.randn(N) * 10 - 60
-    
+
     # Update
     W.update_stp(spikes_pre, spikes_post)
     W.update_calcium(spikes_pre, spikes_post, V_dend)
-    
+
     if step % 10 == 0:
         W.update_plasticity_ca_based(M=1.0, G=np.zeros(N))
-    
+
     if step % 1000 == 0:
         W.enforce_spectral_constraint(rho_target=0.95)
         if step > 0:
@@ -77,7 +77,7 @@ for step in range(n_steps):
 # Final statistics
 print("\n4. Final statistics:")
 stats = W.get_statistics()
-for key in ['spectral_radius', 'W_eff_mean', 'Ca_mean', 'Ca_max']:
+for key in ["spectral_radius", "W_eff_mean", "Ca_mean", "Ca_max"]:
     print(f"   {key}: {stats[key]:.4f}")
 
 print("\n✅ Example complete!")

@@ -11,9 +11,9 @@ from pathlib import Path
 
 BASE = Path(".")
 
-print("="*70)
+print("=" * 70)
 print("FINAL GENERATION PHASE")
-print("="*70)
+print("=" * 70)
 
 # ============================================================================
 # CITATION.CFF
@@ -82,20 +82,20 @@ PRECOMMIT = """repos:
       - id: check-toml
       - id: check-merge-conflict
       - id: debug-statements
-  
+
   - repo: https://github.com/psf/black
     rev: 23.7.0
     hooks:
       - id: black
         language_version: python3
         args: ['--line-length=100']
-  
+
   - repo: https://github.com/PyCQA/flake8
     rev: 6.1.0
     hooks:
       - id: flake8
         args: ['--max-line-length=100', '--extend-ignore=E203,W503']
-  
+
   - repo: https://github.com/PyCQA/bandit
     rev: 1.7.5
     hooks:
@@ -170,19 +170,19 @@ n_steps = int(T / dt)
 
 for step in range(n_steps):
     t = step * dt
-    
+
     # Random spikes
     spikes_pre = np.random.rand(N) < 0.01
     spikes_post = np.random.rand(N) < 0.01
     V_dend = np.random.randn(N) * 10 - 60
-    
+
     # Update
     W.update_stp(spikes_pre, spikes_post)
     W.update_calcium(spikes_pre, spikes_post, V_dend)
-    
+
     if step % 10 == 0:
         W.update_plasticity_ca_based(M=1.0, G=np.zeros(N))
-    
+
     if step % 1000 == 0:
         W.enforce_spectral_constraint(rho_target=0.95)
         if step > 0:
@@ -243,7 +243,7 @@ print("\\nSimulating 10 seconds...")
 for step in range(n_steps):
     t = step * 0.1
     state, changed = controller.step()
-    
+
     if state == NetworkState.THETA:
         theta_time += 0.1
     elif state == NetworkState.SWR:
@@ -379,22 +379,22 @@ def benchmark_weight_update():
     \"\"\"Benchmark weight matrix operations\"\"\"
     np.random.seed(42)
     params = get_default_parameters()
-    
+
     N = 100
     connectivity = np.random.rand(N, N) < 0.1
     np.fill_diagonal(connectivity, False)
-    
+
     layer_assignments = np.random.randint(0, 4, N)
     initial_weights = np.random.lognormal(0, 0.5, (N, N))
     initial_weights = np.clip(initial_weights, 0.01, 10.0)
     source_types = create_source_type_matrix(N, layer_assignments)
-    
+
     W = UnifiedWeightMatrix(connectivity, initial_weights, source_types, params)
-    
+
     # Benchmark
     n_iter = 1000
     start = time.time()
-    
+
     for _ in range(n_iter):
         spikes_pre = np.random.rand(N) < 0.01
         spikes_post = np.random.rand(N) < 0.01
@@ -403,14 +403,14 @@ def benchmark_weight_update():
         W.update_calcium(spikes_pre, spikes_post, V_dend)
         if _ % 10 == 0:
             W.update_plasticity_ca_based(M=1.0, G=np.zeros(N))
-    
+
     elapsed = time.time() - start
     return elapsed, n_iter
 
 def benchmark_laminar_em():
     \"\"\"Benchmark laminar EM\"\"\"
     np.random.seed(42)
-    
+
     N = 1000
     cells = []
     for i in range(N):
@@ -424,31 +424,31 @@ def benchmark_laminar_em():
             z=z, s=np.random.rand(),
             transcripts=transcripts
         ))
-    
+
     model = HierarchicalLaminarModel(lambda_mrf=0.0)
-    
+
     start = time.time()
     q = model.fit_em_vectorized(cells, max_iter=10, verbose=False)
     elapsed = time.time() - start
-    
+
     return elapsed, N
 
 if __name__ == "__main__":
     print("="*70)
     print("PERFORMANCE BENCHMARKS")
     print("="*70)
-    
+
     # Weight updates
     print("\\n1. Weight Matrix Operations (100 neurons)...")
     elapsed, n_iter = benchmark_weight_update()
     print(f"   {n_iter} iterations in {elapsed:.2f}s")
     print(f"   {elapsed/n_iter*1000:.2f} ms/iteration")
-    
+
     # Laminar EM
     print("\\n2. Laminar EM (1000 cells, 10 iterations)...")
     elapsed, N = benchmark_laminar_em()
     print(f"   {N} cells in {elapsed:.2f}s")
-    
+
     print("\\n✅ Benchmarks complete!")
     print("\\nReference (Intel i7, 16GB RAM):")
     print("  Weight updates: ~10 ms/iteration")
@@ -460,6 +460,6 @@ with open(BASE / "scripts" / "benchmark.py", "w") as f:
 print("✓ scripts/benchmark.py")
 
 print("\\n✅ ALL EXAMPLES AND SCRIPTS GENERATED")
-print("="*70)
+print("=" * 70)
 print("PACKAGE GENERATION COMPLETE!")
-print("="*70)
+print("=" * 70)

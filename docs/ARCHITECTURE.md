@@ -85,7 +85,7 @@ Updated W_base [N, N]
 
 ### `data.biophysical_parameters`
 
-**Purpose**: Single source of truth for all parameters  
+**Purpose**: Single source of truth for all parameters
 **Key Classes**:
 - `CA1Parameters`: Master container
 - `LaminarMarkers`: smFISH data (58,065 cells)
@@ -98,7 +98,7 @@ Updated W_base [N, N]
 
 ### `plasticity.unified_weights`
 
-**Purpose**: Unified W+STP+Ca²⁺ matrix  
+**Purpose**: Unified W+STP+Ca²⁺ matrix
 **Key Classes**:
 - `UnifiedWeightMatrix`: Single matrix for dynamics + learning
 - `InputSource`: Channel types (CA3/EC/LOCAL)
@@ -117,7 +117,7 @@ Updated W_base [N, N]
 
 ### `core.hierarchical_laminar`
 
-**Purpose**: Infer 4 layers from transcriptomics  
+**Purpose**: Infer 4 layers from transcriptomics
 **Algorithm**: Variational EM + MRF
 
 **Complexity**:
@@ -131,7 +131,7 @@ Updated W_base [N, N]
 
 ### `core.theta_swr_switching`
 
-**Purpose**: Control network operational state  
+**Purpose**: Control network operational state
 **State Machine**:
 
 ```
@@ -151,7 +151,7 @@ THETA ────────────→ TRANSITION
 
 ### `ai_integration.memory_module`
 
-**Purpose**: LLM long-term memory via CA1 mechanisms  
+**Purpose**: LLM long-term memory via CA1 mechanisms
 **Architecture**:
 
 ```
@@ -173,7 +173,7 @@ Fused output [d_model]
 
 ## Threading Model
 
-**Current**: Single-threaded  
+**Current**: Single-threaded
 **Future**: Thread-safe via locks on W matrix
 
 ## Memory Layout

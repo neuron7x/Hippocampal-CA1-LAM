@@ -47,15 +47,15 @@ python -m pytest -q
 def test_network_stability():
     # Create UnifiedWeightMatrix
     W = UnifiedWeightMatrix(connectivity, weights, sources, params)
-    
+
     # Simulate
     for _ in range(50):
         W.update_stp(spikes_pre, spikes_post)
         W.update_calcium(spikes_pre, spikes_post, V_dend)
-    
+
     # Enforce stability
     W.enforce_spectral_constraint(rho_target=0.95)
-    
+
     # Validate
     assert stats['spectral_radius'] < 1.0  # MUST PASS
 ```
@@ -76,7 +76,7 @@ def test_calcium_plasticity():
     for _ in range(100):
         W.update_plasticity_ca_based(M=1.0, G=np.zeros(N))
     assert delta_ltp > 0.0001  # MUST INCREASE
-    
+
     # Medium Ca → LTD
     W.Ca[0, 1] = 1.5  # θ_d < Ca < θ_p
     for _ in range(100):
@@ -97,11 +97,11 @@ def test_input_specific():
     # Same Ca at CA3 and EC synapses
     W.Ca[0, 1] = 2.5  # CA3
     W.Ca[0, 2] = 2.5  # EC
-    
+
     # Run plasticity
     for _ in range(100):
         W.update_plasticity_ca_based(M=1.0, G=np.zeros(N))
-    
+
     # EC should change 10x less
     ratio = delta_ca3 / (delta_ec + 1e-10)
     assert ratio > 5.0  # MUST PASS
@@ -119,12 +119,12 @@ Ratio: 10.06  ✓
 ```python
 def test_theta_swr():
     controller = NetworkStateController(params)
-    
+
     # Simulate 10 seconds
     for _ in range(100000):
         state, _ = controller.step()
         # Track time in each state
-    
+
     # Validate
     assert 0.7 <= theta_frac <= 0.95  # Theta dominant
     assert controller.get_inhibition_factor() < 1.0  # SWR reduces inh
@@ -144,7 +144,7 @@ SWR recurrence: 2.00  ✓
 def test_reproducibility():
     W1 = run_simulation(seed=42)
     W2 = run_simulation(seed=42)
-    
+
     diff = np.max(np.abs(W1 - W2))
     assert diff < 1e-10  # EXACT MATCH
 ```
@@ -169,18 +169,18 @@ class TestUnifiedWeights:
         self.N = 10
         self.connectivity = np.eye(self.N, k=1, dtype=bool)
         # ... setup
-    
+
     def test_effective_weights_shape(self):
         W = UnifiedWeightMatrix(...)
         W_eff = W.get_effective_weights()
         assert W_eff.shape == (self.N, self.N)
-    
+
     def test_stp_bounds(self):
         W = UnifiedWeightMatrix(...)
         W.update_stp(spikes_pre, spikes_post)
         assert np.all(0 <= W.u) and np.all(W.u <= 1)
         assert np.all(0 <= W.R) and np.all(W.R <= 1)
-    
+
     def test_calcium_nonnegative(self):
         W = UnifiedWeightMatrix(...)
         W.update_calcium(spikes_pre, spikes_post, V_dend)
@@ -195,17 +195,17 @@ def test_layer_assignment_valid():
     model = HierarchicalLaminarModel()
     q = model.fit_em_vectorized(cells, max_iter=10)
     assignments = model.assign_layers(cells, q)
-    
+
     assert len(assignments) == len(cells)
     assert np.all((0 <= assignments) & (assignments < 4))
 
 def test_mrf_improves_coherence():
     model_mrf = HierarchicalLaminarModel(lambda_mrf=0.5)
     model_no_mrf = HierarchicalLaminarModel(lambda_mrf=0.0)
-    
+
     coherence_mrf = compute_coherence(...)
     coherence_no_mrf = compute_coherence(...)
-    
+
     assert coherence_mrf > coherence_no_mrf
 ```
 
@@ -219,7 +219,7 @@ def test_full_pipeline():
     W = UnifiedWeightMatrix(...)
     pop = CA1Population(...)
     controller = NetworkStateController(...)
-    
+
     # 2. Simulate 1000ms
     for step in range(10000):
         state, _ = controller.step()
@@ -228,7 +228,7 @@ def test_full_pipeline():
         W.update_calcium(...)
         if step % 10 == 0:
             W.update_plasticity_ca_based(...)
-    
+
     # 3. Validate
     assert controller state machine worked
     assert spikes generated
@@ -303,16 +303,16 @@ import numpy as np
 def test_my_feature():
     """
     Test description.
-    
+
     Expected behavior: ...
     Reference: DOI if applicable
     """
     # Setup
     np.random.seed(42)
-    
+
     # Execute
     result = my_function(params)
-    
+
     # Validate
     assert result meets expectations
     assert no side effects
@@ -348,13 +348,13 @@ def generate_test_cells(N=1000, seed=42):
 
 ### Common Issues
 
-**Issue**: Tests pass locally but fail in CI  
+**Issue**: Tests pass locally but fail in CI
 **Solution**: Check Python version, dependencies, random seed
 
-**Issue**: Numerical differences across platforms  
+**Issue**: Numerical differences across platforms
 **Solution**: Use tolerance in assertions (but golden tests must match exactly)
 
-**Issue**: Tests are slow  
+**Issue**: Tests are slow
 **Solution**: Use smaller N for unit tests, reserve large N for integration
 
 ---

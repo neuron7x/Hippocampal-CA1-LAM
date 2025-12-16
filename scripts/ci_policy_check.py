@@ -120,9 +120,7 @@ def check_workflow(path: Path) -> list[str]:
                 uses_value = step.get("uses")
                 if isinstance(uses_value, str) and not is_pinned(uses_value):
                     line_no = find_line_number(content, uses_value)
-                    issues.append(
-                        f"{path}:{line_no}: action '{uses_value}' is not pinned to a SHA"
-                    )
+                    issues.append(f"{path}:{line_no}: action '{uses_value}' is not pinned to a SHA")
 
                 run_value = step.get("run")
                 if isinstance(run_value, str):
@@ -141,9 +139,7 @@ def main() -> int:
         print("No .github/workflows directory found", file=sys.stderr)
         return 1
 
-    workflow_files = sorted(WORKFLOW_DIR.glob("*.yml")) + sorted(
-        WORKFLOW_DIR.glob("*.yaml")
-    )
+    workflow_files = sorted(WORKFLOW_DIR.glob("*.yml")) + sorted(WORKFLOW_DIR.glob("*.yaml"))
 
     violations: list[str] = []
     for wf in workflow_files:

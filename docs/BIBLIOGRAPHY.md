@@ -8,10 +8,10 @@ All parameters in this framework are extracted from peer-reviewed literature. Th
 
 ### 1. Laminar Organization
 
-**Pachicano M., Marín O., Rico B.** (2025)  
-*Laminar organization of pyramidal neuron cell types defines distinct CA1 hippocampal subregions*  
-**Nature Communications**, Article 10604  
-Published: 03 December 2025  
+**Pachicano M., Marín O., Rico B.** (2025)
+*Laminar organization of pyramidal neuron cell types defines distinct CA1 hippocampal subregions*
+**Nature Communications**, Article 10604
+Published: 03 December 2025
 DOI: [10.1038/s41467-025-66613-y](https://doi.org/10.1038/s41467-025-66613-y)
 
 **Data extracted:**
@@ -23,9 +23,9 @@ DOI: [10.1038/s41467-025-66613-y](https://doi.org/10.1038/s41467-025-66613-y)
 
 ### 2. Ca²⁺-Based Plasticity
 
-**Graupner M., Brunel N.** (2012)  
-*Calcium-based plasticity model explains sensitivity of synaptic changes to spike pattern, rate, and dendritic location*  
-**Proceedings of the National Academy of Sciences**, 109(10):3991-3996  
+**Graupner M., Brunel N.** (2012)
+*Calcium-based plasticity model explains sensitivity of synaptic changes to spike pattern, rate, and dendritic location*
+**Proceedings of the National Academy of Sciences**, 109(10):3991-3996
 DOI: [10.1073/pnas.1109359109](https://doi.org/10.1073/pnas.1109359109)
 
 **Parameters extracted:**
@@ -38,10 +38,10 @@ DOI: [10.1073/pnas.1109359109](https://doi.org/10.1073/pnas.1109359109)
 
 ### 3. Input-Specific Plasticity (DELTA)
 
-**Mohar B., Ganmore I., Lampl I.** (2025)  
-*DELTA: a method for brain-wide measurement of synaptic protein turnover reveals localized plasticity during learning*  
-**Nature Neuroscience**  
-Published: 2025  
+**Mohar B., Ganmore I., Lampl I.** (2025)
+*DELTA: a method for brain-wide measurement of synaptic protein turnover reveals localized plasticity during learning*
+**Nature Neuroscience**
+Published: 2025
 DOI: [10.1038/s41593-025-01923-4](https://doi.org/10.1038/s41593-025-01923-4)
 
 **Motivation:**
@@ -51,9 +51,9 @@ DOI: [10.1038/s41593-025-01923-4](https://doi.org/10.1038/s41593-025-01923-4)
 
 ### 4. HCN Channel Gradient
 
-**Magee J.C.** (1998)  
-*Dendritic hyperpolarization-activated currents modify the integrative properties of hippocampal CA1 pyramidal neurons*  
-**Journal of Neuroscience**, 18(19):7613-7624  
+**Magee J.C.** (1998)
+*Dendritic hyperpolarization-activated currents modify the integrative properties of hippocampal CA1 pyramidal neurons*
+**Journal of Neuroscience**, 18(19):7613-7624
 DOI: [10.1523/JNEUROSCI.18-19-07613.1998](https://doi.org/10.1523/JNEUROSCI.18-19-07613.1998)
 
 **Data extracted:**
@@ -64,9 +64,9 @@ DOI: [10.1523/JNEUROSCI.18-19-07613.1998](https://doi.org/10.1523/JNEUROSCI.18-1
 
 ### 5. Theta Phase Precession
 
-**O'Keefe J., Recce M.L.** (1993)  
-*Phase relationship between hippocampal place units and the EEG theta rhythm*  
-**Hippocampus**, 3(3):317-330  
+**O'Keefe J., Recce M.L.** (1993)
+*Phase relationship between hippocampal place units and the EEG theta rhythm*
+**Hippocampus**, 3(3):317-330
 DOI: [10.1002/hipo.450030307](https://doi.org/10.1002/hipo.450030307)
 
 **Data extracted:**
@@ -74,9 +74,9 @@ DOI: [10.1002/hipo.450030307](https://doi.org/10.1002/hipo.450030307)
 - Phase precession slope: κ ≈ 2π rad/place field
 - Phase-position relationship: φ = φ₀ - κx (mod 2π)
 
-**Skaggs W.E., McNaughton B.L., Wilson M.A., Barnes C.A.** (1996)  
-*Theta phase precession in hippocampal neuronal populations and the compression of temporal sequences*  
-**Hippocampus**, 6(2):149-172  
+**Skaggs W.E., McNaughton B.L., Wilson M.A., Barnes C.A.** (1996)
+*Theta phase precession in hippocampal neuronal populations and the compression of temporal sequences*
+**Hippocampus**, 6(2):149-172
 DOI: [10.1002/(SICI)1098-1063(1996)6:2<149::AID-HIPO6>3.0.CO;2-K](https://doi.org/10.1002/(SICI)1098-1063(1996)6:2<149::AID-HIPO6>3.0.CO;2-K)
 
 **Additional data:**
@@ -85,8 +85,8 @@ DOI: [10.1002/(SICI)1098-1063(1996)6:2<149::AID-HIPO6>3.0.CO;2-K](https://doi.or
 
 ### 6. Sharp-Wave Ripples (SWR)
 
-**A curated dataset of hippocampal sharp-wave ripples supports investigations of memory replay** (2025)  
-**Scientific Data**, Nature  
+**A curated dataset of hippocampal sharp-wave ripples supports investigations of memory replay** (2025)
+**Scientific Data**, Nature
 DOI: [10.1038/s41597-025-06115-0](https://doi.org/10.1038/s41597-025-06115-0)
 
 **Data extracted:**
@@ -97,9 +97,9 @@ DOI: [10.1038/s41597-025-06115-0](https://doi.org/10.1038/s41597-025-06115-0)
 
 ### 7. OLM Interneuron Control
 
-**Udakis M., Pedrosa V., Chamberlain S.E.L., Clopath C., Mellor J.R.** (2025)  
-*A neural circuit mechanism for controlling learning in the hippocampus*  
-**Nature Communications**  
+**Udakis M., Pedrosa V., Chamberlain S.E.L., Clopath C., Mellor J.R.** (2025)
+*A neural circuit mechanism for controlling learning in the hippocampus*
+**Nature Communications**
 DOI: [10.1038/s41467-025-64859-0](https://doi.org/10.1038/s41467-025-64859-0)
 
 **Data extracted:**
@@ -110,9 +110,9 @@ DOI: [10.1038/s41467-025-64859-0](https://doi.org/10.1038/s41467-025-64859-0)
 
 ### 8. Behavioral Time-Scale Plasticity (BTSP)
 
-**Bittner K.C., Grienberger C., Vaidya S.P., Milstein A.D., Macklin J.J., Suh J., Tonegawa S., Magee J.C.** (2017)  
-*Behavioral time scale synaptic plasticity underlies CA1 place fields*  
-**Science**, 357(6355):1033-1036  
+**Bittner K.C., Grienberger C., Vaidya S.P., Milstein A.D., Macklin J.J., Suh J., Tonegawa S., Magee J.C.** (2017)
+*Behavioral time scale synaptic plasticity underlies CA1 place fields*
+**Science**, 357(6355):1033-1036
 DOI: [10.1126/science.aan3846](https://doi.org/10.1126/science.aan3846)
 
 **Data extracted:**
@@ -122,9 +122,9 @@ DOI: [10.1126/science.aan3846](https://doi.org/10.1126/science.aan3846)
 
 ### 9. Voltage-Based STDP with Homeostasis
 
-**Clopath C., Büsing L., Vasilaki E., Gerstner W.** (2010)  
-*Connectivity reflects coding: a model of voltage-based STDP with homeostasis*  
-**Nature Neuroscience**, 13:344-352  
+**Clopath C., Büsing L., Vasilaki E., Gerstner W.** (2010)
+*Connectivity reflects coding: a model of voltage-based STDP with homeostasis*
+**Nature Neuroscience**, 13:344-352
 DOI: [10.1038/nn.2479](https://doi.org/10.1038/nn.2479)
 
 **Data extracted:**
@@ -134,9 +134,9 @@ DOI: [10.1038/nn.2479](https://doi.org/10.1038/nn.2479)
 
 ### 10. Short-Term Plasticity
 
-**Tsodyks M.V., Markram H.** (1997)  
-*The neural code between neocortical pyramidal neurons depends on neurotransmitter release probability*  
-**Proceedings of the National Academy of Sciences**, 94(2):719-723  
+**Tsodyks M.V., Markram H.** (1997)
+*The neural code between neocortical pyramidal neurons depends on neurotransmitter release probability*
+**Proceedings of the National Academy of Sciences**, 94(2):719-723
 DOI: [10.1073/pnas.94.2.719](https://doi.org/10.1073/pnas.94.2.719)
 
 **Data extracted:**
@@ -147,9 +147,9 @@ DOI: [10.1073/pnas.94.2.719](https://doi.org/10.1073/pnas.94.2.719)
 
 ### 11. Network Stability
 
-**Brunel N.** (2000)  
-*Dynamics of sparsely connected networks of excitatory and inhibitory spiking neurons*  
-**Journal of Computational Neuroscience**, 8:183-208  
+**Brunel N.** (2000)
+*Dynamics of sparsely connected networks of excitatory and inhibitory spiking neurons*
+**Journal of Computational Neuroscience**, 8:183-208
 DOI: [10.1023/A:1008925309027](https://doi.org/10.1023/A:1008925309027)
 
 **Data extracted:**
@@ -159,10 +159,10 @@ DOI: [10.1023/A:1008925309027](https://doi.org/10.1023/A:1008925309027)
 
 ### 12. Fractal Analysis Methodology
 
-**Orima T., Shigematsu N., Koyama S., Jimbo Y.** (2025)  
-*Fractal memory structure in the spatiotemporal learning rule*  
-**Frontiers in Computational Neuroscience**  
-DOI: 10.3389/fncom.2025.1641519  
+**Orima T., Shigematsu N., Koyama S., Jimbo Y.** (2025)
+*Fractal memory structure in the spatiotemporal learning rule*
+**Frontiers in Computational Neuroscience**
+DOI: 10.3389/fncom.2025.1641519
 Full text: https://www.frontiersin.org/journals/computational-neuroscience/articles/10.3389/fncom.2025.1641519/full
 
 **Methodology reference:**
@@ -173,9 +173,9 @@ Full text: https://www.frontiersin.org/journals/computational-neuroscience/artic
 
 ### 13. HippoRAG (AI Integration)
 
-**Gutiérrez B.J., Zhou Y., Lee S., Luria G., Haber N., Sundaram S.** (2025)  
-*HippoRAG: Neurobiologically Inspired Long-Term Memory for Large Language Models*  
-**arXiv:2405.14831** (v3, January 2025)  
+**Gutiérrez B.J., Zhou Y., Lee S., Luria G., Haber N., Sundaram S.** (2025)
+*HippoRAG: Neurobiologically Inspired Long-Term Memory for Large Language Models*
+**arXiv:2405.14831** (v3, January 2025)
 DOI: [10.48550/arXiv.2405.14831](https://doi.org/10.48550/arXiv.2405.14831)
 
 **Architecture reference:**
@@ -187,10 +187,10 @@ DOI: [10.48550/arXiv.2405.14831](https://doi.org/10.48550/arXiv.2405.14831)
 
 ### NMDA Receptor Dynamics
 
-**Jahr C.E., Stevens C.F.** (1990)  
-*Voltage dependence of NMDA-activated macroscopic conductances predicted by single-channel kinetics*  
-**Journal of Neuroscience**, 10(9):3178-3182  
-DOI: [10.1523/JNEUROSCI.10-09-03178.1990](https://doi.org/10.1523/JNEUROSCI.10-09-03178.1990)  
+**Jahr C.E., Stevens C.F.** (1990)
+*Voltage dependence of NMDA-activated macroscopic conductances predicted by single-channel kinetics*
+**Journal of Neuroscience**, 10(9):3178-3182
+DOI: [10.1523/JNEUROSCI.10-09-03178.1990](https://doi.org/10.1523/JNEUROSCI.10-09-03178.1990)
 PubMed: https://pubmed.ncbi.nlm.nih.gov/1697902/
 
 **Mg²⁺ block parameters:**
@@ -200,9 +200,9 @@ PubMed: https://pubmed.ncbi.nlm.nih.gov/1697902/
 
 ### Two-Compartment Models
 
-**Migliore M., Shepherd G.M.** (2002)  
-*Emerging rules for the distributions of active dendritic conductances*  
-**Nature Reviews Neuroscience**, 3:362-370  
+**Migliore M., Shepherd G.M.** (2002)
+*Emerging rules for the distributions of active dendritic conductances*
+**Nature Reviews Neuroscience**, 3:362-370
 DOI: [10.1038/nrn810](https://doi.org/10.1038/nrn810)
 
 **Compartment modeling principles:**
@@ -210,9 +210,9 @@ DOI: [10.1038/nrn810](https://doi.org/10.1038/nrn810)
 - Dendrite: integration, NMDA, Ca²⁺
 - Coupling conductance
 
-**Golding N.L., Staff N.P., Spruston N.** (2002)  
-*Dendritic spikes as a mechanism for cooperative long-term potentiation*  
-**Nature**, 418:326-331  
+**Golding N.L., Staff N.P., Spruston N.** (2002)
+*Dendritic spikes as a mechanism for cooperative long-term potentiation*
+**Nature**, 418:326-331
 DOI: [10.1038/nature00854](https://doi.org/10.1038/nature00854)
 
 **Dendritic Ca²⁺ plateaus:**

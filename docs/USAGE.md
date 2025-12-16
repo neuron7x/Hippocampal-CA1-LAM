@@ -65,24 +65,24 @@ n_steps = int(T / dt)
 # Run simulation
 for step in range(n_steps):
     t = step * dt
-    
+
     # Generate random spikes (example)
     spikes_pre = np.random.rand(N) < 0.01
     spikes_post = np.random.rand(N) < 0.01
     V_dendrite = np.random.randn(N) * 10 - 60  # mV
-    
+
     # Update STP (every timestep)
     W.update_stp(spikes_pre, spikes_post)
-    
+
     # Update Ca²⁺ (every timestep)
     W.update_calcium(spikes_pre, spikes_post, V_dendrite)
-    
+
     # Update plasticity (every 10 timesteps = 1 ms)
     if step % 10 == 0:
         M = 1.0  # Modulatory signal (learning mode)
         G = np.zeros(N)  # No OLM gating
         W.update_plasticity_ca_based(M, G)
-    
+
     # Optional: enforce stability every 100 ms
     if step % 1000 == 0:
         W.enforce_spectral_constraint(rho_target=0.95)
@@ -107,12 +107,12 @@ cells = []
 for i in range(1000):
     z = np.random.rand()  # Depth [0, 1]
     s = np.random.rand()  # Longitudinal [0, 1]
-    
+
     # Transcripts (example: layer-dependent)
     layer = min(int(z * 4), 3)
     transcripts = np.zeros(4)
     transcripts[layer] = np.random.poisson(5)
-    
+
     cells.append(CellDataHier(
         cell_id=i,
         animal_id=0,
@@ -161,18 +161,18 @@ detector = ReplayDetector()
 # Simulation
 for step in range(10000):
     t = step * 0.1
-    
+
     # Step state machine
     state, state_changed = controller.step()
-    
+
     # Get modulation factors
     inh_factor = controller.get_inhibition_factor()  # 0.5 during SWR
     rec_factor = controller.get_recurrence_factor()  # 2.0 during SWR
     theta_drive = controller.get_theta_drive(t, f_theta=8.0)
-    
+
     # Apply to network
     # (integrate with your simulation)
-    
+
     # Detect replay during SWR
     if state == NetworkState.SWR:
         replay_event = detector.detect(t, spikes, state)
@@ -195,7 +195,7 @@ for event in events:
     h_t = np.random.randn(params.ai.d_model)  # Your LLM encoding
     v_t = np.random.randn(params.ai.value_dim)  # Value to store
     position = np.random.rand(2)  # Spatial position (for novelty)
-    
+
     # Process with CA1 memory
     ai_memory.process_step(h_t, v_t, position)
 

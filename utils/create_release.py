@@ -10,75 +10,90 @@ import hashlib
 from pathlib import Path
 from datetime import datetime
 
+
 def calculate_checksum(filepath):
     """Calculate SHA256 checksum"""
     sha256 = hashlib.sha256()
-    with open(filepath, 'rb') as f:
-        for chunk in iter(lambda: f.read(4096), b''):
+    with open(filepath, "rb") as f:
+        for chunk in iter(lambda: f.read(4096), b""):
             sha256.update(chunk)
     return sha256.hexdigest()
 
+
 def create_archive(version="2.0.0"):
     """Create release archive"""
-    print("="*70)
+    print("=" * 70)
     print("📦 CREATING RELEASE ARCHIVE")
-    print("="*70)
+    print("=" * 70)
     print()
-    
+
     # Archive name
     archive_name = f"Hippocampal-CA1-LAM-v{version}.tar.gz"
-    
+
     # Files to exclude
     exclude_patterns = [
-        'venv', 'venv-dev', '.git', '__pycache__', '*.pyc', '*.pyo',
-        '.pytest_cache', 'htmlcov', '.coverage', 'dist', 'build',
-        '*.egg-info', '.DS_Store', '*.swp'
+        "venv",
+        "venv-dev",
+        ".git",
+        "__pycache__",
+        "*.pyc",
+        "*.pyo",
+        ".pytest_cache",
+        "htmlcov",
+        ".coverage",
+        "dist",
+        "build",
+        "*.egg-info",
+        ".DS_Store",
+        "*.swp",
     ]
-    
+
     print(f"Creating: {archive_name}")
     print(f"Excluding: {', '.join(exclude_patterns)}")
     print()
-    
+
     def filter_func(tarinfo):
         """Filter function for tar"""
         for pattern in exclude_patterns:
-            if pattern.replace('*', '') in tarinfo.name or \
-               tarinfo.name.startswith('./' + pattern.replace('*', '')):
+            if pattern.replace("*", "") in tarinfo.name or tarinfo.name.startswith(
+                "./" + pattern.replace("*", "")
+            ):
                 return None
         return tarinfo
-    
+
     # Create archive
     with tarfile.open(archive_name, "w:gz") as tar:
         tar.add(".", arcname="Hippocampal-CA1-LAM", filter=filter_func)
-    
+
     # Get size
     size_bytes = os.path.getsize(archive_name)
     size_kb = size_bytes / 1024
-    
+
     # Calculate checksum
     checksum = calculate_checksum(archive_name)
-    
+
     print(f"✅ Archive created: {archive_name}")
     print(f"   Size: {size_kb:.1f} KB ({size_bytes:,} bytes)")
     print(f"   SHA256: {checksum}")
     print()
-    
+
     # Create checksum file
     checksum_file = f"{archive_name}.sha256"
-    with open(checksum_file, 'w') as f:
+    with open(checksum_file, "w") as f:
         f.write(f"{checksum}  {archive_name}\n")
     print(f"✅ Checksum file: {checksum_file}")
     print()
-    
+
     return archive_name, checksum
+
 
 def create_release_notes(version="2.0.0"):
     """Generate release notes"""
     print("📝 GENERATING RELEASE NOTES")
     print()
-    
+
     date = datetime.now().strftime("%Y-%m-%d")
-    
+
     notes = f"""# Hippocampal-CA1-LAM v{version}
 
 **Release Date**: {date}
@@ -188,37 +203,38 @@ sha256sum -c Hippocampal-CA1-LAM-v{version}.tar.gz.sha256
 
 **Verified**: Production Ready ✓
 """
-    
+
     # Save release notes
     notes_file = f"RELEASE_NOTES_v{version}.md"
-    with open(notes_file, 'w') as f:
+    with open(notes_file, "w") as f:
         f.write(notes)
-    
+
     print(f"✅ Release notes: {notes_file}")
     print()
-    
+
     return notes_file
 
+
 def main():
-    print("="*70)
+    print("=" * 70)
     print("🚀 HIPPOCAMPAL-CA1-LAM RELEASE CREATOR")
-    print("="*70)
+    print("=" * 70)
     print()
-    
+
     # Get version
     version = input("Enter version (default: 2.0.0): ").strip() or "2.0.0"
     print()
-    
+
     # Create archive
     archive_name, checksum = create_archive(version)
-    
+
     # Create release notes
     notes_file = create_release_notes(version)
-    
+
     # Summary
-    print("="*70)
+    print("=" * 70)
     print("✅ RELEASE READY")
-    print("="*70)
+    print("=" * 70)
     print()
     print("Files created:")
     print(f"  • {archive_name}")
@@ -233,6 +249,7 @@ def main():
     print(f"  5. Attach: {archive_name} + {archive_name}.sha256")
     print("  6. Publish release")
     print()
+
 
 if __name__ == "__main__":
     main()

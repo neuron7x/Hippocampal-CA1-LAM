@@ -13,9 +13,9 @@ from plasticity.unified_weights import UnifiedWeightMatrix, create_source_type_m
 
 np.random.seed(42)
 
-print("="*70)
+print("=" * 70)
 print("Ca²⁺-BASED PLASTICITY EXAMPLE")
-print("="*70)
+print("=" * 70)
 
 params = get_default_parameters()
 print(f"\nThresholds:")

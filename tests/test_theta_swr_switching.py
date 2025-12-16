@@ -10,7 +10,9 @@ from core.theta_swr_switching import (
 
 def test_state_transitions_reachable():
     np.random.seed(0)
-    params = StateTransitionParams(P_theta_to_SWR=0.9, P_SWR_to_theta=0.9, P_transition_duration=1.0)
+    params = StateTransitionParams(
+        P_theta_to_SWR=0.9, P_SWR_to_theta=0.9, P_transition_duration=1.0
+    )
     controller = NetworkStateController(params, dt=1.0)
 
     visited = {controller.state}
@@ -28,7 +30,9 @@ def test_state_transitions_reachable():
 
 
 def test_replay_detector_thresholding():
-    detector = ReplayDetector(rate_threshold=2.0, min_duration=20.0, max_duration=150.0, min_neurons=3)
+    detector = ReplayDetector(
+        rate_threshold=2.0, min_duration=20.0, max_duration=150.0, min_neurons=3
+    )
     detector.update_baseline(spike_count=10, window=100.0)
 
     spikes = [(0.0, 0), (1.0, 1), (2.0, 2), (3.0, 0)]

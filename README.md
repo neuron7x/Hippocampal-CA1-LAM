@@ -169,10 +169,10 @@ All parameters from peer-reviewed sources:
 
 ## Features
 
-✅ **Public API scaffold** - Minimal CA1Network for quick-start usage  
-✅ **Reproducible** - Seed=42 guarantees identical regression signals  
-✅ **Validated** - 6 deterministic golden tests  
-✅ **Production-Ready** - Type hints, tests, CI/CD, documentation  
+✅ **Public API scaffold** - Minimal CA1Network for quick-start usage
+✅ **Reproducible** - Seed=42 guarantees identical regression signals
+✅ **Validated** - 6 deterministic golden tests
+✅ **Production-Ready** - Type hints, tests, CI/CD, documentation
 
 ## Citation
 

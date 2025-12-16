@@ -78,10 +78,10 @@ All parameters from peer-reviewed sources:
 
 ## Features
 
-✅ **Complete Implementation** - No pseudo-code or placeholders  
-✅ **Reproducible** - Seed=42 guarantees identical results  
-✅ **Validated** - 5 golden tests, all parameters from experiments  
-✅ **Production-Ready** - Type hints, tests, CI/CD, documentation  
+✅ **Complete Implementation** - No pseudo-code or placeholders
+✅ **Reproducible** - Seed=42 guarantees identical results
+✅ **Validated** - 5 golden tests, all parameters from experiments
+✅ **Production-Ready** - Type hints, tests, CI/CD, documentation
 
 ## Citation
 
@@ -177,19 +177,19 @@ pre-commit install
 def my_function(param: float, flag: bool = True) -> np.ndarray:
     \"\"\"
     Brief description.
-    
+
     Detailed description with scientific context and DOI if applicable.
-    
+
     Args:
         param: Description of param
         flag: Description of flag (default: True)
-    
+
     Returns:
         Description of return value
-    
+
     Raises:
         ValueError: When param is negative
-    
+
     Examples:
         >>> result = my_function(1.5)
         >>> print(result.shape)
@@ -197,7 +197,7 @@ def my_function(param: float, flag: bool = True) -> np.ndarray:
     \"\"\"
     if param < 0:
         raise ValueError("param must be non-negative")
-    
+
     # Implementation
     return np.zeros(10)
 ```
