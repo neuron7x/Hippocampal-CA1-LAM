@@ -112,7 +112,7 @@ def _scan_lines(lines: Iterable[str]) -> List[Tuple[int, int, int, str, str]]:
 def scan_file(root: str, path: str) -> List[Tuple[int, int, int, str, str]]:
     abs_path = os.path.join(root, path)
     try:
-        with open(abs_path, "r", encoding="utf-8", errors="surrogateescape") as handle:
+        with open(abs_path, "r", encoding="utf-8", errors="strict") as handle:
             return _scan_lines(handle)
     except (OSError, UnicodeDecodeError) as exc:
         return [(1, 1, 0, "READ_ERROR", f"Could not read file: {exc}")]

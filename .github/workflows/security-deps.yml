@@ -31,12 +31,26 @@ jobs:
           mkdir -p pip-audit-reports
           status=0
           if [ -f requirements.txt ]; then
-            pip-audit -r requirements.txt --format json --output pip-audit-reports/requirements.json --progress-spinner off | tee pip-audit-reports/requirements.txt || status=$?
+            if ! pip-audit -r requirements.txt --format json --output pip-audit-reports/requirements.json --progress-spinner off; then
+              rc=$?
+              if [ $status -eq 0 ]; then status=$rc; fi
+            fi
+            if ! pip-audit -r requirements.txt --progress-spinner off > pip-audit-reports/requirements.txt; then
+              rc=$?
+              if [ $status -eq 0 ]; then status=$rc; fi
+            fi
           else
             echo "requirements.txt not found, skipping" | tee pip-audit-reports/requirements.txt
           fi
           if [ -f requirements-dev.txt ]; then
-            pip-audit -r requirements-dev.txt --format json --output pip-audit-reports/requirements-dev.json --progress-spinner off | tee pip-audit-reports/requirements-dev.txt || status=$?
+            if ! pip-audit -r requirements-dev.txt --format json --output pip-audit-reports/requirements-dev.json --progress-spinner off; then
+              rc=$?
+              if [ $status -eq 0 ]; then status=$rc; fi
+            fi
+            if ! pip-audit -r requirements-dev.txt --progress-spinner off > pip-audit-reports/requirements-dev.txt; then
+              rc=$?
+              if [ $status -eq 0 ]; then status=$rc; fi
+            fi
           else
             echo "requirements-dev.txt not found, skipping" | tee pip-audit-reports/requirements-dev.txt
           fi

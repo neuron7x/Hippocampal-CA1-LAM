@@ -19,9 +19,18 @@ WORKFLOW_DIR = os.path.join(".github", "workflows")
 
 
 def load_workflow(path: str) -> Tuple[Dict[str, Any], List[str]]:
-    with open(path, "r", encoding="utf-8") as handle:
-        text = handle.read()
-    return yaml.safe_load(text) or {}, text.splitlines()
+    try:
+        with open(path, "r", encoding="utf-8") as handle:
+            text = handle.read()
+    except OSError as exc:
+        print(f"{path}: cannot read workflow ({exc})")
+        return {}, []
+    try:
+        parsed = yaml.safe_load(text) or {}
+    except yaml.YAMLError as exc:
+        print(f"{path}: YAML parse error: {exc}")
+        return {}, text.splitlines()
+    return parsed, text.splitlines()
 
 
 def has_pull_request_target(trigger: Any) -> bool:
