@@ -5,14 +5,20 @@ Performance Benchmarking Script
 Tests performance of key operations and provides a sparse stress test for large inputs.
 """
 import argparse
+import sys
 import time
+from pathlib import Path
 
-import numpy as np
-import scipy.sparse as sp
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
-from core.hierarchical_laminar import CellDataHier, HierarchicalLaminarModel
-from data.biophysical_parameters import get_default_parameters
-from plasticity.unified_weights import UnifiedWeightMatrix, create_source_type_matrix
+import numpy as np  # noqa: E402
+import scipy.sparse as sp  # noqa: E402
+
+from core.hierarchical_laminar import CellDataHier, HierarchicalLaminarModel  # noqa: E402
+from data.biophysical_parameters import get_default_parameters  # noqa: E402
+from plasticity.unified_weights import UnifiedWeightMatrix, create_source_type_matrix  # noqa: E402
 
 
 def benchmark_weight_update(N: int = 100, n_iter: int = 1000):
