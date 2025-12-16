@@ -240,7 +240,9 @@ def test_full_pipeline():
 Minimum coverage: **95%** for changed code paths (critical paths must remain at 100%).
 
 ```bash
-python -m pytest tests/ --cov=. --cov-report=term-missing --cov-fail-under=95
+python -m pytest tests/ \
+  --cov=core --cov=plasticity --cov=ai_integration --cov=validation \
+  --cov-report=term-missing --cov-fail-under=95
 ```
 
 **Critical paths** (must have 100% coverage):
