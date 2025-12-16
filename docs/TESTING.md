@@ -26,6 +26,18 @@ python test_golden_standalone.py
 python -m pytest -q
 ```
 
+## Security Gates (required for merge)
+
+Run these locally before opening a PR:
+
+- Unicode scan: `python scripts/unicode_scan.py`
+- Config validation: `python scripts/validate_configs.py`
+- CI policy check: `python scripts/ci_policy_check.py`
+- Secrets scan: `gitleaks detect -c .gitleaks.toml --redact`
+- Dependency audit: `pip-audit -r requirements.txt` (and `pip-audit -r requirements-dev.txt` if present)
+- Actionlint: `actionlint -color` (install from https://github.com/rhysd/actionlint/releases)
+- PR metadata: ensure the PR body includes “Phase: X.Y” or “Closes #123” **and** a “Verification:” section listing the commands you ran.
+
 ## Golden Tests (Seed=42)
 
 **Critical**: These tests MUST pass with exact numerical values.
