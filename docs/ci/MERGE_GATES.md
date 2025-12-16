@@ -6,11 +6,12 @@ This document describes the security and quality gates that run on every PR.
 
 | Gate | Workflow | Purpose | How to Run Locally |
 |------|----------|---------|-------------------|
-| Unicode Lint | `unicode-lint.yml` | Detects Trojan Source attacks (CVE-2021-42574) | `python tools/unicode_lint.py .` |
-| Actionlint | `actionlint.yml` | Validates GitHub Actions workflow syntax | `actionlint .github/workflows/*.yml` |
-| Config Validation | `validate-configs.yml` | Validates JSON/YAML syntax and Issue Forms | `python tools/validate_json_yaml.py .` |
-| Secret Scanning | `gitleaks.yml` | Detects accidentally committed secrets | `gitleaks detect --config .gitleaks.toml` |
-| Dependency Audit | `dependency-audit.yml` | Scans Python dependencies for vulnerabilities | `pip-audit -r requirements.txt` |
+| Unicode Lint | `security-unicode.yml` | Detects Trojan Source attacks (CVE-2021-42574) | `python scripts/unicode_scan.py` |
+| Actionlint | `security-actionlint.yml` | Validates GitHub Actions workflow syntax | `actionlint .github/workflows/*.yml` |
+| Config Validation | `security-validate-configs.yml` | Validates JSON/YAML syntax and Issue Forms | `python scripts/validate_configs.py .` |
+| Secret Scanning | `security-secrets.yml` | Detects accidentally committed secrets | `gitleaks detect --config .gitleaks.toml` |
+| Dependency Audit | `security-deps.yml` | Scans Python dependencies for vulnerabilities | `pip-audit -r requirements.txt` |
+| CI Policy | `security-ci-policy.yml` | Enforces workflow pinning and policy | `python scripts/ci_policy_check.py` |
 | Link Check | `docs-link-check.yml` | Validates markdown links are not broken | `markdown-link-check <file> --config .github/markdown-link-check-config.json` |
 | ignorePatterns Policy | `docs-link-check.yml` | Prevents hiding broken links with broad ignores | `python tools/no_broad_ignorepatterns.py` |
 | Phase Validation | `phase-validation.yml` | Ensures PRs follow the phase workflow | (Runs on PR description) |
@@ -19,8 +20,8 @@ This document describes the security and quality gates that run on every PR.
 
 ### Unicode Lint (Trojan Source Detection)
 
-**File**: `.github/workflows/unicode-lint.yml`
-**Tool**: `tools/unicode_lint.py`
+**File**: `.github/workflows/security-unicode.yml`
+**Tool**: `scripts/unicode_scan.py`
 
 Scans all source files for dangerous Unicode characters that could be used in Trojan Source attacks:
 
@@ -32,12 +33,12 @@ Scans all source files for dangerous Unicode characters that could be used in Tr
 
 ```bash
 # Run locally
-python tools/unicode_lint.py .
+python scripts/unicode_scan.py
 ```
 
 ### Actionlint
 
-**File**: `.github/workflows/actionlint.yml`
+**File**: `.github/workflows/security-actionlint.yml`
 **Tool**: [actionlint](https://github.com/rhysd/actionlint) v1.7.9
 
 Validates GitHub Actions workflow syntax to catch errors before CI runs.
@@ -50,8 +51,8 @@ curl -sL "https://github.com/rhysd/actionlint/releases/download/v1.7.9/actionlin
 
 ### Config Validation
 
-**File**: `.github/workflows/validate-configs.yml`
-**Tool**: `tools/validate_json_yaml.py`
+**File**: `.github/workflows/security-validate-configs.yml`
+**Tool**: `scripts/validate_configs.py`
 
 Validates:
 - All `*.json` files parse correctly
@@ -61,12 +62,12 @@ Validates:
 ```bash
 # Run locally
 pip install PyYAML
-python tools/validate_json_yaml.py .
+python scripts/validate_configs.py .
 ```
 
 ### Secret Scanning (Gitleaks)
 
-**File**: `.github/workflows/gitleaks.yml`
+**File**: `.github/workflows/security-secrets.yml`
 **Config**: `.gitleaks.toml`
 **Tool**: [gitleaks](https://github.com/gitleaks/gitleaks)
 
@@ -79,7 +80,7 @@ gitleaks detect --config .gitleaks.toml --source .
 
 ### Dependency Audit
 
-**File**: `.github/workflows/dependency-audit.yml`
+**File**: `.github/workflows/security-deps.yml`
 **Tool**: [pip-audit](https://github.com/pypa/pip-audit) v2.7.3
 
 Scans Python dependencies for known vulnerabilities.

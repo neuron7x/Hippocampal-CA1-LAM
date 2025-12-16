@@ -1,18 +1,20 @@
 # CI/CD Overview
 
-This repository uses multiple focused workflows to keep security and correctness fully automated.
+This repository uses focused security workflows with consistent `security-*` naming.
 
 ## Workflows
 
-- **python-tests.yml** — runs `python -m pytest -q` on Python 3.10, 3.11, 3.12 for every push to `main` and all pull requests.
-- **gitleaks.yml / security-secrets.yml** — secrets scanning on every push/PR.
-- **security-unicode.yml** — Trojan Source prevention via `scripts/unicode_scan.py`.
-- **security-validate-configs.yml / validate-configs.yml** — YAML/JSON validation.
-- **security-ci-policy.yml** — enforces workflow pinning and policy checks.
-- **security-actionlint.yml / actionlint.yml** — validates GitHub Actions syntax.
-- **security-deps.yml / dependency-audit.yml** — dependency review and SBOM audit.
-- **docs-link-check.yml** — validates documentation links.
-- **phase-validation.yml** — ensures PR metadata matches the evolution plan.
+| Workflow | Purpose |
+|----------|---------|
+| `python-tests.yml` | Python tests on 3.10, 3.11, 3.12 for every push to `main` and all PRs |
+| `security-secrets.yml` | Secret scanning via Gitleaks |
+| `security-unicode.yml` | Trojan Source prevention via `scripts/unicode_scan.py` |
+| `security-validate-configs.yml` | YAML/JSON validation |
+| `security-ci-policy.yml` | Enforces workflow pinning and policy checks |
+| `security-actionlint.yml` | Validates GitHub Actions syntax |
+| `security-deps.yml` | Dependency vulnerability audit via pip-audit |
+| `docs-link-check.yml` | Validates documentation links |
+| `phase-validation.yml` | Ensures PR metadata matches the evolution plan |
 
 All workflows trigger on pull requests; security suites also run on pushes to `main`.
 

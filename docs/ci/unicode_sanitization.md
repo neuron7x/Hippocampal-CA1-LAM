@@ -56,7 +56,7 @@ Bidirectional and hidden Unicode characters can:
 
 ## CI Integration
 
-The `unicode-lint.yml` workflow runs `tools/unicode_lint.py` on:
+The `security-unicode.yml` workflow runs `scripts/unicode_scan.py` on:
 - Pull requests (opened, synchronize, reopened)
 - Pushes to main branch
 
