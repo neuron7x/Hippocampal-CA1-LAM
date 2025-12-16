@@ -114,7 +114,10 @@ def main() -> int:
         print("No workflows directory found; nothing to validate.")
         return 0
 
-    all_paths = sorted(glob.glob(os.path.join(workflow_dir, "*.yml")))
+    all_paths = sorted(
+        glob.glob(os.path.join(workflow_dir, "*.yml"))
+        + glob.glob(os.path.join(workflow_dir, "*.yaml"))
+    )
     violations: List[Tuple[str, int, str]] = []
     for path in all_paths:
         violations.extend(check_workflow(path))
