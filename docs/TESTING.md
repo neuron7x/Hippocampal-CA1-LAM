@@ -237,7 +237,7 @@ def test_full_pipeline():
 
 ## Coverage Requirements
 
-Minimum coverage: **95%** for changed code paths (critical paths must remain at 100%).
+Minimum coverage: **95%** across the core packages (`core`, `plasticity`, `ai_integration`, `validation`); critical paths must remain at 100%.
 
 ```bash
 python -m pytest tests/ \

@@ -79,10 +79,10 @@ def benchmark_laminar_em(N: int = 1000, max_iter: int = 10):
     model = HierarchicalLaminarModel(lambda_mrf=0.0)
 
     start = time.time()
-    _ = model.fit_em_vectorized(cells, max_iter=max_iter, verbose=False)
+    q = model.fit_em_vectorized(cells, max_iter=max_iter, verbose=False)
     elapsed = time.time() - start
 
-    return elapsed, N
+    return elapsed, N, q
 
 
 def stress_test_sparse(
@@ -180,7 +180,7 @@ if __name__ == "__main__":
     print(
         f"\n2. Laminar EM ({args.laminar_cells} cells, {args.laminar_iter} iterations)..."
     )
-    elapsed, N = benchmark_laminar_em(N=args.laminar_cells, max_iter=args.laminar_iter)
+    elapsed, N, _ = benchmark_laminar_em(N=args.laminar_cells, max_iter=args.laminar_iter)
     print(f"   {N} cells in {elapsed:.2f}s")
 
     # Sparse stress test
