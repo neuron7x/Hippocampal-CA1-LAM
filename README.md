@@ -124,6 +124,32 @@ python test_golden_standalone.py
 python examples/demo_unified_weights.py
 ```
 
+### 🔒 Security & QA Checklist
+
+Run these before opening a PR to satisfy the merge gates:
+
+```bash
+# Secrets / Unicode / config policy
+gitleaks detect --config .gitleaks.toml --report-format sarif --report-path gitleaks.sarif
+python scripts/unicode_scan.py
+python scripts/validate_configs.py .
+python scripts/ci_policy_check.py
+
+# Dependency audit
+pip-audit -r requirements.txt && pip-audit -r requirements-dev.txt
+
+# Pre-commit formatting & lint (PEP8)
+pre-commit install
+pre-commit run --all-files
+
+# Tests & coverage
+python -m pytest -q
+python -m pytest tests/ --cov=. --cov-report=term-missing
+
+# Performance / stress check (optional)
+python scripts/benchmark.py --stress-neurons 100000 --stress-steps 5 --stress-conn-prob 1e-4
+```
+
 ## Documentation
 
 - [Installation Guide](docs/INSTALLATION.md)
@@ -131,6 +157,7 @@ python examples/demo_unified_weights.py
 - [API Reference](docs/API.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Testing](docs/TESTING.md)
+- [CI/CD](.github/CI.md)
 - [Contributing](CONTRIBUTING.md)
 
 ## Scientific Foundation

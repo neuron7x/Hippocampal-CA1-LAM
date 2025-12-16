@@ -7,6 +7,7 @@ Complete testing documentation for CA1 Hippocampus Framework.
 - **Unicode scan**: `python scripts/unicode_scan.py`
 - **Secrets scan (gitleaks)**: `gitleaks detect --config .gitleaks.toml --report-format sarif --report-path gitleaks.sarif`
 - **Dependency audit (pip-audit)**: `pip install pip-audit==2.7.3 && pip-audit -r requirements.txt && pip-audit -r requirements-dev.txt`
+- **Pre-commit PEP8 & lint**: `pre-commit install && pre-commit run --all-files` (black, flake8, unicode scan, gitleaks)
 - **Actionlint**: Download actionlint v1.7.9 and run `actionlint .github/workflows/*.yml` (ensure the binary is on your PATH or reference its full location)
 - **Config validation**: `pip install PyYAML==6.0.2 && python scripts/validate_configs.py .`
 - **CI policy check**: `pip install PyYAML==6.0.2 && python scripts/ci_policy_check.py`
@@ -236,11 +237,15 @@ def test_full_pipeline():
 
 ## Coverage Requirements
 
-Minimum coverage: **90%**
+Minimum coverage: **95%** across the core packages (`core`, `plasticity`, `ai_integration`, `validation`); critical paths must remain at 100%.
 
 ```bash
-python -m pytest tests/ --cov=. --cov-report=term-missing
+python -m pytest tests/ \
+  --cov=core --cov=plasticity --cov=ai_integration --cov=validation \
+  --cov-report=term-missing --cov-fail-under=95
 ```
+
+**Note**: Current legacy baseline coverage is ~39%; reaching the 95% target will require additional test authoring beyond the existing suite.
 
 **Critical paths** (must have 100% coverage):
 - `UnifiedWeightMatrix.update_plasticity_ca_based`
@@ -259,7 +264,8 @@ See `.github/workflows/tests.yml`
 ## Performance Testing
 
 ```bash
-python scripts/benchmark.py
+python scripts/benchmark.py                 # Default reference benchmarks
+python scripts/benchmark.py --stress-neurons 100000 --stress-steps 5 --stress-conn-prob 1e-4
 ```
 
 Expected performance (reference machine):
@@ -267,6 +273,7 @@ Expected performance (reference machine):
 Laminar EM (1000 cells): < 2.5s
 Weight update (10K synapses): < 60ms
 Full simulation (100 neurons, 1s): < 6s
+Sparse stress test (100K neurons, p=1e-4, 5 steps): < 15s, < 200 MB
 ```
 
 ## Debugging Failed Tests
