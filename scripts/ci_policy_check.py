@@ -104,11 +104,9 @@ def check_workflow(path: str) -> List[Tuple[str, int, str]]:
                 run_val = step.get("run")
                 if isinstance(run_val, str):
                     lower_run = run_val.lower()
-                    if ("chmod" in lower_run or "chown" in lower_run) and (
-                        "/__w" in lower_run
-                        or "runner.temp" in lower_run
-                        or "$runner_temp" in lower_run
-                        or "runner_temp" in lower_run
+                    temp_markers = ("/__w", "runner.temp", "runner_temp")
+                    if ("chmod" in lower_run or "chown" in lower_run) and any(
+                        marker in lower_run for marker in temp_markers
                     ):
                         snippet = run_val.splitlines()[0] if run_val.splitlines() else "chmod"
                         record(

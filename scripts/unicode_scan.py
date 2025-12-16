@@ -13,7 +13,7 @@ import os
 import subprocess
 import sys
 import unicodedata
-from typing import Iterable, List, Tuple
+from typing import Iterable, List, Set, Tuple
 
 BIDI_CODES = {
     0x061C,  # Arabic Letter Mark
@@ -40,7 +40,7 @@ ZERO_WIDTH_CODES = {
 
 # No allowlisted Cf characters by default; policy requires blocking all format
 # characters unless explicitly reviewed.
-ALLOWLIST: set[int] = set()
+ALLOWLIST: Set[int] = set()
 
 TARGET_EXTS = {
     ".py",
