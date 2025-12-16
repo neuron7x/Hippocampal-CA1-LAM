@@ -4,11 +4,6 @@ Comprehensive coverage of all methods
 """
 import pytest
 import numpy as np
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).parent.parent))
-
 from data.biophysical_parameters import get_default_parameters
 from plasticity.unified_weights import UnifiedWeightMatrix, InputSource, create_source_type_matrix
 
