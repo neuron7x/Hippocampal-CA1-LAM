@@ -1,4 +1,4 @@
-import scripts.benchmark as bm
+from scripts import benchmark as bm
 
 
 def test_stress_sparse_small():
