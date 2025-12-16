@@ -245,6 +245,8 @@ python -m pytest tests/ \
   --cov-report=term-missing --cov-fail-under=95
 ```
 
+**Note**: Current legacy baseline coverage is ~39%; reaching the 95% target will require additional test authoring beyond the existing suite.
+
 **Critical paths** (must have 100% coverage):
 - `UnifiedWeightMatrix.update_plasticity_ca_based`
 - `NetworkStateController.step`
