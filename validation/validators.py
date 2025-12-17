@@ -192,7 +192,7 @@ def compute_fractal_dimension(
         }
     
     # Normalize events to [0, 1]²
-    events_norm = (events - events.min(axis=0)) / (events.ptp(axis=0) + 1e-8)
+    events_norm = (events - events.min(axis=0)) / (np.ptp(events, axis=0) + 1e-8)
     
     # Box sizes (log-spaced)
     epsilons = np.logspace(np.log10(epsilon_range[0]), 
@@ -232,7 +232,7 @@ def compute_fractal_dimension(
         boot_events = events[idx]
         
         # Recompute (simplified)
-        boot_events_norm = (boot_events - boot_events.min(axis=0)) / (boot_events.ptp(axis=0) + 1e-8)
+        boot_events_norm = (boot_events - boot_events.min(axis=0)) / (np.ptp(boot_events, axis=0) + 1e-8)
         
         boot_N = []
         for eps in epsilons[:10]:  # Subset for speed
@@ -508,8 +508,14 @@ class CA1Validator:
         
         # Overall
         print("\n" + "="*70)
-        blockers = [v['pass'] for k, v in self.results.items() 
-                    if k in ['laminar', 'stability']]
+        blockers = []
+        for k, v in self.results.items():
+            if k in ['laminar', 'stability']:
+                # Handle both 'pass' and 'pass_overall' keys
+                if 'pass_overall' in v:
+                    blockers.append(v['pass_overall'])
+                elif 'pass' in v:
+                    blockers.append(v['pass'])
         overall_pass = all(blockers) if blockers else False
         
         print(f"OVERALL: {'✓ PASS' if overall_pass else '✗ FAIL'}")

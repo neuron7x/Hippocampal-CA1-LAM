@@ -215,7 +215,8 @@ def validate_laminar_structure(model: ZINBLayerModel,
     
     # 1. Mutual information (simplified)
     from sklearn.metrics import mutual_info_score
-    mi = mutual_info_score(assignments, np.digitize(depths, bins=10))
+    depth_bins = np.linspace(0, 1, 11)  # Create 10 bins
+    mi = mutual_info_score(assignments, np.digitize(depths, bins=depth_bins))
     
     # 2. Coexpression rate
     ce = compute_coexpression_rate(cells, thresholds)
@@ -230,7 +231,7 @@ def validate_laminar_structure(model: ZINBLayerModel,
         boot_depths = depths[idx]
         boot_mi.append(mutual_info_score(
             boot_assign, 
-            np.digitize(boot_depths, bins=10)
+            np.digitize(boot_depths, bins=depth_bins)
         ))
     
     mi_std = np.std(boot_mi)
