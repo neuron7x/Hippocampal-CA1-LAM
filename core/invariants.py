@@ -234,6 +234,20 @@ def check_probability(arr: np.ndarray, name: str = "probability", axis: int = -1
 # =============================================================================
 
 
+def compute_spectral_radius(weights: np.ndarray) -> float:
+    """
+    Compute spectral radius of weight matrix.
+
+    Args:
+        weights: Square weight matrix
+
+    Returns:
+        Spectral radius (maximum absolute eigenvalue)
+    """
+    eigenvalues = np.linalg.eigvals(weights)
+    return float(np.max(np.abs(eigenvalues)))
+
+
 def check_spectral_radius(
     weights: np.ndarray,
     max_radius: float = 1.0,
@@ -253,27 +267,12 @@ def check_spectral_radius(
     if not _GUARDS_ENABLED:
         return 0.0
     check_square_matrix(weights, name)
-    eigenvalues = np.linalg.eigvals(weights)
-    rho = np.max(np.abs(eigenvalues))
+    rho = compute_spectral_radius(weights)
     if rho > max_radius:
         raise InvariantViolation(
             f"{name}: spectral radius {rho:.4f} exceeds maximum {max_radius}"
         )
     return rho
-
-
-def compute_spectral_radius(weights: np.ndarray) -> float:
-    """
-    Compute spectral radius of weight matrix.
-
-    Args:
-        weights: Square weight matrix
-
-    Returns:
-        Spectral radius (maximum absolute eigenvalue)
-    """
-    eigenvalues = np.linalg.eigvals(weights)
-    return float(np.max(np.abs(eigenvalues)))
 
 
 # =============================================================================

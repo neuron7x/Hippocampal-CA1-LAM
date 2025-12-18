@@ -189,9 +189,11 @@ def stability_metric(
 
     elif method == "condition":
         # Condition number-based stability
+        # Infinite condition number indicates singular/ill-conditioned matrix
         cond = np.linalg.cond(weights)
         if not np.isfinite(cond):
-            return 0.0
+            # Return very small positive value for numerically unstable matrices
+            return 1e-10
         # Map to [0, 1]: cond=1 -> 1.0, cond=inf -> 0.0
         return float(1.0 / (1.0 + np.log1p(cond)))
 
