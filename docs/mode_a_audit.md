@@ -32,13 +32,11 @@ Owner: Copilot SWE Agent
 
 ## 4) Deterministic Harness (ready-to-use)
 
-- **Quick run** (seeded, guard-on):
+- **Quick run** (seeded, guard-on; `PYTHONPATH=.` keeps the repo root on the module search path when the package is not installed):
   ```bash
   PYTHONPATH=. pytest -q tests/test_core_contracts.py tests/test_config.py
   ```
   (Covers determinism, shape/finite safety, config reproducibility.)
-- **Note**: `PYTHONPATH=.` keeps the repo root on the module search path when
-  the package is not installed in the environment.
 - **Programmatic entry**:
   ```python
   from core import CA1Network, create_deterministic_config, set_guards_enabled
@@ -62,14 +60,14 @@ Owner: Copilot SWE Agent
 ## 6) Roadmap — 3–5 small PRs
 
 1. **CI Deterministic Harness Gate**  
-   - Scope: Add dedicated CI job running `pytest -q tests/test_core_contracts.py tests/test_config.py` with `PYTHONPATH=.` and guards on.  
+   - Scope: Add dedicated CI job running `PYTHONPATH=. pytest -q tests/test_core_contracts.py tests/test_config.py` with guards explicitly forced on (e.g., fixture calling `set_guards_enabled(True)`).  
    - Risk: Low (test-only).  
    - Metrics: Pass/fail; runtime < 2 min.
 
 2. **Seed Propagation Adapter**  
    - Scope: Ensure `ai_integration.memory_module` and `plasticity` accept injected `numpy.random.Generator` seeded from `SimulationConfig.seed`.  
    - Risk: Medium (touches RNG usage).  
-   - Metrics: Determinism delta test: same seed → identical top-k recall; coverage of seed plumbing.
+   - Metrics: Determinism delta test: same seed → identical recall results; coverage of seed plumbing.
 
 3. **State Size Guardrail**  
    - Scope: Add optional `max_trace_steps`/`max_duration_ms` guard in `SimulationConfig` + invariant enforcing bounded trace/history.  
