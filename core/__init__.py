@@ -7,9 +7,42 @@ Implements core neural network components:
 - Laminar structure inference
 - Hierarchical laminar model with MRF
 - Theta-SWR state switching
+- Core contracts and invariants
+- Metrics for memory subsystem
 """
 
 from .ca1_network import CA1Network, SimulationResult
+from .contracts import (
+    EncodeInput,
+    MemoryState,
+    Phase,
+    RecallQuery,
+    RecallResult,
+    SimulationConfig,
+    UpdateInput,
+)
+from .invariants import (
+    InvariantViolation,
+    check_bounded,
+    check_finite,
+    check_non_negative,
+    check_shape_1d,
+    check_shape_2d,
+    check_spectral_radius,
+    compute_spectral_radius,
+    guards_enabled,
+    set_guards_enabled,
+    validate_memory_state,
+)
+from .metrics import (
+    REPORT_KEYS,
+    compute_report,
+    drift_metric,
+    memory_capacity_proxy,
+    recall_accuracy_proxy,
+    stability_metric,
+    validate_report,
+)
 from .hierarchical_laminar import (
     CellDataHier,
     HierarchicalLaminarModel,
@@ -43,6 +76,34 @@ __all__ = [
     # CA1 Network
     "CA1Network",
     "SimulationResult",
+    # Contracts
+    "EncodeInput",
+    "MemoryState",
+    "Phase",
+    "RecallQuery",
+    "RecallResult",
+    "SimulationConfig",
+    "UpdateInput",
+    # Invariants
+    "InvariantViolation",
+    "check_bounded",
+    "check_finite",
+    "check_non_negative",
+    "check_shape_1d",
+    "check_shape_2d",
+    "check_spectral_radius",
+    "compute_spectral_radius",
+    "guards_enabled",
+    "set_guards_enabled",
+    "validate_memory_state",
+    # Metrics
+    "REPORT_KEYS",
+    "compute_report",
+    "drift_metric",
+    "memory_capacity_proxy",
+    "recall_accuracy_proxy",
+    "stability_metric",
+    "validate_report",
     # Hierarchical Laminar
     "CellDataHier",
     "HierarchicalLaminarModel",
