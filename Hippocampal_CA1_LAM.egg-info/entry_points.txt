@@ -1,2 +1,0 @@
-[console_scripts]
-ca1-test = test_golden_standalone:main
