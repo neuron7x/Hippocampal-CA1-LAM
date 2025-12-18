@@ -11,8 +11,9 @@ Usage:
     from core.config import load_config, validate_config
 
     config = load_config("configs/experiment.yaml")
-    if validate_config(config):
-        params = config.to_parameters()
+    errors = validate_config(config)
+    if not errors:
+        sim_config = config.core.to_simulation_config()
 """
 from __future__ import annotations
 
