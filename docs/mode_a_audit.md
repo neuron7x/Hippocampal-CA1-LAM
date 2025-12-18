@@ -11,7 +11,7 @@ Owner: Copilot SWE Agent
   - Simulation: `CA1Network.simulate(duration_ms, dt)` → `dict(time, spikes, voltages, weights)` (seeded RNG, no global state).  
   - Configuration: `create_deterministic_config`, `validate_config`, `merge_configs`, YAML/JSON loaders.  
   - Guards: `set_guards_enabled/guards_enabled`, invariant helpers (`check_shape_*`, `check_finite`, `check_bounded`, `check_spectral_radius`, etc.).  
-  - Metrics: `compute_report` with stable `REPORT_KEYS` (`stability`, `capacity`, `recall`, `drift`).  
+  - Metrics: `compute_report` with stable `REPORT_KEYS` (`capacity_proxy`, `stability`, `weight_stats`, `activation_stats`, `recall_accuracy_cosine`, `recall_accuracy_overlap`, `weight_drift_relative`, `weight_drift_max`, `finite_weights`, `finite_activations`, `spectral_radius_safe`).  
 - **Side-effects**: none beyond seeded `numpy` RNG inside `CA1Network`; plotting only when `matplotlib` is imported ad hoc.
 
 ## 2) Public vs Internal Interfaces
