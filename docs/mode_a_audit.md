@@ -37,8 +37,8 @@ Owner: Copilot SWE Agent
   PYTHONPATH=. pytest -q tests/test_core_contracts.py tests/test_config.py
   ```
   (Covers determinism, shape/finite safety, config reproducibility.)
-  `PYTHONPATH=.` keeps the repo root on the module search path when the package
-  is not installed in the environment.
+- **Note**: `PYTHONPATH=.` keeps the repo root on the module search path when
+  the package is not installed in the environment.
 - **Programmatic entry**:
   ```python
   from core import CA1Network, create_deterministic_config, set_guards_enabled
@@ -52,7 +52,7 @@ Owner: Copilot SWE Agent
 
 ## 5) Failure Map (risks to determinism/safety)
 
-- **Seed drift**: constructing RNGs outside the provided `seed`/config flow; mitigate by centralizing seed injection.  
+- **Seed drift**: constructing RNGs outside the provided `seed`/config flow; mitigation is centralizing seed injection.  
 - **Guard bypass**: disabling `_GUARDS_ENABLED` hides shape/finite violations; CI should run with guards on.  
 - **Unbounded state**: writing long traces (`trace` optional) without caps can grow memory.  
 - **Silent API divergence**: changing return keys from `CA1Network.simulate` or `compute_report` breaks tests/consumers.  
