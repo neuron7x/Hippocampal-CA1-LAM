@@ -37,6 +37,8 @@ Owner: Copilot SWE Agent
   PYTHONPATH=. pytest -q tests/test_core_contracts.py tests/test_config.py
   ```
   (Covers determinism, shape/finite safety, config reproducibility.)
+  `PYTHONPATH=.` keeps the repo root on the module search path when the package
+  is not installed in the environment.
 - **Programmatic entry**:
   ```python
   from core import CA1Network, create_deterministic_config, set_guards_enabled
