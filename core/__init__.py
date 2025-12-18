@@ -9,9 +9,21 @@ Implements core neural network components:
 - Theta-SWR state switching
 - Core contracts and invariants
 - Metrics for memory subsystem
+- Configuration management
 """
 
 from .ca1_network import CA1Network, SimulationResult
+from .config import (
+    ConfigValidationError,
+    CoreConfig,
+    ExperimentConfig,
+    create_deterministic_config,
+    get_default_config,
+    load_config,
+    merge_configs,
+    save_config,
+    validate_config,
+)
 from .contracts import (
     EncodeInput,
     MemoryState,
@@ -76,6 +88,16 @@ __all__ = [
     # CA1 Network
     "CA1Network",
     "SimulationResult",
+    # Configuration
+    "ConfigValidationError",
+    "CoreConfig",
+    "ExperimentConfig",
+    "create_deterministic_config",
+    "get_default_config",
+    "load_config",
+    "merge_configs",
+    "save_config",
+    "validate_config",
     # Contracts
     "EncodeInput",
     "MemoryState",
