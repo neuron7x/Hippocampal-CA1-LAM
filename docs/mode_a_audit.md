@@ -8,7 +8,7 @@ Owner: Copilot SWE Agent
 - **Core namespace (`core/`)**: public API exported via `core/__init__.py` (e.g., `CA1Network`, `SimulationResult`, config helpers, contracts, invariants, metrics).  
 - **State contracts**: `MemoryState`, `EncodeInput`, `RecallQuery`, `RecallResult`, `UpdateInput`, `SimulationConfig` (shape/seed explicitly carried).  
 - **Execution surfaces**:
-  - Simulation: `CA1Network.simulate(duration_ms, dt)` → `dict(time, spikes, voltages, weights)` (seeded RNG, no global state).  
+  - Simulation: `CA1Network.simulate(duration_ms, dt=None)` → `dict(time, spikes, voltages, weights)` (seeded RNG, no global state; `dt` defaults to constructor value).  
   - Configuration: `create_deterministic_config`, `validate_config`, `merge_configs`, YAML/JSON loaders.  
   - Guards: `set_guards_enabled/guards_enabled`, invariant helpers (`check_shape_*`, `check_finite`, `check_bounded`, `check_spectral_radius`, etc.).  
   - Metrics: `compute_report` with stable `REPORT_KEYS` (`capacity_proxy`, `stability`, `weight_stats`, `activation_stats`, `recall_accuracy_cosine`, `recall_accuracy_overlap`, `weight_drift_relative`, `weight_drift_max`, `finite_weights`, `finite_activations`, `spectral_radius_safe`).  
