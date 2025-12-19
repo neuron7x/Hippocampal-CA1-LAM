@@ -19,6 +19,7 @@ Usage:
 """
 from __future__ import annotations
 
+import functools
 import os
 import warnings
 from contextlib import contextmanager
@@ -291,13 +292,19 @@ class DeterministicHarness:
 
         Args:
             simulate_func: Function that runs simulation and returns state dict
-            n_steps: Number of simulation steps
+            n_steps: Number of simulation steps (must be >= 1)
             max_state_size: Maximum allowed total state size in elements
 
         Returns:
             Final simulation result
+
+        Raises:
+            ValueError: If n_steps < 1 or simulate_func returns None
         """
-        result = None
+        if n_steps < 1:
+            raise ValueError("n_steps must be >= 1")
+
+        result: Optional[Dict[str, np.ndarray]] = None
         for _ in range(n_steps):
             result = simulate_func()
 
@@ -395,7 +402,6 @@ def ensure_deterministic(seed: int = DEFAULT_SEED) -> Callable[[F], F]:
     Args:
         seed: Random seed to set before each call
     """
-    import functools
 
     def decorator(func: F) -> F:
         @functools.wraps(func)
