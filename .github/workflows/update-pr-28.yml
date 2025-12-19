@@ -1,0 +1,50 @@
+name: Update PR 28 Body
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    branches: [copilot/analyze-and-remove-unneeded-data]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  update-pr:
+    if: ${{ github.event.pull_request.number == 28 }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update PR #28 body
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const newBody = `Phase: 1.0
+
+The repo contained obsolete manifest/summary docs and PR-specific automation cluttering the codebase.
+
+- Cleanup: Deleted legacy manifest/summary markdowns and PR#19-only helper files (script, workflow, docs, template body).
+- Documentation: Added \`docs/CLEANUP_REPORT.md\` capturing what was removed and the post-cleanup validation command.
+
+Example:
+\`\`\`markdown
+# docs/CLEANUP_REPORT.md
+- Removed legacy manifests (FINAL_MANIFEST*, SUMMARY, etc.)
+- Removed PR19 helpers (update_pr_19_body.py, workflow, docs)
+- Validation: PYTHONPATH=. pytest -q tests/test_core_contracts.py tests/test_config.py
+\`\`\`
+
+Verification:
+- PYTHONPATH=. pytest -q tests/test_core_contracts.py tests/test_config.py
+- Reviewed deleted files for dependencies
+- Confirmed no imports reference removed modules
+`;
+
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: 28,
+              body: newBody
+            });
+
+            console.log('✓ Successfully updated PR #28 body');
