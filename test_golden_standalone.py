@@ -99,7 +99,7 @@ def test_network_stability():
     stats = W.get_statistics()
 
     assert stats["spectral_radius"] < 1.0, f"ρ(W) = {stats['spectral_radius']:.3f} unstable"
-    assert stats["spectral_radius"] > 0.5, f"ρ(W) too weak"
+    assert stats["spectral_radius"] > 0.5, "ρ(W) too weak"
 
     return stats
 

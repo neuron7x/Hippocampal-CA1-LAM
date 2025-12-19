@@ -8,6 +8,9 @@ PR #19 fails the Phase Validation workflow because its body is missing:
 1. A Phase reference (e.g., "Phase: 1.0" or "Closes #123")
 2. A "Verification:" section with commands
 
+> Note: All PRs in this repository must include both a Phase/Closes reference and a non-empty
+> `Verification:` block to satisfy the validation workflow.
+
 ## Solution
 
 The `update_pr_19_body.py` script uses the GitHub API to update PR #19's body with the required metadata.

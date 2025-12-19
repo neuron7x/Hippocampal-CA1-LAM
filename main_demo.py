@@ -173,7 +173,7 @@ def demo_network_dynamics():
     # Compute firing rates
     rates = spike_counts / (T / 1000.0)  # Hz
 
-    print(f"\n--- Population Statistics ---")
+    print("\n--- Population Statistics ---")
     print(f"Mean firing rate: {np.mean(rates):.2f} ± {np.std(rates):.2f} Hz")
     print(f"Active neurons: {np.sum(spike_counts > 0)} / {N}")
 
@@ -183,7 +183,7 @@ def demo_network_dynamics():
     W_final = syn_manager.get_weight_matrix()
     metrics = validate_dynamic_stability(W_final, rates)
 
-    print(f"\n--- Stability Validation ---")
+    print("\n--- Stability Validation ---")
     print(f"Spectral radius ρ(W): {metrics['spectral_radius']:.3f} (< 1.0 required)")
     print(f"Max firing rate: {metrics['max_firing_rate']:.2f} Hz")
     print(f"\n{'✓ PASS' if metrics['pass'] else '✗ FAIL'}")
@@ -249,7 +249,7 @@ def demo_ai_integration():
 
     metrics = evaluate_retrieval_quality(model.memory, test_queries, ground_truth)
 
-    print(f"\n--- Retrieval Metrics ---")
+    print("\n--- Retrieval Metrics ---")
     print(f"Precision@{params.ai.top_k}: {metrics['precision@k']:.3f}")
     print(f"Recall@{params.ai.top_k}: {metrics['recall@k']:.3f}")
 

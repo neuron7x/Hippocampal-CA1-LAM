@@ -19,7 +19,7 @@ print("Ca²⁺-BASED PLASTICITY EXAMPLE")
 print("=" * 70)
 
 params = get_default_parameters()
-print(f"\nThresholds:")
+print("\nThresholds:")
 print(f"  θ_d (LTD): {params.plasticity.theta_d} μM")
 print(f"  θ_p (LTP): {params.plasticity.theta_p} μM")
 
