@@ -1,0 +1,6 @@
+ai_integration
+core
+data
+plasticity
+scripts
+validation
