@@ -11,7 +11,7 @@ Implements all critical validation checks:
 
 import numpy as np
 from sklearn.metrics import mutual_info_score
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 # ============================================================================
 # 1. LAMINAR STRUCTURE VALIDATION
@@ -311,6 +311,15 @@ def validate_dynamic_stability(
         "pass_bounded": pass_bounded,
         "pass": pass_spectral and pass_rates and pass_bounded,
     }
+
+
+def validate_network_stability(
+    W: np.ndarray, firing_rates: np.ndarray, target_rate: float = 5.0
+) -> Dict[str, Any]:
+    """
+    Backward-compatible alias for validate_dynamic_stability.
+    """
+    return validate_dynamic_stability(W, firing_rates, target_rate)
 
 
 # ============================================================================

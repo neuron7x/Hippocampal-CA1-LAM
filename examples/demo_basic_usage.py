@@ -1,14 +1,22 @@
 #!/usr/bin/env python3
 """
-Basic CA1 Model Usage Example
+ Basic CA1 Model Usage Example
 
-Demonstrates:
-- Parameter loading
-- Network creation
-- Simulation loop
-- Weight dynamics
-"""
+ Demonstrates:
+ - Parameter loading
+ - Network creation
+ - Simulation loop
+ - Weight dynamics
+ """
+import sys
+from pathlib import Path
+
 import numpy as np
+
+# Ensure project root is on sys.path when running from examples/
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 from data.biophysical_parameters import get_default_parameters
 from plasticity.unified_weights import UnifiedWeightMatrix, create_source_type_matrix
