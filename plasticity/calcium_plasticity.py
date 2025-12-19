@@ -12,8 +12,8 @@ References:
 - DOI: 10.1038/nn.2479 (Clopath)
 """
 import numpy as np
-from typing import Tuple, Optional
 from dataclasses import dataclass
+
 
 @dataclass
 class SynapseState:
@@ -457,15 +457,14 @@ if __name__ == "__main__":
         
         syn.update_calcium(pre, post, V_d)
         syn.update_weight(M=1.0, G_plasticity=1.0)
-        
         Ca_history.append(syn.state.Ca)
         W_history.append(syn.state.W)
-    
-    print(f"Initial W: 1.0")
+
+    print("Initial W: 1.0")
     print(f"Final W: {syn.state.W:.3f}")
     print(f"Max Ca: {max(Ca_history):.3f} μM")
     print(f"  (LTP threshold: {params.plasticity.theta_p} μM)")
-    
+
     # Test OLM gate
     print("\nTesting OLM gate...")
     gate = OLMGate(params.olm)

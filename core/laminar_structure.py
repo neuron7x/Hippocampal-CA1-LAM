@@ -6,8 +6,9 @@ Based on: Pachicano et al., Nature Comm 2025, DOI: 10.1038/s41467-025-66613-y
 import numpy as np
 from scipy.stats import nbinom
 from scipy.special import logsumexp
-from typing import Tuple, Dict, Optional
+from typing import Dict
 from dataclasses import dataclass
+
 
 @dataclass
 class CellData:

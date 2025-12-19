@@ -9,10 +9,9 @@ Implements all critical validation checks:
 5. Replay metrics (SWR analysis)
 """
 import numpy as np
-from scipy.stats import circmean, circstd, pearsonr
-from scipy.spatial.distance import pdist, squareform
 from sklearn.metrics import mutual_info_score
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Tuple
+
 
 # ============================================================================
 # 1. LAMINAR STRUCTURE VALIDATION
@@ -200,21 +199,20 @@ def compute_fractal_dimension(
                             n_scales)
     
     N_boxes = []
-    
+
     for eps in epsilons:
         # Grid boxes
-        n_bins = int(1.0 / eps) + 1
         boxes = set()
-        
+
         for event in events_norm:
             box_i = int(event[0] / eps)
             box_j = int(event[1] / eps)
             boxes.add((box_i, box_j))
-        
+
         N_boxes.append(len(boxes))
-    
+
     N_boxes = np.array(N_boxes)
-    
+
     # Linear regression: log(N) vs log(1/ε)
     log_eps_inv = np.log(1.0 / epsilons)
     log_N = np.log(N_boxes + 1)  # +1 to avoid log(0)
@@ -346,11 +344,9 @@ def validate_replay(
         }
     
     # Create position vectors
-    n_neurons = max(max(sequence_online), max(sequence_replay)) + 1
-    
     pos_online = {neuron_id: i for i, neuron_id in enumerate(sequence_online)}
     pos_replay = {neuron_id: i for i, neuron_id in enumerate(sequence_replay)}
-    
+
     # Find common neurons
     common = set(sequence_online) & set(sequence_replay)
     

@@ -11,15 +11,15 @@ This ensures:
 Run: python -m pytest golden_tests.py -v
 """
 import numpy as np
-import pytest
-from typing import Dict
 
 # Set global seed
 GOLDEN_SEED = 42
 
+
 def set_seed(seed: int = GOLDEN_SEED):
     """Set all random seeds"""
     np.random.seed(seed)
+
 
 # ============================================================================
 # GOLDEN TEST 1: LAMINAR STRUCTURE
@@ -276,25 +276,24 @@ def test_input_specific_plasticity_golden():
     
     params = get_default_parameters()
     N = 20
-    
+
     # Create synapses: CA3 and EC
     connectivity = np.zeros((N, N), dtype=bool)
     connectivity[0, 1] = True  # CA3
     connectivity[0, 2] = True  # EC
-    
-    layer_assignments = np.zeros(N, dtype=int)
+
     initial_weights = np.ones((N, N))
-    
+
     source_types = np.full((N, N), InputSource.LOCAL.value, dtype=object)
     source_types[0, 1] = InputSource.CA3.value
     source_types[0, 2] = InputSource.EC.value
-    
+
     W = UnifiedWeightMatrix(connectivity, initial_weights, source_types, params)
-    
+
     # High Ca at both synapses
     W.Ca[0, 1] = 2.5  # CA3
     W.Ca[0, 2] = 2.5  # EC
-    
+
     W_ca3_before = W.W_base[0, 1]
     W_ec_before = W.W_base[0, 2]
     

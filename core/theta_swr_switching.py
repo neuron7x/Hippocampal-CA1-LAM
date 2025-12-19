@@ -78,17 +78,16 @@ class NetworkStateController:
     def step(self) -> Tuple[NetworkState, bool]:
         """
         One timestep of state machine
-        
+
         Returns:
             current_state: NetworkState
             state_changed: bool (whether transition occurred)
         """
         state_changed = False
-        prev_state = self.state
-        
+
         # Increment time in current state
         self.time_in_state += self.dt
-        
+
         # State transitions
         if self.state == NetworkState.THETA:
             # Theta → SWR transition
@@ -463,7 +462,7 @@ if __name__ == "__main__":
         elif state == NetworkState.SWR:
             swr_time += dt
     
-    print(f"\n--- State Statistics ---")
+    print("\n--- State Statistics ---")
     print(f"State changes: {len(state_changes)}")
     print(f"Theta time: {theta_time:.1f} ms ({theta_time/T*100:.1f}%)")
     print(f"SWR time: {swr_time:.1f} ms ({swr_time/T*100:.1f}%)")
@@ -499,7 +498,7 @@ if __name__ == "__main__":
     
     if event:
         replay_events.append(event)
-        print(f"✓ Detected replay event:")
+        print("✓ Detected replay event:")
         print(f"  Duration: {event.duration():.1f} ms")
         print(f"  Neurons: {event.n_neurons()}")
     
@@ -529,12 +528,12 @@ if __name__ == "__main__":
     controller_swr = NetworkStateController(params)
     controller_swr.state = NetworkState.SWR
     
-    print(f"Theta mode:")
+    print("Theta mode:")
     print(f"  Inhibition factor: {controller_theta.get_inhibition_factor():.2f}")
     print(f"  Recurrence factor: {controller_theta.get_recurrence_factor():.2f}")
     print(f"  ACh level: {controller_theta.ACh_level:.2f}")
-    
-    print(f"SWR mode:")
+
+    print("SWR mode:")
     print(f"  Inhibition factor: {controller_swr.get_inhibition_factor():.2f}")
     print(f"  Recurrence factor: {controller_swr.get_recurrence_factor():.2f}")
     print(f"  ACh level: {controller_swr.ACh_level:.2f}")

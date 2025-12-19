@@ -9,8 +9,9 @@ Key improvements:
 4. Input-specific channels: CA3 vs EC with different plasticity rules
 """
 import numpy as np
-from typing import Tuple, Dict
+from typing import Dict
 from enum import Enum
+
 
 class InputSource(Enum):
     """Input channel types"""
@@ -165,23 +166,21 @@ class UnifiedWeightMatrix:
             G = np.ones(self.N)
         
         p = self.p.plasticity
-        
+
         # Input-specific learning rates
         eta_p_base = p.eta_p
         eta_d_base = p.eta_d
-        
-        # Mask for each input type
-        mask_CA3 = (self.source_types == InputSource.CA3.value)
+
+        # Mask for EC input type (reduced plasticity)
         mask_EC = (self.source_types == InputSource.EC.value)
-        mask_LOCAL = (self.source_types == InputSource.LOCAL.value)
-        
+
         # EC synapses have 10x lower plasticity (DELTA: stable feedforward)
         eta_p = np.ones((self.N, self.N)) * eta_p_base
         eta_d = np.ones((self.N, self.N)) * eta_d_base
-        
+
         eta_p[mask_EC] *= 0.1
         eta_d[mask_EC] *= 0.1
-        
+
         # Apply OLM gating (per postsynaptic neuron)
         for i in range(self.N):
             eta_p[i, :] *= (1.0 - G[i])
@@ -294,28 +293,26 @@ def create_source_type_matrix(N: int,
         source_types: [N, N] InputSource values
     """
     source_types = np.full((N, N), InputSource.LOCAL.value, dtype=object)
-    
+
     for i in range(N):
         layer_i = layer_assignments[i]
-        
+
         for j in range(N):
             if i == j:
                 continue
-            
-            layer_j = layer_assignments[j]
-            
+
             # EC input (feedforward to superficial layers)
             if layer_i <= 1 and np.random.rand() < p_EC:
                 source_types[i, j] = InputSource.EC.value
-            
+
             # CA3 input (recurrent to deep layers)
             elif layer_i >= 2 and np.random.rand() < p_CA3:
                 source_types[i, j] = InputSource.CA3.value
-            
+
             # Otherwise LOCAL
             else:
                 source_types[i, j] = InputSource.LOCAL.value
-    
+
     return source_types
 
 # ============================================================================

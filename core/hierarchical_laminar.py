@@ -14,9 +14,9 @@ Based on:
 """
 import numpy as np
 from scipy.stats import nbinom
-from scipy.special import logsumexp, digamma
+from scipy.special import logsumexp
 from scipy.sparse import csr_matrix
-from typing import Tuple, Dict, List, Optional
+from typing import Dict, List
 from dataclasses import dataclass
 
 @dataclass
@@ -254,8 +254,6 @@ class HierarchicalLaminarModel:
     
     def _initialize_params_vectorized(self, cells: List[CellDataHier]):
         """Initialize from data (vectorized)"""
-        N = len(cells)
-        
         # Stratify by depth
         for ell in range(self.n_layers):
             z_range = (ell / self.n_layers, (ell+1) / self.n_layers)
@@ -274,23 +272,21 @@ class HierarchicalLaminarModel:
                 theta_val = mean_count**2 / max(var_count - mean_count, 0.1)
                 self.theta[ell, k] = max(theta_val, 1e-3)
     
-    def _compute_elbo(self, 
+    def _compute_elbo(self,
                       cells: List[CellDataHier],
                       q: np.ndarray,
                       log_lik_matrix: np.ndarray) -> float:
         """
         Compute Evidence Lower Bound
-        
+
         ELBO = E_q[log p(g, L)] - E_q[log q(L)]
         """
-        N = len(cells)
-        
         # E[log p(g | L)]
         elbo = np.sum(q * log_lik_matrix)
-        
+
         # E[log p(L)] (prior)
         elbo += np.sum(q * np.log(self.layer_prior + 1e-10))
-        
+
         # Entropy: -E[log q(L)]
         entropy = -np.sum(q * np.log(q + 1e-10))
         elbo += entropy
