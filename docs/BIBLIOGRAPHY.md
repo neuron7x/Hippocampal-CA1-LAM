@@ -162,8 +162,7 @@ DOI: [10.1023/A:1008925309027](https://doi.org/10.1023/A:1008925309027)
 **Orima T., Shigematsu N., Koyama S., Jimbo Y.** (2025)  
 *Fractal memory structure in the spatiotemporal learning rule*  
 **Frontiers in Computational Neuroscience**  
-DOI: 10.3389/fncom.2025.1641519  
-Full text: https://www.frontiersin.org/journals/computational-neuroscience/articles/10.3389/fncom.2025.1641519/full
+DOI: [10.3389/fncom.2025.1641519](https://doi.org/10.3389/fncom.2025.1641519)
 
 **Methodology reference:**
 - Box-counting dimension calculation
