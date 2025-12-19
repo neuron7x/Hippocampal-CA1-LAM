@@ -55,13 +55,43 @@ DANGEROUS_CHARS: set[int] = BIDI_CHARS | ZERO_WIDTH_CHARS | CONTROL_CHARS
 
 # File extensions to scan
 TEXT_EXTENSIONS: set[str] = {
-    '.md', '.txt', '.py', '.js', '.ts', '.jsx', '.tsx',
-    '.yml', '.yaml', '.json', '.xml', '.html', '.css',
-    '.sh', '.bash', '.zsh', '.fish',
-    '.rs', '.go', '.java', '.c', '.cpp', '.h', '.hpp',
-    '.rb', '.pl', '.php', '.lua', '.r', '.R',
-    '.toml', '.ini', '.cfg', '.conf',
-    '.rst', '.tex', '.asciidoc',
+    ".md",
+    ".txt",
+    ".py",
+    ".js",
+    ".ts",
+    ".jsx",
+    ".tsx",
+    ".yml",
+    ".yaml",
+    ".json",
+    ".xml",
+    ".html",
+    ".css",
+    ".sh",
+    ".bash",
+    ".zsh",
+    ".fish",
+    ".rs",
+    ".go",
+    ".java",
+    ".c",
+    ".cpp",
+    ".h",
+    ".hpp",
+    ".rb",
+    ".pl",
+    ".php",
+    ".lua",
+    ".r",
+    ".R",
+    ".toml",
+    ".ini",
+    ".cfg",
+    ".conf",
+    ".rst",
+    ".tex",
+    ".asciidoc",
 }
 
 
@@ -69,21 +99,17 @@ def get_git_tracked_files(repo_path: str) -> list[str]:
     """Get list of git-tracked files in the repository."""
     try:
         result = subprocess.run(
-            ['git', 'ls-files'],
-            cwd=repo_path,
-            capture_output=True,
-            text=True,
-            check=True
+            ["git", "ls-files"], cwd=repo_path, capture_output=True, text=True, check=True
         )
         stdout = result.stdout.strip()
         if not stdout:
             return []
-        return [os.path.join(repo_path, f) for f in stdout.split('\n') if f]
+        return [os.path.join(repo_path, f) for f in stdout.split("\n") if f]
     except subprocess.CalledProcessError:
         # Fallback: walk directory and filter by extension
         files = []
         for root, _, filenames in os.walk(repo_path):
-            if '.git' in root:
+            if ".git" in root:
                 continue
             for filename in filenames:
                 files.append(os.path.join(root, filename))
@@ -156,12 +182,12 @@ def get_char_name(codepoint: int) -> str:
 def scan_file(filepath: str) -> list[tuple[int, int, int, str]]:
     """
     Scan a file for dangerous characters.
-    
+
     Returns list of tuples: (line_number, column, codepoint, char_name)
     """
     findings: list[tuple[int, int, int, str]] = []
     try:
-        with open(filepath, 'r', encoding='utf-8', errors='surrogateescape') as f:
+        with open(filepath, "r", encoding="utf-8", errors="surrogateescape") as f:
             for line_num, line in enumerate(f, 1):
                 for col, char in enumerate(line, 1):
                     codepoint = ord(char)
@@ -179,22 +205,22 @@ def scan_file(filepath: str) -> list[tuple[int, int, int, str]]:
 
 def main() -> int:
     """Main entry point."""
-    repo_path = sys.argv[1] if len(sys.argv) > 1 else '.'
+    repo_path = sys.argv[1] if len(sys.argv) > 1 else "."
     repo_path = os.path.abspath(repo_path)
-    
+
     if not os.path.isdir(repo_path):
         print(f"Error: {repo_path} is not a directory", file=sys.stderr)
         return 1
-    
+
     print(f"Scanning {repo_path} for dangerous Unicode characters...")
     print()
-    
+
     files = get_git_tracked_files(repo_path)
     files_to_scan = [f for f in files if should_scan_file(f)]
-    
+
     total_findings = 0
     files_with_issues = 0
-    
+
     for filepath in sorted(files_to_scan):
         findings = scan_file(filepath)
         if findings:
@@ -203,12 +229,14 @@ def main() -> int:
             for line_num, col, codepoint, char_name in findings:
                 print(f"{rel_path}:{line_num}:{col} U+{codepoint:04X} ({char_name})")
                 total_findings += 1
-    
+
     print()
     print(f"Scanned {len(files_to_scan)} files")
-    
+
     if total_findings > 0:
-        print(f"FAILED: Found {total_findings} dangerous character(s) in {files_with_issues} file(s)")
+        print(
+            f"FAILED: Found {total_findings} dangerous character(s) in {files_with_issues} file(s)"
+        )
         return 1
     else:
         print("PASSED: No dangerous Unicode characters found")

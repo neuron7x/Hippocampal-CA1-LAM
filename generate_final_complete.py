@@ -6,18 +6,25 @@ Generates EVERYTHING: docs 9-12, tests, CI/CD, bibliography, examples
 THIS IS THE FINAL PRODUCTION BUILD
 NO COMPROMISES, NO PLACEHOLDERS, ALL WORKING CODE
 """
-import os
 from pathlib import Path
 
 BASE = Path(".")
 
 # Ensure all dirs exist
-for d in ["docs", "tests", ".github/workflows", ".github/ISSUE_TEMPLATE", "examples", "scripts", ".vscode"]:
+for d in [
+    "docs",
+    "tests",
+    ".github/workflows",
+    ".github/ISSUE_TEMPLATE",
+    "examples",
+    "scripts",
+    ".vscode",
+]:
     (BASE / d).mkdir(parents=True, exist_ok=True)
 
-print("="*70)
+print("=" * 70)
 print("FINAL PRODUCTION PACKAGE GENERATION")
-print("="*70)
+print("=" * 70)
 
 # ============================================================================
 # 9/12: docs/TESTING.md
@@ -63,15 +70,15 @@ python -m pytest tests/ --cov=. --cov-report=html
 def test_network_stability():
     # Create UnifiedWeightMatrix
     W = UnifiedWeightMatrix(connectivity, weights, sources, params)
-    
+
     # Simulate
     for _ in range(50):
         W.update_stp(spikes_pre, spikes_post)
         W.update_calcium(spikes_pre, spikes_post, V_dend)
-    
+
     # Enforce stability
     W.enforce_spectral_constraint(rho_target=0.95)
-    
+
     # Validate
     assert stats['spectral_radius'] < 1.0  # MUST PASS
 ```
@@ -92,7 +99,7 @@ def test_calcium_plasticity():
     for _ in range(100):
         W.update_plasticity_ca_based(M=1.0, G=np.zeros(N))
     assert delta_ltp > 0.0001  # MUST INCREASE
-    
+
     # Medium Ca → LTD
     W.Ca[0, 1] = 1.5  # θ_d < Ca < θ_p
     for _ in range(100):
@@ -113,11 +120,11 @@ def test_input_specific():
     # Same Ca at CA3 and EC synapses
     W.Ca[0, 1] = 2.5  # CA3
     W.Ca[0, 2] = 2.5  # EC
-    
+
     # Run plasticity
     for _ in range(100):
         W.update_plasticity_ca_based(M=1.0, G=np.zeros(N))
-    
+
     # EC should change 10x less
     ratio = delta_ca3 / (delta_ec + 1e-10)
     assert ratio > 5.0  # MUST PASS
@@ -135,12 +142,12 @@ Ratio: 10.06  ✓
 ```python
 def test_theta_swr():
     controller = NetworkStateController(params)
-    
+
     # Simulate 10 seconds
     for _ in range(100000):
         state, _ = controller.step()
         # Track time in each state
-    
+
     # Validate
     assert 0.7 <= theta_frac <= 0.95  # Theta dominant
     assert controller.get_inhibition_factor() < 1.0  # SWR reduces inh
@@ -160,7 +167,7 @@ SWR recurrence: 2.00  ✓
 def test_reproducibility():
     W1 = run_simulation(seed=42)
     W2 = run_simulation(seed=42)
-    
+
     diff = np.max(np.abs(W1 - W2))
     assert diff < 1e-10  # EXACT MATCH
 ```
@@ -185,18 +192,18 @@ class TestUnifiedWeights:
         self.N = 10
         self.connectivity = np.eye(self.N, k=1, dtype=bool)
         # ... setup
-    
+
     def test_effective_weights_shape(self):
         W = UnifiedWeightMatrix(...)
         W_eff = W.get_effective_weights()
         assert W_eff.shape == (self.N, self.N)
-    
+
     def test_stp_bounds(self):
         W = UnifiedWeightMatrix(...)
         W.update_stp(spikes_pre, spikes_post)
         assert np.all(0 <= W.u) and np.all(W.u <= 1)
         assert np.all(0 <= W.R) and np.all(W.R <= 1)
-    
+
     def test_calcium_nonnegative(self):
         W = UnifiedWeightMatrix(...)
         W.update_calcium(spikes_pre, spikes_post, V_dend)
@@ -211,17 +218,17 @@ def test_layer_assignment_valid():
     model = HierarchicalLaminarModel()
     q = model.fit_em_vectorized(cells, max_iter=10)
     assignments = model.assign_layers(cells, q)
-    
+
     assert len(assignments) == len(cells)
     assert np.all((0 <= assignments) & (assignments < 4))
 
 def test_mrf_improves_coherence():
     model_mrf = HierarchicalLaminarModel(lambda_mrf=0.5)
     model_no_mrf = HierarchicalLaminarModel(lambda_mrf=0.0)
-    
+
     coherence_mrf = compute_coherence(...)
     coherence_no_mrf = compute_coherence(...)
-    
+
     assert coherence_mrf > coherence_no_mrf
 ```
 
@@ -235,7 +242,7 @@ def test_full_pipeline():
     W = UnifiedWeightMatrix(...)
     pop = CA1Population(...)
     controller = NetworkStateController(...)
-    
+
     # 2. Simulate 1000ms
     for step in range(10000):
         state, _ = controller.step()
@@ -244,7 +251,7 @@ def test_full_pipeline():
         W.update_calcium(...)
         if step % 10 == 0:
             W.update_plasticity_ca_based(...)
-    
+
     # 3. Validate
     assert controller state machine worked
     assert spikes generated
@@ -313,16 +320,16 @@ import numpy as np
 def test_my_feature():
     \"\"\"
     Test description.
-    
+
     Expected behavior: ...
     Reference: DOI if applicable
     \"\"\"
     # Setup
     np.random.seed(42)
-    
+
     # Execute
     result = my_function(params)
-    
+
     # Validate
     assert result meets expectations
     assert no side effects
@@ -358,13 +365,13 @@ def generate_test_cells(N=1000, seed=42):
 
 ### Common Issues
 
-**Issue**: Tests pass locally but fail in CI  
+**Issue**: Tests pass locally but fail in CI
 **Solution**: Check Python version, dependencies, random seed
 
-**Issue**: Numerical differences across platforms  
+**Issue**: Numerical differences across platforms
 **Solution**: Use tolerance in assertions (but golden tests must match exactly)
 
-**Issue**: Tests are slow  
+**Issue**: Tests are slow
 **Solution**: Use smaller N for unit tests, reserve large N for integration
 
 ---
@@ -701,10 +708,10 @@ All parameters in this framework are extracted from peer-reviewed literature. Th
 
 ### 1. Laminar Organization
 
-**Pachicano M., Marín O., Rico B.** (2025)  
-*Laminar organization of pyramidal neuron cell types defines distinct CA1 hippocampal subregions*  
-**Nature Communications**, Article 10604  
-Published: 03 December 2025  
+**Pachicano M., Marín O., Rico B.** (2025)
+*Laminar organization of pyramidal neuron cell types defines distinct CA1 hippocampal subregions*
+**Nature Communications**, Article 10604
+Published: 03 December 2025
 DOI: [10.1038/s41467-025-66613-y](https://doi.org/10.1038/s41467-025-66613-y)
 
 **Data extracted:**
@@ -716,9 +723,9 @@ DOI: [10.1038/s41467-025-66613-y](https://doi.org/10.1038/s41467-025-66613-y)
 
 ### 2. Ca²⁺-Based Plasticity
 
-**Graupner M., Brunel N.** (2012)  
-*Calcium-based plasticity model explains sensitivity of synaptic changes to spike pattern, rate, and dendritic location*  
-**Proceedings of the National Academy of Sciences**, 109(10):3991-3996  
+**Graupner M., Brunel N.** (2012)
+*Calcium-based plasticity model explains sensitivity of synaptic changes to spike pattern, rate, and dendritic location*
+**Proceedings of the National Academy of Sciences**, 109(10):3991-3996
 DOI: [10.1073/pnas.1109359109](https://doi.org/10.1073/pnas.1109359109)
 
 **Parameters extracted:**
@@ -731,10 +738,10 @@ DOI: [10.1073/pnas.1109359109](https://doi.org/10.1073/pnas.1109359109)
 
 ### 3. Input-Specific Plasticity (DELTA)
 
-**Mohar B., Ganmore I., Lampl I.** (2025)  
-*DELTA: a method for brain-wide measurement of synaptic protein turnover reveals localized plasticity during learning*  
-**Nature Neuroscience**  
-Published: 2025  
+**Mohar B., Ganmore I., Lampl I.** (2025)
+*DELTA: a method for brain-wide measurement of synaptic protein turnover reveals localized plasticity during learning*
+**Nature Neuroscience**
+Published: 2025
 DOI: [10.1038/s41593-025-01923-4](https://doi.org/10.1038/s41593-025-01923-4)
 
 **Motivation:**
@@ -744,9 +751,9 @@ DOI: [10.1038/s41593-025-01923-4](https://doi.org/10.1038/s41593-025-01923-4)
 
 ### 4. HCN Channel Gradient
 
-**Magee J.C.** (1998)  
-*Dendritic hyperpolarization-activated currents modify the integrative properties of hippocampal CA1 pyramidal neurons*  
-**Journal of Neuroscience**, 18(19):7613-7624  
+**Magee J.C.** (1998)
+*Dendritic hyperpolarization-activated currents modify the integrative properties of hippocampal CA1 pyramidal neurons*
+**Journal of Neuroscience**, 18(19):7613-7624
 DOI: [10.1523/JNEUROSCI.18-19-07613.1998](https://doi.org/10.1523/JNEUROSCI.18-19-07613.1998)
 
 **Data extracted:**
@@ -757,9 +764,9 @@ DOI: [10.1523/JNEUROSCI.18-19-07613.1998](https://doi.org/10.1523/JNEUROSCI.18-1
 
 ### 5. Theta Phase Precession
 
-**O'Keefe J., Recce M.L.** (1993)  
-*Phase relationship between hippocampal place units and the EEG theta rhythm*  
-**Hippocampus**, 3(3):317-330  
+**O'Keefe J., Recce M.L.** (1993)
+*Phase relationship between hippocampal place units and the EEG theta rhythm*
+**Hippocampus**, 3(3):317-330
 DOI: [10.1002/hipo.450030307](https://doi.org/10.1002/hipo.450030307)
 
 **Data extracted:**
@@ -767,9 +774,9 @@ DOI: [10.1002/hipo.450030307](https://doi.org/10.1002/hipo.450030307)
 - Phase precession slope: κ ≈ 2π rad/place field
 - Phase-position relationship: φ = φ₀ - κx (mod 2π)
 
-**Skaggs W.E., McNaughton B.L., Wilson M.A., Barnes C.A.** (1996)  
-*Theta phase precession in hippocampal neuronal populations and the compression of temporal sequences*  
-**Hippocampus**, 6(2):149-172  
+**Skaggs W.E., McNaughton B.L., Wilson M.A., Barnes C.A.** (1996)
+*Theta phase precession in hippocampal neuronal populations and the compression of temporal sequences*
+**Hippocampus**, 6(2):149-172
 DOI: [10.1002/(SICI)1098-1063(1996)6:2<149::AID-HIPO6>3.0.CO;2-K](https://doi.org/10.1002/(SICI)1098-1063(1996)6:2<149::AID-HIPO6>3.0.CO;2-K)
 
 **Additional data:**
@@ -778,8 +785,8 @@ DOI: [10.1002/(SICI)1098-1063(1996)6:2<149::AID-HIPO6>3.0.CO;2-K](https://doi.or
 
 ### 6. Sharp-Wave Ripples (SWR)
 
-**A curated dataset of hippocampal sharp-wave ripples supports investigations of memory replay** (2025)  
-**Scientific Data**, Nature  
+**A curated dataset of hippocampal sharp-wave ripples supports investigations of memory replay** (2025)
+**Scientific Data**, Nature
 DOI: [10.1038/s41597-025-06115-0](https://doi.org/10.1038/s41597-025-06115-0)
 
 **Data extracted:**
@@ -790,9 +797,9 @@ DOI: [10.1038/s41597-025-06115-0](https://doi.org/10.1038/s41597-025-06115-0)
 
 ### 7. OLM Interneuron Control
 
-**Udakis M., Pedrosa V., Chamberlain S.E.L., Clopath C., Mellor J.R.** (2025)  
-*A neural circuit mechanism for controlling learning in the hippocampus*  
-**Nature Communications**  
+**Udakis M., Pedrosa V., Chamberlain S.E.L., Clopath C., Mellor J.R.** (2025)
+*A neural circuit mechanism for controlling learning in the hippocampus*
+**Nature Communications**
 DOI: [10.1038/s41467-025-64859-0](https://doi.org/10.1038/s41467-025-64859-0)
 
 **Data extracted:**
@@ -803,9 +810,9 @@ DOI: [10.1038/s41467-025-64859-0](https://doi.org/10.1038/s41467-025-64859-0)
 
 ### 8. Behavioral Time-Scale Plasticity (BTSP)
 
-**Bittner K.C., Grienberger C., Vaidya S.P., Milstein A.D., Macklin J.J., Suh J., Tonegawa S., Magee J.C.** (2017)  
-*Behavioral time scale synaptic plasticity underlies CA1 place fields*  
-**Science**, 357(6355):1033-1036  
+**Bittner K.C., Grienberger C., Vaidya S.P., Milstein A.D., Macklin J.J., Suh J., Tonegawa S., Magee J.C.** (2017)
+*Behavioral time scale synaptic plasticity underlies CA1 place fields*
+**Science**, 357(6355):1033-1036
 DOI: [10.1126/science.aan3846](https://doi.org/10.1126/science.aan3846)
 
 **Data extracted:**
@@ -815,9 +822,9 @@ DOI: [10.1126/science.aan3846](https://doi.org/10.1126/science.aan3846)
 
 ### 9. Voltage-Based STDP with Homeostasis
 
-**Clopath C., Büsing L., Vasilaki E., Gerstner W.** (2010)  
-*Connectivity reflects coding: a model of voltage-based STDP with homeostasis*  
-**Nature Neuroscience**, 13:344-352  
+**Clopath C., Büsing L., Vasilaki E., Gerstner W.** (2010)
+*Connectivity reflects coding: a model of voltage-based STDP with homeostasis*
+**Nature Neuroscience**, 13:344-352
 DOI: [10.1038/nn.2479](https://doi.org/10.1038/nn.2479)
 
 **Data extracted:**
@@ -827,9 +834,9 @@ DOI: [10.1038/nn.2479](https://doi.org/10.1038/nn.2479)
 
 ### 10. Short-Term Plasticity
 
-**Tsodyks M.V., Markram H.** (1997)  
-*The neural code between neocortical pyramidal neurons depends on neurotransmitter release probability*  
-**Proceedings of the National Academy of Sciences**, 94(2):719-723  
+**Tsodyks M.V., Markram H.** (1997)
+*The neural code between neocortical pyramidal neurons depends on neurotransmitter release probability*
+**Proceedings of the National Academy of Sciences**, 94(2):719-723
 DOI: [10.1073/pnas.94.2.719](https://doi.org/10.1073/pnas.94.2.719)
 
 **Data extracted:**
@@ -840,9 +847,9 @@ DOI: [10.1073/pnas.94.2.719](https://doi.org/10.1073/pnas.94.2.719)
 
 ### 11. Network Stability
 
-**Brunel N.** (2000)  
-*Dynamics of sparsely connected networks of excitatory and inhibitory spiking neurons*  
-**Journal of Computational Neuroscience**, 8:183-208  
+**Brunel N.** (2000)
+*Dynamics of sparsely connected networks of excitatory and inhibitory spiking neurons*
+**Journal of Computational Neuroscience**, 8:183-208
 DOI: [10.1023/A:1008925309027](https://doi.org/10.1023/A:1008925309027)
 
 **Data extracted:**
@@ -852,9 +859,9 @@ DOI: [10.1023/A:1008925309027](https://doi.org/10.1023/A:1008925309027)
 
 ### 12. Fractal Analysis Methodology
 
-**Orima T., Shigematsu N., Koyama S., Jimbo Y.** (2025)  
-*Fractal memory structure in the spatiotemporal learning rule*  
-**Frontiers in Computational Neuroscience**  
+**Orima T., Shigematsu N., Koyama S., Jimbo Y.** (2025)
+*Fractal memory structure in the spatiotemporal learning rule*
+**Frontiers in Computational Neuroscience**
 DOI: [10.3389/fncom.2025.1641519](https://doi.org/10.3389/fncom.2025.1641519)
 
 **Methodology reference:**
@@ -865,9 +872,9 @@ DOI: [10.3389/fncom.2025.1641519](https://doi.org/10.3389/fncom.2025.1641519)
 
 ### 13. HippoRAG (AI Integration)
 
-**Gutiérrez B.J., Zhou Y., Lee S., Luria G., Haber N., Sundaram S.** (2025)  
-*HippoRAG: Neurobiologically Inspired Long-Term Memory for Large Language Models*  
-**arXiv:2405.14831** (v3, January 2025)  
+**Gutiérrez B.J., Zhou Y., Lee S., Luria G., Haber N., Sundaram S.** (2025)
+*HippoRAG: Neurobiologically Inspired Long-Term Memory for Large Language Models*
+**arXiv:2405.14831** (v3, January 2025)
 DOI: [10.48550/arXiv.2405.14831](https://doi.org/10.48550/arXiv.2405.14831)
 
 **Architecture reference:**
@@ -879,9 +886,9 @@ DOI: [10.48550/arXiv.2405.14831](https://doi.org/10.48550/arXiv.2405.14831)
 
 ### NMDA Receptor Dynamics
 
-**Jahr C.E., Stevens C.F.** (1990)  
-*Voltage dependence of NMDA-activated macroscopic conductances predicted by single-channel kinetics*  
-**Nature**, 346:678-681  
+**Jahr C.E., Stevens C.F.** (1990)
+*Voltage dependence of NMDA-activated macroscopic conductances predicted by single-channel kinetics*
+**Nature**, 346:678-681
 DOI: [10.1038/346678a0](https://doi.org/10.1038/346678a0)
 
 **Mg²⁺ block parameters:**
@@ -891,9 +898,9 @@ DOI: [10.1038/346678a0](https://doi.org/10.1038/346678a0)
 
 ### Two-Compartment Models
 
-**Migliore M., Shepherd G.M.** (2002)  
-*Emerging rules for the distributions of active dendritic conductances*  
-**Nature Reviews Neuroscience**, 3:362-370  
+**Migliore M., Shepherd G.M.** (2002)
+*Emerging rules for the distributions of active dendritic conductances*
+**Nature Reviews Neuroscience**, 3:362-370
 DOI: [10.1038/nrn810](https://doi.org/10.1038/nrn810)
 
 **Compartment modeling principles:**
@@ -901,9 +908,9 @@ DOI: [10.1038/nrn810](https://doi.org/10.1038/nrn810)
 - Dendrite: integration, NMDA, Ca²⁺
 - Coupling conductance
 
-**Golding N.L., Staff N.P., Spruston N.** (2002)  
-*Dendritic spikes as a mechanism for cooperative long-term potentiation*  
-**Nature**, 418:326-331  
+**Golding N.L., Staff N.P., Spruston N.** (2002)
+*Dendritic spikes as a mechanism for cooperative long-term potentiation*
+**Nature**, 418:326-331
 DOI: [10.1038/nature00854](https://doi.org/10.1038/nature00854)
 
 **Dendritic Ca²⁺ plateaus:**
@@ -1154,24 +1161,24 @@ n_steps = int(T / dt)
 # Run simulation
 for step in range(n_steps):
     t = step * dt
-    
+
     # Generate random spikes (example)
     spikes_pre = np.random.rand(N) < 0.01
     spikes_post = np.random.rand(N) < 0.01
     V_dendrite = np.random.randn(N) * 10 - 60  # mV
-    
+
     # Update STP (every timestep)
     W.update_stp(spikes_pre, spikes_post)
-    
+
     # Update Ca²⁺ (every timestep)
     W.update_calcium(spikes_pre, spikes_post, V_dendrite)
-    
+
     # Update plasticity (every 10 timesteps = 1 ms)
     if step % 10 == 0:
         M = 1.0  # Modulatory signal (learning mode)
         G = np.zeros(N)  # No OLM gating
         W.update_plasticity_ca_based(M, G)
-    
+
     # Optional: enforce stability every 100 ms
     if step % 1000 == 0:
         W.enforce_spectral_constraint(rho_target=0.95)
@@ -1196,12 +1203,12 @@ cells = []
 for i in range(1000):
     z = np.random.rand()  # Depth [0, 1]
     s = np.random.rand()  # Longitudinal [0, 1]
-    
+
     # Transcripts (example: layer-dependent)
     layer = min(int(z * 4), 3)
     transcripts = np.zeros(4)
     transcripts[layer] = np.random.poisson(5)
-    
+
     cells.append(CellDataHier(
         cell_id=i,
         animal_id=0,
@@ -1250,18 +1257,18 @@ detector = ReplayDetector()
 # Simulation
 for step in range(10000):
     t = step * 0.1
-    
+
     # Step state machine
     state, state_changed = controller.step()
-    
+
     # Get modulation factors
     inh_factor = controller.get_inhibition_factor()  # 0.5 during SWR
     rec_factor = controller.get_recurrence_factor()  # 2.0 during SWR
     theta_drive = controller.get_theta_drive(t, f_theta=8.0)
-    
+
     # Apply to network
     # (integrate with your simulation)
-    
+
     # Detect replay during SWR
     if state == NetworkState.SWR:
         replay_event = detector.detect(t, spikes, state)
@@ -1284,7 +1291,7 @@ for event in events:
     h_t = np.random.randn(params.ai.d_model)  # Your LLM encoding
     v_t = np.random.randn(params.ai.value_dim)  # Value to store
     position = np.random.rand(2)  # Spatial position (for novelty)
-    
+
     # Process with CA1 memory
     ai_memory.process_step(h_t, v_t, position)
 
@@ -1505,9 +1512,9 @@ with open(BASE / "docs" / "USAGE.md", "w") as f:
     f.write(USAGE_MD)
 print("✓ 12/12 docs/USAGE.md")
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("✅ ALL 12 DOCUMENTATION FILES COMPLETE")
-print("="*70)
+print("=" * 70)
 print("\nGenerated:")
 print("  1. README.md")
 print("  2. CONTRIBUTING.md")

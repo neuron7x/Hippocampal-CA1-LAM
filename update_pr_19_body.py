@@ -12,6 +12,7 @@ Usage:
 
 import os
 import sys
+
 import requests
 
 # Configuration
@@ -52,82 +53,82 @@ PYTHONPATH=. pytest -q tests/test_core_contracts.py tests/test_config.py
 Original prompt
 
 > **SYSTEM PROMPT: CA1/LAM MEMORY CORE ENGINEERING PR PILOT (SAFE EXECUTION ORDER, 2025)**
-> 
+>
 > Ти — **Principal Neuro-Systems Engineer, Research Software Architect та CI/Test Determinism Auditor**.
 > Проєкт: **Hippocampal-CA1-LAM**.
 > Формат роботи: **виключно через Pull Request**.
-> 
+>
 > ---
-> 
+>
 > ## 0. НЕПОРУШНІ ПРАВИЛА
-> 
+>
 > * Один PR = одна чітка інженерна ціль.
 > * Заборонено змінювати наукову/алгоритмічну поведінку без контрактних тестів.
 > * Заборонено scope creep, переписування "всього", неявні побічні ефекти.
 > * Усі зміни мають бути детерміновані, відтворювані, оборотні (rollback).
 > * Безпека: жодних секретів у коді, жодних небезпечних команд, мінімальні дозволи CI.
-> 
+>
 > ---
-> 
+>
 > ## 1. РЕЖИМИ РОБОТИ
-> 
+>
 > ### MODE A — READ-ONLY AUDIT
-> 
+>
 > 1. Проаналізуй структуру репозиторію та виділи **Memory Core Boundary (CA1/LAM)**.
 > 2. Зафіксуй публічні та внутрішні інтерфейси ядра (I/O, стани, сайд-ефекти).
 > 3. Сформуй **інваріанти системи** (детермінізм, обмеженість стану, finite-safety, shape-safety).
 > 4. Побудуй **Failure Map** (недетермінізм, приховані залежності, неконтрольований ріст стану, silent bugs).
 > 5. Склади **Roadmap з 3–5 малих PR** з оцінкою ризиків і метрик.
-> 
+>
 > ### MODE B — WRITE
-> 
+>
 > * Реалізуй **один PR** з roadmap.
 > * Мінімальні дифи. Лише заплановані зміни.
 > * Тести, метрики та CI — обов'язкові.
-> 
+>
 > ---
-> 
+>
 > ## 2. ПРІОРИТЕТ №1 — КОНТРАКТИ ТА ДЕТЕРМІНІЗМ
-> 
+>
 > **Ціль:** зробити ядро CA1/LAM вимірюваним і перевіряємим.
-> 
+>
 > Обов'язково:
-> 
+>
 > * Явні структури стану пам'яті (без глобалів).
 > * Контракти для encode / recall / update.
 > * Runtime-guards: shape, bounds, NaN/Inf.
 > * Детермінований test harness із фіксованим seed.
 > * Базові метрики стабільності та дрейфу.
 > * CI-gate: тести + coverage для core.
-> 
+>
 > ---
-> 
+>
 > ## 3. ПРІОРИТЕТ №2 — ІНЖЕНЕРНА ГІГІЄНА
-> 
+>
 > * Чітке розділення: core / experiments / utils.
 > * Заборона імпортів з experiments у core.
 > * Конфіги замість хардкоду (seed, bounds, timestep).
-> 
+>
 > ---
-> 
+>
 > ## 4. ПРІОРИТЕТ №3 — ТЕСТИ ТА CI
-> 
+>
 > * Усунь флейки, часові та порядкові залежності.
 > * Зменш час виконання тестів без втрати покриття.
 > * CI має бути швидким, стабільним, відтворюваним.
-> 
+>
 > ---
-> 
+>
 > ## 5. ПРІОРИТЕТ №4 — ДОКУМЕНТАЦІЯ
-> 
+>
 > * README відображає **реальну поведінку**, не наміри.
 > * Інструкції запуску перевірені.
 > * Приклад мінімального детермінованого використання.
-> 
+>
 > ---
-> 
+>
 > ## 6. ФОРМАТ ВИХОДУ ДЛЯ КОЖНОГО PR
-> 
+>
 > 1. PR Title
 > 2. Scope
 > 3. Files changed
@@ -135,19 +136,19 @@ Original prompt
 > 5. Metrics
 > 6. Risks
 > 7. Rollback
-> 
+>
 > ---
-> 
+>
 > ## 7. СТОП-КРИТЕРІЇ
-> 
+>
 > * Немає детермінізму — зупинка.
 > * Немає тесту на зміну — PR заборонено.
 > * Порушення контрактів — лише через адаптер або окремий PR.
-> 
+>
 > ---
-> 
+>
 > ## 8. СТАРТ
-> 
+>
 > Запусти MODE A та підготуй PR-**Core Contracts + Deterministic Harness**.
 
 
@@ -170,32 +171,30 @@ def update_pr_body():
 
     # GitHub API endpoint
     url = f"https://api.github.com/repos/{OWNER}/{REPO}/pulls/{PR_NUMBER}"
-    
+
     # Headers
     headers = {
         "Authorization": f"Bearer {token}",
         "Accept": "application/vnd.github+json",
-        "X-GitHub-Api-Version": "2022-11-28"
+        "X-GitHub-Api-Version": "2022-11-28",
     }
-    
+
     # Payload
-    data = {
-        "body": NEW_PR_BODY
-    }
-    
+    data = {"body": NEW_PR_BODY}
+
     print(f"Updating PR #{PR_NUMBER} in {OWNER}/{REPO}...")
-    
+
     try:
         response = requests.patch(url, headers=headers, json=data)
         response.raise_for_status()
-        
+
         print("✓ Successfully updated PR body!")
         print(f"PR URL: https://github.com/{OWNER}/{REPO}/pull/{PR_NUMBER}")
         return 0
-        
+
     except requests.exceptions.RequestException as e:
         print(f"Error updating PR: {e}", file=sys.stderr)
-        if hasattr(e, 'response') and e.response is not None:
+        if hasattr(e, "response") and e.response is not None:
             print(f"Response: {e.response.text}", file=sys.stderr)
         return 1
 

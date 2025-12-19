@@ -14,32 +14,38 @@ Invariants:
 7. Non-negativity - certain values must be non-negative
 8. Probability normalization - probabilities sum to 1
 """
+
 from __future__ import annotations
 
 import functools
+import threading
 from typing import Any, Callable, TypeVar
 
 import numpy as np
 
-# Global flag to enable/disable guards (for production performance)
-_GUARDS_ENABLED: bool = True
+# Thread-local storage for guards state (thread-safe)
+_guards_local = threading.local()
+
+
+def _get_guards_enabled() -> bool:
+    """Get thread-local guards enabled state."""
+    if not hasattr(_guards_local, "enabled"):
+        _guards_local.enabled = True  # Default enabled
+    return _guards_local.enabled
 
 
 def set_guards_enabled(enabled: bool) -> None:
-    """Enable or disable runtime guards globally."""
-    global _GUARDS_ENABLED
-    _GUARDS_ENABLED = enabled
+    """Enable or disable runtime guards for the current thread."""
+    _guards_local.enabled = enabled
 
 
 def guards_enabled() -> bool:
-    """Check if guards are currently enabled."""
-    return _GUARDS_ENABLED
+    """Check if guards are currently enabled for the current thread."""
+    return _get_guards_enabled()
 
 
 class InvariantViolation(Exception):
     """Exception raised when a runtime invariant is violated."""
-
-    pass
 
 
 # =============================================================================
@@ -56,21 +62,17 @@ def check_shape_1d(arr: np.ndarray, expected_size: int, name: str = "array") -> 
         expected_size: Expected number of elements
         name: Name for error messages
     """
-    if not _GUARDS_ENABLED:
+    if not _get_guards_enabled():
         return
     if arr.ndim != 1:
         raise InvariantViolation(
             f"{name}: expected 1D array, got {arr.ndim}D with shape {arr.shape}"
         )
     if arr.shape[0] != expected_size:
-        raise InvariantViolation(
-            f"{name}: expected size {expected_size}, got {arr.shape[0]}"
-        )
+        raise InvariantViolation(f"{name}: expected size {expected_size}, got {arr.shape[0]}")
 
 
-def check_shape_2d(
-    arr: np.ndarray, expected_shape: tuple[int, int], name: str = "array"
-) -> None:
+def check_shape_2d(arr: np.ndarray, expected_shape: tuple[int, int], name: str = "array") -> None:
     """
     Check that array is 2D with expected shape.
 
@@ -79,16 +81,14 @@ def check_shape_2d(
         expected_shape: Expected (rows, cols)
         name: Name for error messages
     """
-    if not _GUARDS_ENABLED:
+    if not _get_guards_enabled():
         return
     if arr.ndim != 2:
         raise InvariantViolation(
             f"{name}: expected 2D array, got {arr.ndim}D with shape {arr.shape}"
         )
     if arr.shape != expected_shape:
-        raise InvariantViolation(
-            f"{name}: expected shape {expected_shape}, got {arr.shape}"
-        )
+        raise InvariantViolation(f"{name}: expected shape {expected_shape}, got {arr.shape}")
 
 
 def check_square_matrix(arr: np.ndarray, name: str = "matrix") -> int:
@@ -102,16 +102,12 @@ def check_square_matrix(arr: np.ndarray, name: str = "matrix") -> int:
     Returns:
         Size of the matrix (number of rows/cols)
     """
-    if not _GUARDS_ENABLED:
+    if not _get_guards_enabled():
         return arr.shape[0] if arr.ndim >= 1 else 0
     if arr.ndim != 2:
-        raise InvariantViolation(
-            f"{name}: expected 2D array, got {arr.ndim}D"
-        )
+        raise InvariantViolation(f"{name}: expected 2D array, got {arr.ndim}D")
     if arr.shape[0] != arr.shape[1]:
-        raise InvariantViolation(
-            f"{name}: expected square matrix, got shape {arr.shape}"
-        )
+        raise InvariantViolation(f"{name}: expected square matrix, got shape {arr.shape}")
     return arr.shape[0]
 
 
@@ -128,14 +124,12 @@ def check_finite(arr: np.ndarray, name: str = "array") -> None:
         arr: Array to check
         name: Name for error messages
     """
-    if not _GUARDS_ENABLED:
+    if not _get_guards_enabled():
         return
     if not np.all(np.isfinite(arr)):
         n_nan = np.sum(np.isnan(arr))
         n_inf = np.sum(np.isinf(arr))
-        raise InvariantViolation(
-            f"{name}: contains {n_nan} NaN and {n_inf} Inf values"
-        )
+        raise InvariantViolation(f"{name}: contains {n_nan} NaN and {n_inf} Inf values")
 
 
 def check_no_nan(arr: np.ndarray, name: str = "array") -> None:
@@ -146,7 +140,7 @@ def check_no_nan(arr: np.ndarray, name: str = "array") -> None:
         arr: Array to check
         name: Name for error messages
     """
-    if not _GUARDS_ENABLED:
+    if not _get_guards_enabled():
         return
     if np.any(np.isnan(arr)):
         n_nan = np.sum(np.isnan(arr))
@@ -175,7 +169,7 @@ def check_bounded(
         name: Name for error messages
         strict: If True, bounds are exclusive
     """
-    if not _GUARDS_ENABLED:
+    if not _get_guards_enabled():
         return
     if strict:
         if np.any(arr <= low) or np.any(arr >= high):
@@ -199,7 +193,7 @@ def check_non_negative(arr: np.ndarray, name: str = "array") -> None:
         arr: Array to check
         name: Name for error messages
     """
-    if not _GUARDS_ENABLED:
+    if not _get_guards_enabled():
         return
     if np.any(arr < 0):
         n_neg = np.sum(arr < 0)
@@ -218,7 +212,7 @@ def check_probability(arr: np.ndarray, name: str = "probability", axis: int = -1
         name: Name for error messages
         axis: Axis along which probabilities should sum to 1
     """
-    if not _GUARDS_ENABLED:
+    if not _get_guards_enabled():
         return
     check_bounded(arr, 0.0, 1.0, name)
     sums = np.sum(arr, axis=axis)
@@ -264,14 +258,12 @@ def check_spectral_radius(
     Returns:
         Computed spectral radius
     """
-    if not _GUARDS_ENABLED:
+    if not _get_guards_enabled():
         return 0.0
     check_square_matrix(weights, name)
     rho = compute_spectral_radius(weights)
     if rho > max_radius:
-        raise InvariantViolation(
-            f"{name}: spectral radius {rho:.4f} exceeds maximum {max_radius}"
-        )
+        raise InvariantViolation(f"{name}: spectral radius {rho:.4f} exceeds maximum {max_radius}")
     return rho
 
 
@@ -289,12 +281,10 @@ def check_state_size(size: int, max_size: int, name: str = "state") -> None:
         max_size: Maximum allowed size
         name: Name for error messages
     """
-    if not _GUARDS_ENABLED:
+    if not _get_guards_enabled():
         return
     if size > max_size:
-        raise InvariantViolation(
-            f"{name}: size {size} exceeds maximum {max_size}"
-        )
+        raise InvariantViolation(f"{name}: size {size} exceeds maximum {max_size}")
 
 
 # =============================================================================
@@ -327,7 +317,7 @@ def check_determinism(
     Raises:
         InvariantViolation: If outputs differ between runs
     """
-    if not _GUARDS_ENABLED:
+    if not _get_guards_enabled():
         return True
 
     # First run
@@ -341,8 +331,7 @@ def check_determinism(
     if not np.allclose(result1, result2, rtol=rtol, atol=atol):
         max_diff = np.max(np.abs(result1 - result2))
         raise InvariantViolation(
-            f"Function {func.__name__} is not deterministic: "
-            f"max difference = {max_diff}"
+            f"Function {func.__name__} is not deterministic: " f"max difference = {max_diff}"
         )
     return True
 
@@ -364,7 +353,7 @@ def guarded(func: F) -> F:
 
     @functools.wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
-        if _GUARDS_ENABLED:
+        if _get_guards_enabled():
             # Check array inputs
             for i, arg in enumerate(args):
                 if isinstance(arg, np.ndarray):
@@ -375,7 +364,7 @@ def guarded(func: F) -> F:
 
         result = func(*args, **kwargs)
 
-        if _GUARDS_ENABLED:
+        if _get_guards_enabled():
             # Check array outputs
             if isinstance(result, np.ndarray):
                 check_finite(result, f"{func.__name__}_output")

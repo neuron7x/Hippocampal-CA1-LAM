@@ -2,17 +2,18 @@
 Unit tests for Calcium-Based Plasticity
 Tests for CalciumBasedSynapse, OLMGate, and HomeostaticRegulator
 """
-import pytest
-import numpy as np
 
+import numpy as np
+import pytest
+
+from data.biophysical_parameters import get_default_parameters
 from plasticity.calcium_plasticity import (
     CalciumBasedSynapse,
-    OLMGate,
     HomeostaticRegulator,
+    OLMGate,
     SynapseState,
     compute_place_field_novelty,
 )
-from data.biophysical_parameters import get_default_parameters
 
 
 class TestSynapseState:
@@ -72,25 +73,25 @@ class TestCalciumBasedSynapse:
         # First test at hyperpolarized voltage
         synapse.update_calcium(pre_spike=False, post_spike=False, V_dendrite=-80.0)
         Ca_hyper = synapse.state.Ca
-        
+
         # Reset
         synapse.state.Ca = 0.0
-        
+
         # Then at depolarized voltage
         synapse.update_calcium(pre_spike=False, post_spike=False, V_dendrite=-30.0)
         Ca_depol = synapse.state.Ca
-        
+
         assert Ca_depol > Ca_hyper
 
     def test_update_calcium_decay(self, synapse):
         """Test calcium decay"""
         synapse.state.Ca = 5.0
         initial = synapse.state.Ca
-        
+
         # Run many steps without input
         for _ in range(100):
             synapse.update_calcium(pre_spike=False, post_spike=False, V_dendrite=-70.0)
-        
+
         assert synapse.state.Ca < initial
 
     def test_update_calcium_nonnegative(self, synapse):
@@ -104,30 +105,30 @@ class TestCalciumBasedSynapse:
         """Test LTP when Ca > theta_p"""
         synapse.state.Ca = 3.0  # Above theta_p = 2.0
         initial_W = synapse.state.W
-        
+
         for _ in range(50):
             synapse.update_weight(M=1.0, G_plasticity=1.0)
-        
+
         assert synapse.state.W > initial_W
 
     def test_update_weight_ltd(self, synapse):
         """Test LTD when theta_d < Ca < theta_p"""
         synapse.state.Ca = 1.5  # Between theta_d=1.0 and theta_p=2.0
         initial_W = synapse.state.W
-        
+
         for _ in range(50):
             synapse.update_weight(M=1.0, G_plasticity=1.0)
-        
+
         assert synapse.state.W < initial_W
 
     def test_update_weight_no_change_low_ca(self, synapse):
         """Test no significant change when Ca < theta_d"""
         synapse.state.Ca = 0.5  # Below theta_d = 1.0
         initial_W = synapse.state.W
-        
+
         for _ in range(50):
             synapse.update_weight(M=1.0, G_plasticity=1.0)
-        
+
         # Should be close to initial (only decay)
         assert abs(synapse.state.W - initial_W) < 0.01
 
@@ -135,18 +136,18 @@ class TestCalciumBasedSynapse:
         """Test modulatory factor M affects learning"""
         synapse.state.Ca = 3.0
         initial_W = synapse.state.W
-        
+
         # No modulation
         synapse.update_weight(M=0.0, G_plasticity=1.0)
         W_no_mod = synapse.state.W
-        
+
         # Reset
         synapse.state.W = initial_W
-        
+
         # With modulation
         synapse.update_weight(M=1.0, G_plasticity=1.0)
         W_with_mod = synapse.state.W
-        
+
         # Change should be larger with modulation
         assert abs(W_with_mod - initial_W) >= abs(W_no_mod - initial_W)
 
@@ -154,20 +155,20 @@ class TestCalciumBasedSynapse:
         """Test OLM gating affects learning"""
         synapse.state.Ca = 3.0
         initial_W = synapse.state.W
-        
+
         # Full gating (plasticity blocked)
         for _ in range(50):
             synapse.update_weight(M=1.0, G_plasticity=0.0)
         W_blocked = synapse.state.W
-        
+
         # Reset
         synapse.state.W = initial_W
-        
+
         # No gating (full plasticity)
         for _ in range(50):
             synapse.update_weight(M=1.0, G_plasticity=1.0)
         W_full = synapse.state.W
-        
+
         # Blocked should change less
         assert abs(W_full - initial_W) > abs(W_blocked - initial_W)
 
@@ -178,7 +179,7 @@ class TestCalciumBasedSynapse:
         for _ in range(200):
             synapse.update_weight(M=1.0, G_plasticity=1.0)
         assert synapse.state.W <= synapse.W_max
-        
+
         # Reset and try to push below min
         synapse.state.W = synapse.W_min
         synapse.state.Ca = 1.5  # LTD range
@@ -189,29 +190,29 @@ class TestCalciumBasedSynapse:
     def test_update_eligibility(self, synapse):
         """Test eligibility trace update"""
         initial_e = synapse.state.e
-        
+
         # Pre spike
         synapse.update_eligibility(pre_spike=True, post_spike=False)
         e_pre = synapse.state.e
-        
+
         # Post spike (should increase eligibility more)
         synapse.update_eligibility(pre_spike=False, post_spike=True)
         e_post = synapse.state.e
-        
+
         # Paired (should increase most)
         synapse.update_eligibility(pre_spike=True, post_spike=True)
         e_paired = synapse.state.e
-        
+
         assert e_pre != initial_e or e_post != initial_e or e_paired != initial_e
 
     def test_update_stp(self, synapse):
         """Test short-term plasticity update"""
         initial_u = synapse.state.u
         initial_R = synapse.state.R
-        
+
         # Pre spike should change u and R
         synapse.update_stp(pre_spike=True, U=0.5, tau_F=100.0, tau_D=200.0)
-        
+
         # u should increase (facilitation)
         # R should decrease (depression)
         assert synapse.state.u != initial_u
@@ -222,10 +223,10 @@ class TestCalciumBasedSynapse:
         synapse.state.W = 2.0
         synapse.state.u = 0.5
         synapse.state.R = 0.8
-        
+
         W_eff = synapse.get_effective_weight()
         expected = 2.0 * 0.5 * 0.8
-        
+
         assert W_eff == expected
 
 
@@ -266,10 +267,10 @@ class TestOLMGate:
         """Test smooth transition"""
         gate.G = 0.0
         target = 1.0
-        
+
         for _ in range(5000):  # Need more iterations for convergence
             gate.update(target)
-        
+
         # Allow for larger tolerance due to slow convergence
         assert abs(gate.G - target) < 0.4
 
@@ -284,10 +285,10 @@ class TestOLMGate:
         """Test plasticity modulation factor"""
         gate.G = 0.0
         assert gate.get_plasticity_factor() == 1.0
-        
+
         gate.G = 1.0
         assert gate.get_plasticity_factor() == 0.0
-        
+
         gate.G = 0.5
         assert gate.get_plasticity_factor() == 0.5
 
@@ -339,9 +340,9 @@ class TestHomeostaticRegulator:
         """Test applying scaling to weights"""
         weights = np.ones((10, 10))
         regulator.nu_filtered = 10.0  # High rate
-        
+
         scaled = regulator.apply_scaling(weights)
-        
+
         # All weights should be reduced
         assert np.all(scaled < weights)
 
@@ -353,7 +354,7 @@ class TestComputePlaceFieldNovelty:
         """Test novelty with empty history"""
         position = np.array([0.5, 0.5])
         history = np.array([])
-        
+
         novelty = compute_place_field_novelty(position, history, sigma=0.1)
         assert novelty == 1.0
 
@@ -361,7 +362,7 @@ class TestComputePlaceFieldNovelty:
         """Test novelty at familiar position"""
         position = np.array([0.5, 0.5])
         history = np.array([[0.5, 0.5], [0.5, 0.5], [0.5, 0.5]])
-        
+
         novelty = compute_place_field_novelty(position, history, sigma=0.1)
         assert novelty < 0.5  # Should be familiar
 
@@ -369,14 +370,14 @@ class TestComputePlaceFieldNovelty:
         """Test novelty at novel position"""
         position = np.array([0.9, 0.9])
         history = np.array([[0.1, 0.1], [0.2, 0.2], [0.3, 0.3]])
-        
+
         novelty = compute_place_field_novelty(position, history, sigma=0.1)
         assert novelty > 0.5  # Should be novel
 
     def test_novelty_range(self):
         """Test novelty is in [0, 1] range"""
         np.random.seed(42)
-        
+
         for _ in range(10):
             position = np.random.rand(2)
             history = np.random.rand(10, 2)

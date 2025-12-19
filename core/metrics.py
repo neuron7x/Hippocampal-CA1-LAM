@@ -10,6 +10,7 @@ This module provides metrics to measure memory subsystem behavior:
 
 All metrics return structured dictionaries with consistent keys.
 """
+
 from __future__ import annotations
 
 from typing import Any, Dict, Optional
@@ -89,9 +90,7 @@ def recall_accuracy_proxy(
         Accuracy value in [0, 1] (or [-1, 1] for correlation)
     """
     if original.shape != recalled.shape:
-        raise ValueError(
-            f"Shape mismatch: original {original.shape} vs recalled {recalled.shape}"
-        )
+        raise ValueError(f"Shape mismatch: original {original.shape} vs recalled {recalled.shape}")
 
     if method == "cosine":
         norm_orig = np.linalg.norm(original)
@@ -113,7 +112,7 @@ def recall_accuracy_proxy(
     elif method == "mse":
         mse = np.mean((original - recalled) ** 2)
         max_val = max(np.max(np.abs(original)), np.max(np.abs(recalled)), 1.0)
-        normalized_mse = mse / (max_val ** 2)
+        normalized_mse = mse / (max_val**2)
         return float(1.0 - min(normalized_mse, 1.0))
 
     else:
@@ -142,9 +141,7 @@ def drift_metric(
         Drift value (non-negative)
     """
     if state_before.shape != state_after.shape:
-        raise ValueError(
-            f"Shape mismatch: {state_before.shape} vs {state_after.shape}"
-        )
+        raise ValueError(f"Shape mismatch: {state_before.shape} vs {state_after.shape}")
 
     diff = state_after - state_before
 
@@ -300,12 +297,8 @@ def compute_report(
 
     # Drift (if previous weights provided)
     if previous_weights is not None:
-        report["weight_drift_relative"] = drift_metric(
-            previous_weights, weights, method="relative"
-        )
-        report["weight_drift_max"] = drift_metric(
-            previous_weights, weights, method="max"
-        )
+        report["weight_drift_relative"] = drift_metric(previous_weights, weights, method="relative")
+        report["weight_drift_max"] = drift_metric(previous_weights, weights, method="max")
     else:
         report["weight_drift_relative"] = None
         report["weight_drift_max"] = None
@@ -313,27 +306,27 @@ def compute_report(
     # Sanity checks
     report["finite_weights"] = bool(np.all(np.isfinite(weights)))
     report["finite_activations"] = bool(np.all(np.isfinite(activations)))
-    report["spectral_radius_safe"] = bool(
-        report["weight_stats"]["spectral_radius"] <= 1.0
-    )
+    report["spectral_radius_safe"] = bool(report["weight_stats"]["spectral_radius"] <= 1.0)
 
     return report
 
 
 # Standard report keys for validation
-REPORT_KEYS = frozenset([
-    "capacity_proxy",
-    "stability",
-    "weight_stats",
-    "activation_stats",
-    "recall_accuracy_cosine",
-    "recall_accuracy_overlap",
-    "weight_drift_relative",
-    "weight_drift_max",
-    "finite_weights",
-    "finite_activations",
-    "spectral_radius_safe",
-])
+REPORT_KEYS = frozenset(
+    [
+        "capacity_proxy",
+        "stability",
+        "weight_stats",
+        "activation_stats",
+        "recall_accuracy_cosine",
+        "recall_accuracy_overlap",
+        "weight_drift_relative",
+        "weight_drift_max",
+        "finite_weights",
+        "finite_activations",
+        "spectral_radius_safe",
+    ]
+)
 
 
 def validate_report(report: Dict[str, Any]) -> bool:

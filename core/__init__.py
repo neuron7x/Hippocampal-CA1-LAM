@@ -33,6 +33,11 @@ from .contracts import (
     SimulationConfig,
     UpdateInput,
 )
+from .hierarchical_laminar import (
+    CellDataHier,
+    HierarchicalLaminarModel,
+    build_knn_neighbors,
+)
 from .invariants import (
     InvariantViolation,
     check_bounded,
@@ -46,6 +51,13 @@ from .invariants import (
     set_guards_enabled,
     validate_memory_state,
 )
+from .laminar_structure import (
+    CellData,
+    SubregionClassifier,
+    ZINBLayerModel,
+    compute_coexpression_rate,
+)
+from .laminar_structure import validate_laminar_structure as validate_zinb_structure
 from .metrics import (
     REPORT_KEYS,
     compute_report,
@@ -54,18 +66,6 @@ from .metrics import (
     recall_accuracy_proxy,
     stability_metric,
     validate_report,
-)
-from .hierarchical_laminar import (
-    CellDataHier,
-    HierarchicalLaminarModel,
-    build_knn_neighbors,
-)
-from .laminar_structure import (
-    CellData,
-    SubregionClassifier,
-    ZINBLayerModel,
-    compute_coexpression_rate,
-    validate_laminar_structure as validate_zinb_structure,
 )
 from .neuron_model import (
     CA1Population,
