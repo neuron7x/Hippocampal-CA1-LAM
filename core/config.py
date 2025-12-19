@@ -15,6 +15,7 @@ Usage:
     if not errors:
         sim_config = config.core.to_simulation_config()
 """
+
 from __future__ import annotations
 
 import json
@@ -166,8 +167,7 @@ def load_config(path: Union[str, Path]) -> ExperimentConfig:
             import yaml
         except ImportError as e:
             raise ImportError(
-                "PyYAML is required for YAML config files. "
-                "Install with: pip install pyyaml"
+                "PyYAML is required for YAML config files. " "Install with: pip install pyyaml"
             ) from e
 
         with open(path, "r", encoding="utf-8") as f:
@@ -178,9 +178,7 @@ def load_config(path: Union[str, Path]) -> ExperimentConfig:
             data = json.load(f)
 
     else:
-        raise ValueError(
-            f"Unsupported config format: {suffix}. Use .yaml, .yml, or .json"
-        )
+        raise ValueError(f"Unsupported config format: {suffix}. Use .yaml, .yml, or .json")
 
     return ExperimentConfig.from_dict(data or {})
 
@@ -206,8 +204,7 @@ def save_config(config: ExperimentConfig, path: Union[str, Path]) -> None:
             import yaml
         except ImportError as e:
             raise ImportError(
-                "PyYAML is required for YAML config files. "
-                "Install with: pip install pyyaml"
+                "PyYAML is required for YAML config files. " "Install with: pip install pyyaml"
             ) from e
 
         with open(path, "w", encoding="utf-8") as f:
@@ -218,9 +215,7 @@ def save_config(config: ExperimentConfig, path: Union[str, Path]) -> None:
             json.dump(data, f, indent=2)
 
     else:
-        raise ValueError(
-            f"Unsupported config format: {suffix}. Use .yaml, .yml, or .json"
-        )
+        raise ValueError(f"Unsupported config format: {suffix}. Use .yaml, .yml, or .json")
 
 
 class ConfigValidationError(Exception):
@@ -257,21 +252,18 @@ def validate_config(config: ExperimentConfig) -> List[str]:
     # Validate ranges
     if not (0 < core.connection_probability <= 1):
         errors.append(
-            f"connection_probability must be in (0, 1], "
-            f"got {core.connection_probability}"
+            f"connection_probability must be in (0, 1], " f"got {core.connection_probability}"
         )
 
     if not (0 < core.spectral_radius_target < 1):
         errors.append(
-            f"spectral_radius_target must be in (0, 1), "
-            f"got {core.spectral_radius_target}"
+            f"spectral_radius_target must be in (0, 1), " f"got {core.spectral_radius_target}"
         )
 
     # Validate weight bounds
     if core.weight_min >= core.weight_max:
         errors.append(
-            f"weight_min ({core.weight_min}) must be < "
-            f"weight_max ({core.weight_max})"
+            f"weight_min ({core.weight_min}) must be < " f"weight_max ({core.weight_max})"
         )
 
     if core.weight_min < 0:
@@ -279,10 +271,7 @@ def validate_config(config: ExperimentConfig) -> List[str]:
 
     # Validate theta frequency
     if not (1 <= core.theta_frequency <= 20):
-        errors.append(
-            f"theta_frequency should be in [1, 20] Hz, "
-            f"got {core.theta_frequency}"
-        )
+        errors.append(f"theta_frequency should be in [1, 20] Hz, " f"got {core.theta_frequency}")
 
     # Validate n_layers
     if core.n_layers not in (2, 3, 4):

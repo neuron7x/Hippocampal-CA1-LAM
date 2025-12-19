@@ -2,13 +2,14 @@
 Unit tests for Laminar Structure Inference
 Tests for ZINB model and subregion classification
 """
-import pytest
+
 import numpy as np
+import pytest
 
 from core.laminar_structure import (
     CellData,
-    ZINBLayerModel,
     SubregionClassifier,
+    ZINBLayerModel,
     compute_coexpression_rate,
     validate_laminar_structure,
 )
@@ -19,10 +20,7 @@ class TestCellData:
 
     def test_basic_initialization(self):
         """Test CellData initializes correctly"""
-        cell = CellData(
-            x=0.5, y=0.3, z=0.25, s=0.1,
-            transcripts=np.array([5, 0, 1, 0])
-        )
+        cell = CellData(x=0.5, y=0.3, z=0.25, s=0.1, transcripts=np.array([5, 0, 1, 0]))
         assert cell.x == 0.5
         assert cell.y == 0.3
         assert cell.z == 0.25
@@ -55,13 +53,9 @@ class TestZINBLayerModel:
             layer = min(int(z * 4), 3)
             transcripts = np.zeros(4)
             transcripts[layer] = np.random.poisson(5)
-            cells.append(CellData(
-                x=np.random.rand(),
-                y=np.random.rand(),
-                z=z,
-                s=s,
-                transcripts=transcripts
-            ))
+            cells.append(
+                CellData(x=np.random.rand(), y=np.random.rand(), z=z, s=s, transcripts=transcripts)
+            )
         return cells
 
     def test_initialization(self, model):
@@ -107,7 +101,7 @@ class TestZINBLayerModel:
     def test_fit_em(self, model, synthetic_cells):
         """Test EM fitting"""
         q = model.fit_em(synthetic_cells[:100], max_iter=5, tol=1e-3)
-        
+
         assert q.shape == (100, 4)
         # Responsibilities should sum to 1 (allow for NaN in edge cases)
         valid_rows = ~np.any(np.isnan(q), axis=1)
@@ -120,9 +114,9 @@ class TestZINBLayerModel:
         """Test layer assignment"""
         # First fit the model
         q = model.fit_em(synthetic_cells[:100], max_iter=5, tol=1e-3)
-        
+
         assignments = model.assign_layers(synthetic_cells[:100])
-        
+
         assert assignments.shape == (100,)
         assert np.all(assignments >= 0)
         assert np.all(assignments < 4)
@@ -138,16 +132,16 @@ class TestSubregionClassifier:
 
     def test_initialization(self, classifier):
         """Test classifier initialization"""
-        assert 'CA1d' in classifier.subregion_signatures
-        assert 'CA1i' in classifier.subregion_signatures
-        assert 'CA1v' in classifier.subregion_signatures
-        assert 'CA1vv' in classifier.subregion_signatures
+        assert "CA1d" in classifier.subregion_signatures
+        assert "CA1i" in classifier.subregion_signatures
+        assert "CA1v" in classifier.subregion_signatures
+        assert "CA1vv" in classifier.subregion_signatures
 
     def test_classify_ca1d(self, classifier):
         """Test CA1d classification"""
         proportions = {1: 0.5, 2: 0.4, 3: 0.05, 4: 0.05}
         result = classifier.classify_position(s=0.2, layer_proportions=proportions)
-        assert result == 'CA1d'
+        assert result == "CA1d"
 
     def test_classify_ca1vv(self, classifier):
         """Test CA1vv classification"""
@@ -155,41 +149,38 @@ class TestSubregionClassifier:
         proportions = {1: 0.0, 2: 0.0, 3: 0.1, 4: 0.9}
         result = classifier.classify_position(s=0.9, layer_proportions=proportions)
         # May be CA1vv or CA1v depending on dominance logic
-        assert result in ['CA1vv', 'CA1v', 'unknown']
+        assert result in ["CA1vv", "CA1v", "unknown"]
 
     def test_classify_unknown(self, classifier):
         """Test unknown classification"""
         proportions = {1: 0.25, 2: 0.25, 3: 0.25, 4: 0.25}
         result = classifier.classify_position(s=0.5, layer_proportions=proportions)
         # With balanced proportions, may be 'unknown' or matched
-        assert result in ['unknown', 'CA1v', 'CA1i', 'CA1d', 'CA1vv']
+        assert result in ["unknown", "CA1v", "CA1i", "CA1d", "CA1vv"]
 
     def test_create_subregion_map(self, classifier):
         """Test subregion map creation"""
         np.random.seed(42)
-        
+
         # Create cells
         cells = []
         for _ in range(100):
             z = np.random.rand()
             s = np.random.rand()
-            cells.append(CellData(
-                x=np.random.rand(),
-                y=np.random.rand(),
-                z=z, s=s,
-                transcripts=np.zeros(4)
-            ))
-        
+            cells.append(
+                CellData(x=np.random.rand(), y=np.random.rand(), z=z, s=s, transcripts=np.zeros(4))
+            )
+
         # Random assignments
         assignments = np.random.randint(0, 4, 100)
-        
+
         subregion_map = classifier.create_subregion_map(cells, assignments, s_bins=10)
-        
+
         assert isinstance(subregion_map, dict)
-        assert 'CA1d' in subregion_map
-        assert 'CA1i' in subregion_map
-        assert 'CA1v' in subregion_map
-        assert 'CA1vv' in subregion_map
+        assert "CA1d" in subregion_map
+        assert "CA1i" in subregion_map
+        assert "CA1v" in subregion_map
+        assert "CA1vv" in subregion_map
 
 
 class TestComputeCoexpressionRate:
@@ -204,7 +195,7 @@ class TestComputeCoexpressionRate:
             CellData(x=0, y=0, z=0.9, s=0.5, transcripts=np.array([0, 0, 0, 5])),
         ]
         thresholds = {0: 2.0, 1: 2.0, 2: 2.0, 3: 2.0}
-        
+
         ce = compute_coexpression_rate(cells, thresholds)
         assert ce == 0.0
 
@@ -215,7 +206,7 @@ class TestComputeCoexpressionRate:
             CellData(x=0, y=0, z=0.5, s=0.5, transcripts=np.array([5, 5, 0, 0])),
         ]
         thresholds = {0: 2.0, 1: 2.0, 2: 2.0, 3: 2.0}
-        
+
         ce = compute_coexpression_rate(cells, thresholds)
         assert ce == 1.0
 
@@ -228,7 +219,7 @@ class TestComputeCoexpressionRate:
             CellData(x=0, y=0, z=0.9, s=0.5, transcripts=np.array([0, 0, 0, 5])),  # Single
         ]
         thresholds = {0: 2.0, 1: 2.0, 2: 2.0, 3: 2.0}
-        
+
         ce = compute_coexpression_rate(cells, thresholds)
         assert ce == 0.25  # 1 out of 4
 
@@ -240,7 +231,7 @@ class TestValidateLaminarStructure:
     def synthetic_data(self):
         """Generate synthetic validation data"""
         np.random.seed(42)
-        
+
         N = 200
         cells = []
         for _ in range(N):
@@ -248,42 +239,44 @@ class TestValidateLaminarStructure:
             layer = min(int(z * 4), 3)
             transcripts = np.zeros(4)
             transcripts[layer] = np.random.poisson(5)
-            cells.append(CellData(
-                x=np.random.rand(),
-                y=np.random.rand(),
-                z=z,
-                s=np.random.rand(),
-                transcripts=transcripts
-            ))
-        
+            cells.append(
+                CellData(
+                    x=np.random.rand(),
+                    y=np.random.rand(),
+                    z=z,
+                    s=np.random.rand(),
+                    transcripts=transcripts,
+                )
+            )
+
         model = ZINBLayerModel()
         model.fit_em(cells, max_iter=5)
-        
+
         return cells, model
 
     def test_validate_returns_dict(self, synthetic_data):
         """Test validation returns dict with expected keys"""
         cells, model = synthetic_data
         thresholds = {0: 2.0, 1: 2.0, 2: 2.0, 3: 2.0}
-        
+
         metrics = validate_laminar_structure(model, cells, thresholds)
-        
+
         assert isinstance(metrics, dict)
-        assert 'mutual_information' in metrics
-        assert 'coexpression_rate' in metrics
-        assert 'pass_mi' in metrics
-        assert 'pass_ce' in metrics
-        assert 'pass_overall' in metrics
+        assert "mutual_information" in metrics
+        assert "coexpression_rate" in metrics
+        assert "pass_mi" in metrics
+        assert "pass_ce" in metrics
+        assert "pass_overall" in metrics
 
     def test_validate_mutual_information(self, synthetic_data):
         """Test mutual information is computed"""
         cells, model = synthetic_data
         thresholds = {0: 2.0, 1: 2.0, 2: 2.0, 3: 2.0}
-        
+
         metrics = validate_laminar_structure(model, cells, thresholds)
-        
-        assert isinstance(metrics['mutual_information'], float)
-        assert metrics['mutual_information'] >= 0
+
+        assert isinstance(metrics["mutual_information"], float)
+        assert metrics["mutual_information"] >= 0
 
 
 if __name__ == "__main__":

@@ -10,6 +10,7 @@ Contracts:
 - RecallQuery: Query for memory recall
 - RecallResult: Result from memory recall
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -90,9 +91,7 @@ class EncodeInput:
     def __post_init__(self) -> None:
         """Validate input dimensions."""
         if self.pattern.ndim not in (1, 2):
-            raise ValueError(
-                f"pattern must be 1D or 2D, got {self.pattern.ndim}D"
-            )
+            raise ValueError(f"pattern must be 1D or 2D, got {self.pattern.ndim}D")
 
 
 @dataclass
@@ -199,26 +198,19 @@ WeightMatrix = np.ndarray  # Shape: [N, N]
 TimeSeriesArray = np.ndarray  # Shape: [T, N]
 
 
-def validate_neuron_array(
-    arr: np.ndarray, expected_size: int, name: str = "array"
-) -> None:
+def validate_neuron_array(arr: np.ndarray, expected_size: int, name: str = "array") -> None:
     """Validate a neuron array has correct shape."""
     if arr.ndim != 1:
         raise ValueError(f"{name} must be 1D, got {arr.ndim}D")
     if arr.shape[0] != expected_size:
-        raise ValueError(
-            f"{name} must have size {expected_size}, got {arr.shape[0]}"
-        )
+        raise ValueError(f"{name} must have size {expected_size}, got {arr.shape[0]}")
 
 
-def validate_weight_matrix(
-    weights: np.ndarray, expected_size: int, name: str = "weights"
-) -> None:
+def validate_weight_matrix(weights: np.ndarray, expected_size: int, name: str = "weights") -> None:
     """Validate a weight matrix has correct shape."""
     if weights.ndim != 2:
         raise ValueError(f"{name} must be 2D, got {weights.ndim}D")
     if weights.shape != (expected_size, expected_size):
         raise ValueError(
-            f"{name} must have shape ({expected_size}, {expected_size}), "
-            f"got {weights.shape}"
+            f"{name} must have shape ({expected_size}, {expected_size}), " f"got {weights.shape}"
         )

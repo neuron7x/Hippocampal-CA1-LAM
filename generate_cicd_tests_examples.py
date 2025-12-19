@@ -17,7 +17,6 @@ This includes:
 
 NO COMPROMISES. ALL WORKING CODE.
 """
-import os
 from pathlib import Path
 
 BASE = Path(".")
@@ -25,21 +24,21 @@ BASE = Path(".")
 # Ensure ALL directories
 dirs = [
     ".github/workflows",
-    ".github/ISSUE_TEMPLATE", 
+    ".github/ISSUE_TEMPLATE",
     ".github/PULL_REQUEST_TEMPLATE",
     "tests",
     "examples",
     "scripts",
-    ".vscode"
+    ".vscode",
 ]
 
 for d in dirs:
     (BASE / d).mkdir(parents=True, exist_ok=True)
 
-print("="*70)
+print("=" * 70)
 print("ULTIMATE PRODUCTION PACKAGE GENERATOR")
 print("GENERATING: CI/CD + TESTS + EXAMPLES + CONFIGS")
-print("="*70)
+print("=" * 70)
 
 # ============================================================================
 # GITHUB ACTIONS - CI/CD WORKFLOWS

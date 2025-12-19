@@ -9,10 +9,11 @@ This test suite validates:
 5. Monotonic recall sanity - recall at least matches random baseline
 6. Metrics stability - metrics return consistent dictionary structure
 """
+
 from __future__ import annotations
 
-import pytest
 import numpy as np
+import pytest
 
 from core import CA1Network
 from core.contracts import (
@@ -400,9 +401,7 @@ class TestValidateMemoryState:
         weights = np.random.randn(n, n) * 0.1
         activations = np.random.randn(n)
 
-        results = validate_memory_state(
-            weights, activations, weight_min=-1.0, weight_max=1.0
-        )
+        results = validate_memory_state(weights, activations, weight_min=-1.0, weight_max=1.0)
 
         assert results["shape_valid"]
         assert results["finite_valid"]

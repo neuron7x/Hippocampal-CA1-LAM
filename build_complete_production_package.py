@@ -5,7 +5,6 @@ Generates 100% production-ready package
 
 Run: python build_complete_production_package.py
 """
-import os
 from pathlib import Path
 
 BASE = Path(".")
@@ -14,9 +13,9 @@ BASE = Path(".")
 for d in ["docs", "tests", ".github/workflows", ".github/ISSUE_TEMPLATE", "examples", "scripts"]:
     (BASE / d).mkdir(parents=True, exist_ok=True)
 
-print("="*70)
+print("=" * 70)
 print("BUILDING COMPLETE PRODUCTION PACKAGE")
-print("="*70)
+print("=" * 70)
 
 # ============================================================================
 # 6/12: CHANGELOG.md (already exists, enhance it)

@@ -15,13 +15,19 @@ import scipy.sparse as sp
 try:
     from core.hierarchical_laminar import CellDataHier, HierarchicalLaminarModel
     from data.biophysical_parameters import get_default_parameters
-    from plasticity.unified_weights import UnifiedWeightMatrix, create_source_type_matrix
+    from plasticity.unified_weights import (
+        UnifiedWeightMatrix,
+        create_source_type_matrix,
+    )
 except ModuleNotFoundError:
     PROJECT_ROOT = Path(__file__).resolve().parent.parent
     sys.path.insert(0, str(PROJECT_ROOT))
     from core.hierarchical_laminar import CellDataHier, HierarchicalLaminarModel
     from data.biophysical_parameters import get_default_parameters
-    from plasticity.unified_weights import UnifiedWeightMatrix, create_source_type_matrix
+    from plasticity.unified_weights import (
+        UnifiedWeightMatrix,
+        create_source_type_matrix,
+    )
 
 
 def benchmark_weight_update(N: int = 100, n_iter: int = 1000):
@@ -108,9 +114,7 @@ def stress_test_sparse(
         _ = conn @ spikes[step].astype(np.float32)
     elapsed = time.time() - start
 
-    bytes_used = (
-        conn.data.nbytes + conn.indptr.nbytes + conn.indices.nbytes + spikes.nbytes
-    )
+    bytes_used = conn.data.nbytes + conn.indptr.nbytes + conn.indices.nbytes + spikes.nbytes
     return elapsed, conn.nnz, bytes_used / (1024 * 1024)
 
 
@@ -177,9 +181,7 @@ if __name__ == "__main__":
     print(f"   {elapsed / n_iter * 1000:.2f} ms/iteration")
 
     # Laminar EM
-    print(
-        f"\n2. Laminar EM ({args.laminar_cells} cells, {args.laminar_iter} iterations)..."
-    )
+    print(f"\n2. Laminar EM ({args.laminar_cells} cells, {args.laminar_iter} iterations)...")
     elapsed, N, _ = benchmark_laminar_em(N=args.laminar_cells, max_iter=args.laminar_iter)
     print(f"   {N} cells in {elapsed:.2f}s")
 

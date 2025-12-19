@@ -10,14 +10,6 @@ Implements validation gates and testing:
 - Golden test suite for reproducibility
 """
 
-from .validators import (
-    CA1Validator,
-    compute_fractal_dimension,
-    validate_dynamic_stability,
-    validate_laminar_structure,
-    validate_phase_precession,
-    validate_replay,
-)
 from .golden_tests import (
     GOLDEN_REFERENCE,
     GOLDEN_SEED,
@@ -28,6 +20,14 @@ from .golden_tests import (
     test_laminar_inference_golden,
     test_network_stability_golden,
     test_theta_swr_switching_golden,
+)
+from .validators import (
+    CA1Validator,
+    compute_fractal_dimension,
+    validate_dynamic_stability,
+    validate_laminar_structure,
+    validate_phase_precession,
+    validate_replay,
 )
 
 __all__ = [

@@ -2,9 +2,9 @@
 Unit tests for TwoCompartmentNeuron and CA1Population
 Comprehensive coverage of neuron model functionality
 """
+
 import pytest
 import numpy as np
-from unittest.mock import MagicMock
 
 from core.neuron_model import (
     TwoCompartmentNeuron,
@@ -73,7 +73,7 @@ class TestTwoCompartmentNeuron:
         """Test HCN steady-state activation"""
         m_inf = neuron.m_inf_h(-70.0)
         assert 0.0 <= m_inf <= 1.0
-        
+
         # More hyperpolarized should increase activation
         m_inf_hyper = neuron.m_inf_h(-90.0)
         m_inf_depol = neuron.m_inf_h(-50.0)
@@ -90,7 +90,7 @@ class TestTwoCompartmentNeuron:
         block_hyper = neuron.I_NMDA_voltage_dep(-80.0)
         # At depolarized voltage, should be unblocked
         block_depol = neuron.I_NMDA_voltage_dep(-20.0)
-        
+
         assert block_hyper < block_depol
         assert 0.0 < block_hyper < 1.0
         assert 0.0 < block_depol <= 1.0
@@ -99,10 +99,10 @@ class TestTwoCompartmentNeuron:
         """Test theta drive oscillation"""
         t1 = 0.0
         t2 = 62.5  # Half period at 8 Hz (125 ms period)
-        
+
         I1 = neuron.I_theta(t1)
         I2 = neuron.I_theta(t2)
-        
+
         assert isinstance(I1, float)
         assert isinstance(I2, float)
         # Oscillatory behavior
@@ -118,17 +118,15 @@ class TestTwoCompartmentNeuron:
         """Test spike generation with strong input"""
         # Force voltage above threshold
         neuron.state.V_soma = -50.0  # Just below threshold
-        
+
         # Provide strong excitatory input
         for _ in range(100):
             spike = neuron.step(
-                t=0.0,
-                I_syn_E_soma=500.0,  # Strong excitation
-                mode=NetworkMode.THETA
+                t=0.0, I_syn_E_soma=500.0, mode=NetworkMode.THETA  # Strong excitation
             )
             if spike:
                 break
-        
+
         # After spike, voltage should be reset
         # (This is implementation-dependent)
 
@@ -136,7 +134,7 @@ class TestTwoCompartmentNeuron:
         """Test refractory period prevents spikes"""
         # Set refractory state
         neuron.state.refractory_until = 10.0
-        
+
         # Even with high voltage, should not spike
         neuron.state.V_soma = 0.0  # Way above threshold
         spike = neuron.step(t=5.0, mode=NetworkMode.THETA)
@@ -147,9 +145,9 @@ class TestTwoCompartmentNeuron:
         neuron.state.g_AMPA_soma = 1.0
         neuron.state.g_NMDA = 1.0
         neuron.state.g_GABA_soma = 1.0
-        
+
         neuron.decay_synapses()
-        
+
         assert neuron.state.g_AMPA_soma < 1.0
         assert neuron.state.g_NMDA < 1.0
         assert neuron.state.g_GABA_soma < 1.0
@@ -224,7 +222,7 @@ class TestCA1Population:
         # Run some steps
         for _ in range(100):
             population.step()
-        
+
         rates = population.get_firing_rates(window=100.0)
         assert rates.shape == (20,)
         assert np.all(rates >= 0.0)
@@ -234,10 +232,10 @@ class TestCA1Population:
         # Run some steps
         for _ in range(50):
             population.step()
-        
+
         # Reset
         population.reset()
-        
+
         assert population.t == 0.0
         assert all(len(st) == 0 for st in population.spike_times)
         assert len(population.spike_trains) == 0
@@ -254,11 +252,11 @@ class TestExtractThetaPhase:
         duration = 2000  # ms
         t = np.arange(0, duration, dt)
         f_theta = 8.0  # Hz
-        
+
         lfp = np.sin(2 * np.pi * f_theta * t / 1000.0) + np.random.randn(len(t)) * 0.1
-        
+
         phase = extract_theta_phase(lfp, dt=dt, f_band=(4, 12))
-        
+
         assert phase.shape == lfp.shape
         assert np.all(phase >= 0)
         assert np.all(phase <= 2 * np.pi)
@@ -269,9 +267,9 @@ class TestExtractThetaPhase:
         dt = 0.1
         t = np.arange(0, 1000, dt)
         lfp = np.sin(2 * np.pi * 8 * t / 1000.0) + np.random.randn(len(t)) * 0.2
-        
+
         phase = extract_theta_phase(lfp, dt=dt)
-        
+
         assert np.all(phase >= 0)
         assert np.all(phase <= 2 * np.pi)
 

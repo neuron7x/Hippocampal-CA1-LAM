@@ -3,6 +3,7 @@ Tests for Configuration Management.
 
 Tests configuration loading, validation, and serialization.
 """
+
 from __future__ import annotations
 
 import tempfile
@@ -122,9 +123,7 @@ class TestConfigValidation:
 
     def test_inverted_weight_bounds_fails(self) -> None:
         """weight_min >= weight_max fails validation."""
-        config = ExperimentConfig(
-            core=CoreConfig(weight_min=5.0, weight_max=1.0)
-        )
+        config = ExperimentConfig(core=CoreConfig(weight_min=5.0, weight_max=1.0))
         errors = validate_config(config)
 
         assert any("weight_min" in e and "weight_max" in e for e in errors)

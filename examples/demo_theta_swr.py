@@ -8,20 +8,23 @@ Demonstrates:
 - Gating modulation
 """
 import numpy as np
-from core.theta_swr_switching import NetworkStateController, StateTransitionParams, ReplayDetector, NetworkState
+
+from core.theta_swr_switching import (
+    NetworkState,
+    NetworkStateController,
+    ReplayDetector,
+    StateTransitionParams,
+)
 
 np.random.seed(42)
 
-print("="*70)
+print("=" * 70)
 print("THETA-SWR STATE SWITCHING EXAMPLE")
-print("="*70)
+print("=" * 70)
 
 # Create controller
 params = StateTransitionParams(
-    P_theta_to_SWR=0.005,
-    P_SWR_to_theta=0.05,
-    SWR_duration_mean=60.0,
-    SWR_duration_std=15.0
+    P_theta_to_SWR=0.005, P_SWR_to_theta=0.05, SWR_duration_mean=60.0, SWR_duration_std=15.0
 )
 
 controller = NetworkStateController(params, dt=0.1)
@@ -39,7 +42,7 @@ print("\nSimulating 10 seconds...")
 for step in range(n_steps):
     t = step * 0.1
     state, changed = controller.step()
-    
+
     if state == NetworkState.THETA:
         theta_time += 0.1
     elif state == NetworkState.SWR:

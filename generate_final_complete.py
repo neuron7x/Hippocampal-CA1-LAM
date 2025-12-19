@@ -6,18 +6,25 @@ Generates EVERYTHING: docs 9-12, tests, CI/CD, bibliography, examples
 THIS IS THE FINAL PRODUCTION BUILD
 NO COMPROMISES, NO PLACEHOLDERS, ALL WORKING CODE
 """
-import os
 from pathlib import Path
 
 BASE = Path(".")
 
 # Ensure all dirs exist
-for d in ["docs", "tests", ".github/workflows", ".github/ISSUE_TEMPLATE", "examples", "scripts", ".vscode"]:
+for d in [
+    "docs",
+    "tests",
+    ".github/workflows",
+    ".github/ISSUE_TEMPLATE",
+    "examples",
+    "scripts",
+    ".vscode",
+]:
     (BASE / d).mkdir(parents=True, exist_ok=True)
 
-print("="*70)
+print("=" * 70)
 print("FINAL PRODUCTION PACKAGE GENERATION")
-print("="*70)
+print("=" * 70)
 
 # ============================================================================
 # 9/12: docs/TESTING.md
@@ -1505,9 +1512,9 @@ with open(BASE / "docs" / "USAGE.md", "w") as f:
     f.write(USAGE_MD)
 print("✓ 12/12 docs/USAGE.md")
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("✅ ALL 12 DOCUMENTATION FILES COMPLETE")
-print("="*70)
+print("=" * 70)
 print("\nGenerated:")
 print("  1. README.md")
 print("  2. CONTRIBUTING.md")

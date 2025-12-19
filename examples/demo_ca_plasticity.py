@@ -8,14 +8,15 @@ Demonstrates:
 - No change when Ca < θ_d
 """
 import numpy as np
+
 from data.biophysical_parameters import get_default_parameters
 from plasticity.unified_weights import UnifiedWeightMatrix, create_source_type_matrix
 
 np.random.seed(42)
 
-print("="*70)
+print("=" * 70)
 print("Ca²⁺-BASED PLASTICITY EXAMPLE")
-print("="*70)
+print("=" * 70)
 
 params = get_default_parameters()
 print(f"\nThresholds:")

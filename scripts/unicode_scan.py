@@ -45,9 +45,7 @@ ALLOWLIST_CF: set[int] = set()
 def get_tracked_files() -> list[str]:
     """Return git-tracked files."""
     try:
-        result = subprocess.run(
-            ["git", "ls-files"], capture_output=True, text=True, check=True
-        )
+        result = subprocess.run(["git", "ls-files"], capture_output=True, text=True, check=True)
     except subprocess.CalledProcessError as exc:  # pragma: no cover - git absent
         print(f"Error: git ls-files failed: {exc}", file=sys.stderr)
         return []

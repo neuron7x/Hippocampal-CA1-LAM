@@ -4,6 +4,7 @@ Minimal CA1 network scaffold for quick API validation.
 This is a lightweight, deterministic placeholder that produces synthetic
 activity suitable for smoke tests. It is not a biophysical simulation.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -64,7 +65,9 @@ class CA1Network:
         # Keep weights constant during this minimal simulation
         weights = self._weights.copy()
 
-        self._last_result = SimulationResult(time=time, spikes=spikes, voltages=voltages, weights=weights)
+        self._last_result = SimulationResult(
+            time=time, spikes=spikes, voltages=voltages, weights=weights
+        )
         return {
             "time": time,
             "spikes": spikes,
@@ -85,7 +88,9 @@ class CA1Network:
         try:
             import matplotlib.pyplot as plt  # type: ignore
         except ImportError as exc:  # pragma: no cover - exercised via tests for error path
-            raise RuntimeError("matplotlib is required for plotting. Install via `pip install matplotlib`.") from exc
+            raise RuntimeError(
+                "matplotlib is required for plotting. Install via `pip install matplotlib`."
+            ) from exc
 
         spikes = self._last_result.spikes
         t = self._last_result.time

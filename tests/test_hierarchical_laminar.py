@@ -6,7 +6,9 @@ from core.hierarchical_laminar import CellDataHier, HierarchicalLaminarModel
 def test_em_outputs_normalized_and_finite():
     np.random.seed(0)
     cells = [
-        CellDataHier(cell_id=i, animal_id=0, x=0.0, y=0.0, z=z, s=0.0, transcripts=np.array([5, 1, 0, 0]))
+        CellDataHier(
+            cell_id=i, animal_id=0, x=0.0, y=0.0, z=z, s=0.0, transcripts=np.array([5, 1, 0, 0])
+        )
         for i, z in enumerate(np.linspace(0.1, 0.9, 4))
     ]
     model = HierarchicalLaminarModel(lambda_mrf=0.0)

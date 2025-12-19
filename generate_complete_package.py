@@ -5,7 +5,6 @@ Generates all 12 required documents + tests + CI/CD
 
 Usage: python generate_complete_package.py
 """
-import os
 from pathlib import Path
 
 # Base directory

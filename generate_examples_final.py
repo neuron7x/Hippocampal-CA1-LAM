@@ -11,9 +11,9 @@ from pathlib import Path
 
 BASE = Path(".")
 
-print("="*70)
+print("=" * 70)
 print("FINAL GENERATION PHASE")
-print("="*70)
+print("=" * 70)
 
 # ============================================================================
 # CITATION.CFF
@@ -460,6 +460,6 @@ with open(BASE / "scripts" / "benchmark.py", "w") as f:
 print("✓ scripts/benchmark.py")
 
 print("\\n✅ ALL EXAMPLES AND SCRIPTS GENERATED")
-print("="*70)
+print("=" * 70)
 print("PACKAGE GENERATION COMPLETE!")
-print("="*70)
+print("=" * 70)
