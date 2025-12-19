@@ -1,5 +1,6 @@
 # 🔴 РЕЄСТР ІНЖЕНЕРНИХ НЕДОЛІКІВ / ENGINEERING DEFECTS REGISTRY
 
+**Phase: 0.1** - Foundation Audit (Code Analysis)
 **Дата аудиту**: 2025-12-19
 **Версія проєкту**: v2.0.0
 **Автор аудиту**: Copilot SWE Agent (Opus 4.5)
