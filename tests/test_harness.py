@@ -210,15 +210,7 @@ class TestVerifyDeterminism:
 
     def test_verify_determinism_fails(self) -> None:
         """verify_determinism returns False for non-deterministic function."""
-        import time
-
-        def nondeterministic_func() -> np.ndarray:
-            # Use time to make it non-deterministic
-            # Note: This could flake if time doesn't change between calls
-            return np.array([np.random.randn()] + [float(hash(str(time.time_ns())))])
-
-        # This should be non-deterministic across runs
-        # We need to actually make it non-deterministic
+        # Use a counter to ensure each call produces different results
         call_counter = [0]
 
         def truly_nondeterministic() -> np.ndarray:
