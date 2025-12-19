@@ -240,8 +240,8 @@ class TestValidateDynamicStability:
 
         result = validate_dynamic_stability(W, firing_rates)
 
-        assert result["pass_spectral"] == True
-        assert result["pass_bounded"] == True
+        assert result["pass_spectral"] == True  # noqa: E712
+        assert result["pass_bounded"] == True  # noqa: E712
 
 
 class TestValidateReplay:
@@ -272,7 +272,7 @@ class TestValidateReplay:
         result = validate_replay(sequence, sequence)
 
         assert result["correlation"] > 0.9
-        assert result["pass"] == True
+        assert result["pass"] == True  # noqa: E712
 
     def test_reversed_sequence(self):
         """Test reversed sequence has negative correlation"""

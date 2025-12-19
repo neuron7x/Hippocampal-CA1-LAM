@@ -295,7 +295,6 @@ def test_input_specific_plasticity_golden():
     connectivity[0, 1] = True  # CA3
     connectivity[0, 2] = True  # EC
 
-    layer_assignments = np.zeros(N, dtype=int)
     initial_weights = np.ones((N, N))
 
     source_types = np.full((N, N), InputSource.LOCAL.value, dtype=object)

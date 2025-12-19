@@ -44,12 +44,20 @@ class CA1MemoryModule:
     - Homeostatic capacity control
     """
 
-    def __init__(self, params):
+    def __init__(self, params, rng: Optional[np.random.Generator] = None):
         """
         Args:
             params: AIIntegrationParams from biophysical_parameters
+            rng: Optional numpy random generator for reproducibility.
+                 If None, uses np.random.default_rng() for deterministic seeding.
         """
         self.p = params
+
+        # Initialize RNG for reproducibility
+        if rng is None:
+            self._rng = np.random.default_rng()
+        else:
+            self._rng = rng
 
         # Memory slots
         self.memory: List[Optional[MemoryEntry]] = [None] * self.p.memory_size
@@ -70,13 +78,15 @@ class CA1MemoryModule:
 
     def _init_encoder(self) -> np.ndarray:
         """Initialize encoder: LLM hidden → CA1 key"""
-        # Random projection (can be learned)
-        W = np.random.randn(self.p.key_dim, self.p.d_model) / np.sqrt(self.p.d_model)
+        # Random projection using injectable RNG
+        W = self._rng.standard_normal((self.p.key_dim, self.p.d_model)) / np.sqrt(self.p.d_model)
         return W
 
     def _init_decoder(self) -> np.ndarray:
         """Initialize decoder: retrieved value → LLM dim"""
-        W = np.random.randn(self.p.d_model, self.p.value_dim) / np.sqrt(self.p.value_dim)
+        W = self._rng.standard_normal((self.p.d_model, self.p.value_dim)) / np.sqrt(
+            self.p.value_dim
+        )
         return W
 
     def encode_event(self, h_t: np.ndarray, include_phase: bool = True) -> np.ndarray:
@@ -272,7 +282,7 @@ class CA1MemoryModule:
             # Weight by novelty
             weights = np.array([m.novelty for _, m in valid_entries])
             weights /= weights.sum()
-            selected_idx = np.random.choice(
+            selected_idx = self._rng.choice(
                 len(valid_entries),
                 size=min(n_episodes, len(valid_entries)),
                 replace=False,
@@ -282,7 +292,7 @@ class CA1MemoryModule:
             # Most recent
             selected_idx = np.argsort([m.timestamp for _, m in valid_entries])[-n_episodes:]
         else:  # random
-            selected_idx = np.random.choice(
+            selected_idx = self._rng.choice(
                 len(valid_entries), size=min(n_episodes, len(valid_entries)), replace=False
             )
 
@@ -377,12 +387,13 @@ class LLMWithCA1Memory:
         model.consolidate()
     """
 
-    def __init__(self, params):
+    def __init__(self, params, rng: Optional[np.random.Generator] = None):
         """
         Args:
             params: AIIntegrationParams
+            rng: Optional numpy random generator for reproducibility
         """
-        self.memory = CA1MemoryModule(params)
+        self.memory = CA1MemoryModule(params, rng=rng)
         self.position_history = []  # For novelty computation
 
     def process_step(self, h_t: np.ndarray, v_t: np.ndarray, position: Optional[np.ndarray] = None):

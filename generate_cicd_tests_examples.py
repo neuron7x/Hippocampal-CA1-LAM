@@ -60,27 +60,27 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ['3.8', '3.9', '3.10', '3.11']
-    
+
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
-    
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pytest pytest-cov
-    
+
     - name: Run golden tests
       run: python test_golden_standalone.py
-    
+
     - name: Run unit tests
       run: pytest tests/ -v --cov=. --cov-report=xml
-    
+
     - name: Upload coverage
       uses: codecov/codecov-action@v3
       with:
@@ -100,27 +100,27 @@ on: [push, pull_request]
 jobs:
   lint:
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
-    
+
     - name: Install dependencies
       run: |
         pip install flake8 mypy black
-    
+
     - name: Lint with flake8
       run: |
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         flake8 . --count --max-complexity=10 --max-line-length=100 --statistics
-    
+
     - name: Check formatting with black
       run: black --check .
-    
+
     - name: Type check with mypy
       run: mypy . --ignore-missing-imports || true
 """
@@ -141,13 +141,13 @@ on:
 jobs:
   security:
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Run Bandit security scan
       uses: PyCQA/bandit-action@v1
-    
+
     - name: Check dependencies for vulnerabilities
       run: |
         pip install safety
@@ -175,9 +175,9 @@ A clear description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce:
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 **Expected behavior**
 What you expected to happen.
@@ -229,8 +229,8 @@ Why is this feature needed? What problem does it solve?
 
 **Scientific Justification**
 If applicable, provide references (DOI):
-- Paper: 
-- DOI: 
+- Paper:
+- DOI:
 - Relevant data/parameters:
 
 **Proposed API**
@@ -293,8 +293,8 @@ RESULTS: 5/5 PASSED
 
 ## Scientific References
 If adding new neuroscience features:
-- Paper: 
-- DOI: 
+- Paper:
+- DOI:
 - Parameters extracted:
 
 ## Additional Notes
