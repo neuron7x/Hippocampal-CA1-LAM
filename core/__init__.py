@@ -10,6 +10,7 @@ Implements core neural network components:
 - Core contracts and invariants
 - Metrics for memory subsystem
 - Configuration management
+- Deterministic test harness
 """
 
 from .ca1_network import CA1Network, SimulationResult
@@ -32,6 +33,14 @@ from .contracts import (
     RecallResult,
     SimulationConfig,
     UpdateInput,
+)
+from .harness import (
+    DEFAULT_SEED,
+    DeterministicHarness,
+    HarnessReport,
+    deterministic_context,
+    ensure_deterministic,
+    verify_determinism,
 )
 from .invariants import (
     InvariantViolation,
@@ -106,6 +115,13 @@ __all__ = [
     "RecallResult",
     "SimulationConfig",
     "UpdateInput",
+    # Harness
+    "DEFAULT_SEED",
+    "DeterministicHarness",
+    "HarnessReport",
+    "deterministic_context",
+    "ensure_deterministic",
+    "verify_determinism",
     # Invariants
     "InvariantViolation",
     "check_bounded",

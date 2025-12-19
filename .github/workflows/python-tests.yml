@@ -37,4 +37,6 @@ jobs:
           fi
 
       - name: Run tests
+        env:
+          PYTHONHASHSEED: "42"
         run: python -m pytest -q
