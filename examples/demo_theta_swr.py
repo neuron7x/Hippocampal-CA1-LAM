@@ -50,19 +50,19 @@ for step in range(n_steps):
         if changed:
             swr_events += 1
 
-print(f"\nResults:")
+print("\nResults:")
 print(f"  Theta time: {theta_time:.1f}ms ({theta_time/T*100:.1f}%)")
 print(f"  SWR time: {swr_time:.1f}ms ({swr_time/T*100:.1f}%)")
 print(f"  SWR events: {swr_events}")
 
 # Test gating
 controller.state = NetworkState.THETA
-print(f"\nTheta mode:")
+print("\nTheta mode:")
 print(f"  Inhibition: {controller.get_inhibition_factor():.2f}")
 print(f"  Recurrence: {controller.get_recurrence_factor():.2f}")
 
 controller.state = NetworkState.SWR
-print(f"\nSWR mode:")
+print("\nSWR mode:")
 print(f"  Inhibition: {controller.get_inhibition_factor():.2f} (reduced!)")
 print(f"  Recurrence: {controller.get_recurrence_factor():.2f} (boosted!)")
 

@@ -463,7 +463,7 @@ if __name__ == "__main__":
         Ca_history.append(syn.state.Ca)
         W_history.append(syn.state.W)
 
-    print(f"Initial W: 1.0")
+    print("Initial W: 1.0")
     print(f"Final W: {syn.state.W:.3f}")
     print(f"Max Ca: {max(Ca_history):.3f} μM")
     print(f"  (LTP threshold: {params.plasticity.theta_p} μM)")

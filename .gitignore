@@ -5,3 +5,4 @@ __pycache__/
 .coverage
 htmlcov/
 node_modules/
+*.egg-info/
