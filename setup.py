@@ -29,6 +29,13 @@ setup(
         "numpy>=1.24.0",
         "scipy>=1.10.0",
         "scikit-learn>=1.2.0",
+        "fastapi>=0.104.0",
+        "uvicorn>=0.24.0",
+        "pydantic>=2.0.0",
+        "pydantic-settings>=2.0.0",
+        "httpx>=0.25.0",
+        "click>=8.1.0",
+        "psutil>=5.9.0",
     ],
     extras_require={
         "dev": [
@@ -45,6 +52,8 @@ setup(
     entry_points={
         "console_scripts": [
             "ca1-test=test_golden_standalone:main",
+            "mlsdm=src.mlsdm.serve:main",
         ],
     },
 )
+
