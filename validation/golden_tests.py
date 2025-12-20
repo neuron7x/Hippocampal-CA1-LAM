@@ -143,10 +143,11 @@ def test_network_stability_golden():
     stats = W.get_statistics()
 
     # Golden assertions
-    if stats["spectral_radius"] >= 1.0:
-        raise AssertionError(f"ρ(W) = {stats['spectral_radius']:.3f} unstable")
-    if stats["spectral_radius"] <= 0.5:
-        raise AssertionError(f"ρ(W) = {stats['spectral_radius']:.3f} too weak")
+    rho = stats["spectral_radius"]
+    if rho >= 1.0:
+        raise AssertionError(f"ρ(W) = {rho:.3f} unstable")
+    if rho <= 0.5:
+        raise AssertionError(f"ρ(W) = {rho:.3f} too weak")
     if not (0.01 <= stats["W_eff_mean"] <= 5.0):
         raise AssertionError(f"W_eff mean = {stats['W_eff_mean']:.3f} out of range")
 
