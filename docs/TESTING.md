@@ -27,6 +27,14 @@ tests/
 
 ## Quick Start
 
+Before running the suite, make sure the repository itself is on `PYTHONPATH`. The simplest
+way is to install it in editable mode after installing dependencies:
+
+```bash
+pip install -r requirements-dev.txt
+pip install -e .  # ensures imports like `core` and `ai_integration` resolve
+```
+
 ### Run All Tests
 
 ```bash
