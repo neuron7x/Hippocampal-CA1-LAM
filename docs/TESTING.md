@@ -32,7 +32,7 @@ way is to install it in editable mode after installing dependencies:
 
 ```bash
 pip install -r requirements-dev.txt
-pip install -e .  # ensures imports like `core` and `ai_integration` resolve
+pip install -e .  # ensures local project modules (e.g., the core and ai_integration packages) resolve
 ```
 
 ### Run All Tests
