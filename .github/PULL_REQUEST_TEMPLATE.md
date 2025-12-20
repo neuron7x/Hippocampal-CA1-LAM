@@ -1,5 +1,5 @@
 Phase: 0.0
-Closes #<issue-number> (replace or remove if not applicable)
+Closes #123 (example - replace with your real issue before merging, or remove if Phase alone applies)
 
 ## Phase Reference
 Update the Phase line above to match the Evolution Plan entry (e.g., `Phase: 1.2`).

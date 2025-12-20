@@ -26,17 +26,36 @@ jobs:
           phase_pattern="Phase:[[:space:]]*[0-9]{1,2}(\.[0-9]{1,2})?"
           closes_pattern="Closes #[0-9]+"
 
+          verification_heading_pattern='^[[:space:]]*##[[:space:]]*Verification([[:space:]]|$)'
+          verification_label_pattern='^[[:space:]]*Verification:'
+          verification_pattern="${verification_heading_pattern}|${verification_label_pattern}"
+          # Matches either a markdown heading ("## Verification") or a label line ("Verification:") with optional leading whitespace.
+
           if ! echo "$PR_BODY" | grep -qiE "$phase_pattern" && ! echo "$PR_BODY" | grep -qE "$closes_pattern" ; then
             echo "::error::PR should reference a Phase issue from Evolution Plan (e.g., 'Closes #123' or 'Phase: X.Y')."
             exit 1
           fi
 
-          if ! printf "%s\n" "$PR_BODY" | grep -qiE '^(##[[:space:]]*Verification\b|Verification:)' ; then
+          if ! printf "%s\n" "$PR_BODY" | grep -qiE "$verification_pattern" ; then
             echo "::error::PR must include a 'Verification:' section (or '## Verification' heading) listing commands that were run."
             exit 1
           fi
 
-          verification_block=$(printf "%s\n" "$PR_BODY" | awk 'BEGIN{IGNORECASE=1} /^(##[[:space:]]*Verification\b|Verification:)/ {capture=1; next} capture && /^##[[:space:]]+/ {exit} capture {print}')
+          # Capture lines after the first verification header/label until the next markdown heading.
+          verification_awk=$(cat <<'AWK'
+BEGIN {
+  IGNORECASE=1
+}
+# Begin capturing after the verification header/label.
+$0 ~ start_pattern { capture=1; next }
+# Stop capturing once the next markdown heading is reached.
+capture && $0 ~ end_pattern { exit }
+# Emit captured verification lines.
+capture { print }
+AWK
+)
+
+          verification_block=$(printf "%s\n" "$PR_BODY" | awk -v start_pattern="$verification_pattern" -v end_pattern='^[[:space:]]*##[[:space:]]+' "$verification_awk")
           if ! printf "%s\n" "$verification_block" | grep -qE '\S'; then
             echo "::error::Add at least one verification command under the 'Verification:' section."
             exit 1
