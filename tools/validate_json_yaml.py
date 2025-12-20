@@ -76,8 +76,9 @@ def validate_yaml_file(filepath: str) -> list[str]:
     errors = []
     try:
         with open(filepath, "r", encoding="utf-8") as f:
-            # Use safe_load to avoid code execution
-            yaml.safe_load(f)
+            # Use safe_load_all to support multi-document YAML files
+            for doc in yaml.safe_load_all(f):
+                pass  # Just iterate to validate all documents
     except yaml.YAMLError as e:
         errors.append(f"YAML parse error: {e}")
     except OSError as e:
@@ -125,7 +126,11 @@ def validate_yaml_with_structure(filepath: str, repo_path: str) -> list[str]:
     errors = []
     try:
         with open(filepath, "r", encoding="utf-8") as f:
-            content = yaml.safe_load(f)
+            # Use safe_load_all to support multi-document YAML files
+            documents = list(yaml.safe_load_all(f))
+            # For structure validation, use the first document
+            # (Issue Forms are single document, K8s manifests are multi-document)
+            content = documents[0] if documents else None
     except yaml.YAMLError as e:
         errors.append(f"YAML parse error: {e}")
         return errors
@@ -139,8 +144,11 @@ def validate_yaml_with_structure(filepath: str, repo_path: str) -> list[str]:
         # Skip config.yml which is not an issue form
         basename = os.path.basename(filepath)
         if basename != "config.yml":
-            form_errors = validate_issue_form(filepath, content)
-            errors.extend(form_errors)
+            if content is not None:
+                form_errors = validate_issue_form(filepath, content)
+                errors.extend(form_errors)
+            else:
+                errors.append("Issue form file is empty")
 
     return errors
 
