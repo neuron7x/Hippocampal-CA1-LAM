@@ -72,15 +72,17 @@ def test_laminar_inference_golden():
     metrics = validate_laminar_structure(assignments, depths, transcripts, thresholds)
 
     # Golden assertions
-    assert (
-        metrics["mutual_information"] > 0.1
-    ), f"I(L;z) = {metrics['mutual_information']:.3f} too low"
-    assert metrics["coexpression_rate"] <= 0.05, f"CE = {metrics['coexpression_rate']:.3f} too high"
+    if metrics["mutual_information"] <= 0.1:
+        raise AssertionError(f"I(L;z) = {metrics['mutual_information']:.3f} too low")
+    if metrics["coexpression_rate"] > 0.05:
+        raise AssertionError(f"CE = {metrics['coexpression_rate']:.3f} too high")
 
     # Layer distribution (should be roughly balanced)
     layer_counts = np.bincount(assignments)
-    assert len(layer_counts) == 4, "Should have 4 layers"
-    assert all(100 < count < 400 for count in layer_counts), f"Unbalanced layers: {layer_counts}"
+    if len(layer_counts) != 4:
+        raise AssertionError("Should have 4 layers")
+    if not all(100 < count < 400 for count in layer_counts):
+        raise AssertionError(f"Unbalanced layers: {layer_counts}")
 
     print(
         f"✓ Laminar inference: I(L;z)={metrics['mutual_information']:.3f}, CE={metrics['coexpression_rate']:.3f}"
@@ -141,11 +143,12 @@ def test_network_stability_golden():
     stats = W.get_statistics()
 
     # Golden assertions
-    assert stats["spectral_radius"] < 1.0, f"ρ(W) = {stats['spectral_radius']:.3f} unstable"
-    assert stats["spectral_radius"] > 0.5, f"ρ(W) = {stats['spectral_radius']:.3f} too weak"
-    assert (
-        0.01 <= stats["W_eff_mean"] <= 5.0
-    ), f"W_eff mean = {stats['W_eff_mean']:.3f} out of range"
+    if stats["spectral_radius"] >= 1.0:
+        raise AssertionError(f"ρ(W) = {stats['spectral_radius']:.3f} unstable")
+    if stats["spectral_radius"] <= 0.5:
+        raise AssertionError(f"ρ(W) = {stats['spectral_radius']:.3f} too weak")
+    if not (0.01 <= stats["W_eff_mean"] <= 5.0):
+        raise AssertionError(f"W_eff mean = {stats['W_eff_mean']:.3f} out of range")
 
     print(
         f"✓ Network stability: ρ(W)={stats['spectral_radius']:.3f}, W_eff={stats['W_eff_mean']:.3f}"
@@ -206,8 +209,10 @@ def test_calcium_plasticity_golden():
     delta_ltd = W_ltd - W_initial
 
     # Golden assertions
-    assert delta_ltp > 0.001, f"LTP failed: ΔW = {delta_ltp:.6f}"
-    assert delta_ltd < -0.0001, f"LTD failed: ΔW = {delta_ltd:.6f}"
+    if delta_ltp <= 0.001:
+        raise AssertionError(f"LTP failed: ΔW = {delta_ltp:.6f}")
+    if delta_ltd >= -0.0001:
+        raise AssertionError(f"LTD failed: ΔW = {delta_ltd:.6f}")
 
     print(f"✓ Ca2+ plasticity: LTP ΔW={delta_ltp:.4f}, LTD ΔW={delta_ltd:.4f}")
 
@@ -257,14 +262,19 @@ def test_theta_swr_switching_golden():
     swr_frac = swr_time / T
 
     # Golden assertions
-    assert 0.7 <= theta_frac <= 0.95, f"Theta fraction = {theta_frac:.2f} out of range"
-    assert 0.05 <= swr_frac <= 0.3, f"SWR fraction = {swr_frac:.2f} out of range"
-    assert 3 <= n_swr_events <= 50, f"SWR events = {n_swr_events} out of range"
+    if not (0.7 <= theta_frac <= 0.95):
+        raise AssertionError(f"Theta fraction = {theta_frac:.2f} out of range")
+    if not (0.05 <= swr_frac <= 0.3):
+        raise AssertionError(f"SWR fraction = {swr_frac:.2f} out of range")
+    if not (3 <= n_swr_events <= 50):
+        raise AssertionError(f"SWR events = {n_swr_events} out of range")
 
     # Test gating
     controller.state = NetworkState.SWR
-    assert controller.get_inhibition_factor() < 1.0, "Inhibition not reduced in SWR"
-    assert controller.get_recurrence_factor() > 1.0, "Recurrence not boosted in SWR"
+    if controller.get_inhibition_factor() >= 1.0:
+        raise AssertionError("Inhibition not reduced in SWR")
+    if controller.get_recurrence_factor() <= 1.0:
+        raise AssertionError("Recurrence not boosted in SWR")
 
     print(f"✓ Theta-SWR: theta={theta_frac:.2f}, SWR={swr_frac:.2f}, events={n_swr_events}")
 
@@ -320,7 +330,8 @@ def test_input_specific_plasticity_golden():
     # Golden assertion: EC changes less
     ratio = delta_ca3 / (delta_ec + 1e-10)
 
-    assert ratio > 5.0, f"EC/CA3 ratio = {ratio:.2f}, expected >5.0"
+    if ratio <= 5.0:
+        raise AssertionError(f"EC/CA3 ratio = {ratio:.2f}, expected >5.0")
 
     print(f"✓ Input-specific: CA3 ΔW={delta_ca3:.4f}, EC ΔW={delta_ec:.4f}, ratio={ratio:.2f}")
 
@@ -374,7 +385,8 @@ def test_full_reproducibility():
     W2 = run_simulation(42)
 
     # Must be identical
-    assert np.allclose(W1, W2, atol=1e-10), "Reproducibility failed: runs differ"
+    if not np.allclose(W1, W2, atol=1e-10):
+        raise AssertionError("Reproducibility failed: runs differ")
 
     print(f"✓ Reproducibility: max diff = {np.max(np.abs(W1 - W2)):.2e}")
 
