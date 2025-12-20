@@ -8,6 +8,40 @@
 
 **Production-grade neurobiological model of CA1 hippocampus for AI memory and computational neuroscience.**
 
+## 🚀 NEW: Service Infrastructure
+
+**v2.0 now includes production-ready API and SDK!**
+
+```bash
+# Start API service
+mlsdm serve --mode api
+
+# Start Neuro Engine
+mlsdm serve --mode neuro --port 8001
+
+# Use Python SDK
+from src.mlsdm.sdk import NeuroEngineClient
+client = NeuroEngineClient("http://localhost:8000")
+response = client.generate([0.1, 0.2, 0.3])
+```
+
+**📚 Service Documentation:**
+- [SDK Usage Guide](docs/SDK_USAGE.md) - Python SDK with examples
+- [Configuration Guide](docs/CONFIGURATION_GUIDE.md) - Environment variables & settings
+- [Deployment Runbook](docs/RUNBOOK.md) - Docker, Kubernetes, production deployment
+- [Implementation Summary](docs/IMPLEMENTATION_SUMMARY.md) - Complete technical details
+
+**Features:**
+- ✅ RESTful API with FastAPI
+- ✅ Official Python SDK (sync + async)
+- ✅ Unified CLI (`mlsdm serve`)
+- ✅ Health/metrics endpoints
+- ✅ API key authentication + mTLS support
+- ✅ Docker & Kubernetes ready
+- ✅ Comprehensive test suite (21 tests)
+
+---
+
 ## 📋 Development Roadmap
 
 We're following a comprehensive **8-phase evolution plan** to build v3.0:
