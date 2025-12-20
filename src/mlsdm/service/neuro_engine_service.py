@@ -9,7 +9,12 @@ import numpy as np
 import psutil
 import os
 
-from ...core.ca1_network import CA1Network
+# Try to import CA1Network if available
+try:
+    from core.ca1_network import CA1Network
+except ImportError:
+    CA1Network = None
+
 from ..api.health import HealthResponse, MetricsResponse, _start_time
 from ..utils.config_loader import get_settings
 
@@ -48,6 +53,11 @@ def create_neuro_app() -> FastAPI:
         """Initialize network on startup."""
         nonlocal network
         logger.info("Starting MLSDM Neuro Engine")
+        
+        if CA1Network is None:
+            logger.warning("CA1Network not available, running in stub mode")
+            return
+        
         logger.info(f"Initializing CA1 network with {settings.neuro.n_neurons} neurons")
         
         try:
