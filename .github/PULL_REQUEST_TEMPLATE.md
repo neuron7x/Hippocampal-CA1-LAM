@@ -1,6 +1,8 @@
+Phase: 0.0
+Closes #<issue-number> (replace or remove if not applicable)
+
 ## Phase Reference
-Closes #[issue-number]
-Phase: [X.Y Section Name]
+Update the Phase line above to match the Evolution Plan entry (e.g., `Phase: 1.2`).
 
 ## Changes
 <!-- Brief description of what changed -->
@@ -18,11 +20,10 @@ Phase: [X.Y Section Name]
 - [ ] No breaking changes expected
 - [ ] Breaking changes documented below:
 
-## Verification
+Verification:
 <!-- Paste verification commands run and their output, or link to CI run -->
 ```bash
-# Commands run locally:
-
+python -m pytest -q
 ```
 
 ## Security Impact

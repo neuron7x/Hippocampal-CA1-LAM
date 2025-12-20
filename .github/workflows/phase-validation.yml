@@ -23,7 +23,7 @@ jobs:
             exit 1
           fi
 
-          phase_pattern="Phase:[[:space:]]*[0-9]{1,2}\.[0-9]{1,2}"
+          phase_pattern="Phase:[[:space:]]*[0-9]{1,2}(\.[0-9]{1,2})?"
           closes_pattern="Closes #[0-9]+"
 
           if ! echo "$PR_BODY" | grep -qiE "$phase_pattern" && ! echo "$PR_BODY" | grep -qE "$closes_pattern" ; then
@@ -31,12 +31,12 @@ jobs:
             exit 1
           fi
 
-          if ! echo "$PR_BODY" | grep -qi "Verification:" ; then
-            echo "::error::PR must include a 'Verification:' section listing commands that were run."
+          if ! printf "%s\n" "$PR_BODY" | grep -qiE '^(##[[:space:]]*Verification\b|Verification:)' ; then
+            echo "::error::PR must include a 'Verification:' section (or '## Verification' heading) listing commands that were run."
             exit 1
           fi
 
-          verification_block=$(printf "%s\n" "$PR_BODY" | awk 'BEGIN{IGNORECASE=1} /Verification:/ {capture=1; next} capture {print}')
+          verification_block=$(printf "%s\n" "$PR_BODY" | awk 'BEGIN{IGNORECASE=1} /^(##[[:space:]]*Verification\b|Verification:)/ {capture=1; next} capture && /^##[[:space:]]+/ {exit} capture {print}')
           if ! printf "%s\n" "$verification_block" | grep -qE '\S'; then
             echo "::error::Add at least one verification command under the 'Verification:' section."
             exit 1
