@@ -43,13 +43,12 @@ help:
 # Installation targets
 install:
 	@echo "📦 Installing production dependencies..."
-	pip install -r requirements.txt
+	pip install -e .
 	@echo "✅ Installation complete"
 
 install-dev:
 	@echo "📦 Installing development environment..."
-	pip install -r requirements.txt
-	pip install -r requirements-dev.txt
+	pip install -e ".[dev]"
 	pre-commit install
 	@echo "✅ Dev environment ready"
 

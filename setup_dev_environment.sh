@@ -40,20 +40,14 @@ python -m pip install --upgrade pip -q
 echo "   ✓ pip оновлено"
 echo ""
 
-# Install core dependencies
-echo "3. Встановлення основних залежностей..."
-pip install -r requirements.txt -q
-echo "   ✓ numpy, scipy, scikit-learn встановлено"
-echo ""
-
-# Install dev dependencies
-echo "4. Встановлення dev інструментів..."
-pip install -r requirements-dev.txt -q
-echo "   ✓ pytest, flake8, mypy, black, isort встановлено"
+# Install package + dev dependencies
+echo "3. Встановлення пакета та dev інструментів..."
+pip install -e ".[dev]" -q
+echo "   ✓ Пакет та dev залежності встановлено"
 echo ""
 
 # Install pre-commit hooks
-echo "5. Налаштування pre-commit hooks..."
+echo "4. Налаштування pre-commit hooks..."
 if [ -f ".pre-commit-config.yaml" ]; then
     pre-commit install
     echo "   ✓ Pre-commit hooks встановлено"
@@ -63,13 +57,13 @@ fi
 echo ""
 
 # Create useful aliases
-echo "6. Створення корисних скриптів..."
+echo "5. Створення корисних скриптів..."
 
 # Create test script
 cat > run_tests_quick.sh << 'EOF'
 #!/bin/bash
 # Quick test runner
-python test_golden_standalone.py && echo "✅ Golden tests passed"
+python -m hippocampal_ca1_lam.cli && echo "✅ Golden tests passed"
 EOF
 chmod +x run_tests_quick.sh
 echo "   ✓ run_tests_quick.sh створено"
@@ -102,23 +96,13 @@ echo "   ✓ lint_code.sh створено"
 
 echo ""
 
-# Install package in editable mode
-echo "7. Встановлення пакета в editable mode..."
-if [ -f "setup.py" ]; then
-    pip install -e . -q
-    echo "   ✓ Пакет встановлено в editable mode"
-else
-    echo "   ⚠ setup.py не знайдено, пропускаю"
-fi
-echo ""
-
 # Run initial tests
-echo "8. Запуск початкових тестів..."
-python test_golden_standalone.py
+echo "6. Запуск початкових тестів..."
+python -m hippocampal_ca1_lam.cli
 echo ""
 
 # Create .vscode settings (if VSCode is used)
-echo "9. Налаштування VSCode (опційно)..."
+echo "7. Налаштування VSCode (опційно)..."
 mkdir -p .vscode
 cat > .vscode/settings.json << 'EOF'
 {

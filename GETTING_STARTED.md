@@ -50,15 +50,13 @@ cd Hippocampal-CA1-LAM
 
 # 2. Запустіть швидкий старт
 bash quick_start.sh
-# Або якщо bash не встановлено:
-python quick_start.py
 ```
 
 **Що відбудеться**:
 1. ✓ Перевірка Python
 2. ✓ Створення віртуального середовища
-3. ✓ Встановлення всіх залежностей
-4. ✓ Запуск тестів для перевірки
+3. ✓ Встановлення пакету (editable, опційно з `INSTALL_DEV=1`)
+4. ✓ Запуск golden-тестів через `python -m hippocampal_ca1_lam.cli`
 
 **Очікуваний результат**:
 ```
@@ -101,11 +99,11 @@ venv\Scripts\activate
 
 Ви побачите `(venv)` перед командним рядком.
 
-### Крок 3: Встановити залежності
+### Крок 3: Встановити пакет
 
 ```bash
 pip install --upgrade pip
-pip install -r requirements.txt
+pip install -e .
 ```
 
 Це встановить:
@@ -116,7 +114,7 @@ pip install -r requirements.txt
 ### Крок 4: Перевірити установку
 
 ```bash
-python test_golden_standalone.py
+python -m hippocampal_ca1_lam.cli
 ```
 
 **Очікуваний результат**:

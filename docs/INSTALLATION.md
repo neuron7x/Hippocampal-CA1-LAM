@@ -7,7 +7,7 @@ Complete installation instructions for all platforms.
 ### Minimum
 
 - **OS**: Linux, macOS, Windows 10+
-- **Python**: 3.8 or higher
+- **Python**: 3.10 or higher
 - **RAM**: 4 GB
 - **Disk**: 500 MB
 
@@ -31,11 +31,11 @@ cd Hippocampal-CA1-LAM
 python3 -m venv venv
 source venv/bin/activate
 
-# Install dependencies
-pip install -r requirements.txt
+# Install package
+pip install -e .
 
 # Verify installation
-python test_golden_standalone.py
+python -m hippocampal_ca1_lam.cli
 ```
 
 ### Windows
@@ -49,11 +49,11 @@ cd Hippocampal-CA1-LAM
 python -m venv venv
 venv\Scripts\activate
 
-# Install dependencies
-pip install -r requirements.txt
+# Install package
+pip install -e .
 
 # Verify installation
-python test_golden_standalone.py
+python -m hippocampal_ca1_lam.cli
 ```
 
 ## From PyPI (when published)
@@ -76,14 +76,13 @@ python3 -m venv venv-dev
 source venv-dev/bin/activate
 
 # Install in editable mode with dev dependencies
-pip install -e .
-pip install -r requirements-dev.txt
+pip install -e ".[dev]"
 
 # Install pre-commit hooks
 pre-commit install
 
 # Verify
-python test_golden_standalone.py
+python -m hippocampal_ca1_lam.cli
 pytest tests/ -v
 ```
 

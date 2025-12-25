@@ -31,7 +31,7 @@ tests/
 
 ```bash
 # Golden tests (must pass)
-python test_golden_standalone.py
+python -m hippocampal_ca1_lam.cli
 
 # Unit tests (including golden suite)
 python -m pytest -q

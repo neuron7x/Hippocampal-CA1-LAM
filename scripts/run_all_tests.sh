@@ -28,7 +28,7 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo "TEST 1/4: Golden Tests (Reproducibility & Stability)"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
-python test_golden_standalone.py
+python -m hippocampal_ca1_lam.cli
 GOLDEN_RESULT=$?
 echo ""
 

@@ -4,7 +4,13 @@
 #
 # Usage: bash quick_start.sh
 
-set -e  # Exit on error
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+OS="unknown"
+PYTHON_BIN="${PYTHON_BIN:-python3}"
+VENV_DIR="${VENV_DIR:-venv}"
+INSTALL_DEV="${INSTALL_DEV:-0}"
 
 echo "========================================================================"
 echo "🚀 HIPPOCAMPAL-CA1-LAM - QUICK START"
@@ -12,12 +18,11 @@ echo "========================================================================"
 echo ""
 
 # Detect OS
-OS="unknown"
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+if [[ "${OSTYPE:-}" == "linux-gnu"* ]]; then
     OS="linux"
-elif [[ "$OSTYPE" == "darwin"* ]]; then
+elif [[ "${OSTYPE:-}" == "darwin"* ]]; then
     OS="macos"
-elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "cygwin" ]]; then
+elif [[ "${OSTYPE:-}" == "msys" ]] || [[ "${OSTYPE:-}" == "cygwin" ]]; then
     OS="windows"
 fi
 
@@ -26,34 +31,36 @@ echo ""
 
 # Check Python
 echo "1. Перевірка Python..."
-if ! command -v python3 &> /dev/null; then
-    echo "❌ Python 3 не знайдено!"
-    echo "   Встановіть Python 3.8+ з https://www.python.org/downloads/"
+if ! command -v "$PYTHON_BIN" &> /dev/null; then
+    echo "❌ Python 3.10+ не знайдено!"
+    echo "   Встановіть Python 3.10+ з https://www.python.org/downloads/"
     exit 1
 fi
 
-PYTHON_VERSION=$(python3 --version | cut -d' ' -f2)
+PYTHON_VERSION=$("$PYTHON_BIN" --version | cut -d' ' -f2)
 echo "   ✓ Python $PYTHON_VERSION знайдено"
 echo ""
 
 # Create virtual environment
 echo "2. Створення віртуального середовища..."
-if [ ! -d "venv" ]; then
-    python3 -m venv venv
-    echo "   ✓ venv створено"
+if [ ! -d "$VENV_DIR" ]; then
+    "$PYTHON_BIN" -m venv "$VENV_DIR"
+    echo "   ✓ $VENV_DIR створено"
 else
-    echo "   ✓ venv вже існує"
+    echo "   ✓ $VENV_DIR вже існує"
 fi
 echo ""
 
 # Activate virtual environment
 echo "3. Активація віртуального середовища..."
 if [[ "$OS" == "windows" ]]; then
-    source venv/Scripts/activate
+    # shellcheck disable=SC1091
+    source "$VENV_DIR/Scripts/activate"
 else
-    source venv/bin/activate
+    # shellcheck disable=SC1091
+    source "$VENV_DIR/bin/activate"
 fi
-echo "   ✓ venv активовано"
+echo "   ✓ $VENV_DIR активовано"
 echo ""
 
 # Upgrade pip
@@ -62,30 +69,21 @@ python -m pip install --upgrade pip -q
 echo "   ✓ pip оновлено"
 echo ""
 
-# Install dependencies
-echo "5. Встановлення залежностей..."
-if [ -f "requirements.txt" ]; then
-    pip install -r requirements.txt -q
-    echo "   ✓ Основні залежності встановлено"
+# Install package
+echo "5. Встановлення Hippocampal-CA1-LAM..."
+cd "$ROOT_DIR"
+if [[ "$INSTALL_DEV" == "1" ]]; then
+    python -m pip install -e ".[dev]" -q
+    echo "   ✓ Встановлено у режимі dev"
 else
-    echo "   ⚠ requirements.txt не знайдено"
-fi
-echo ""
-
-# Install dev dependencies (optional)
-read -p "Встановити dev залежності? (y/n) " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-    if [ -f "requirements-dev.txt" ]; then
-        pip install -r requirements-dev.txt -q
-        echo "   ✓ Dev залежності встановлено"
-    fi
+    python -m pip install -e "." -q
+    echo "   ✓ Встановлено у режимі користувача"
 fi
 echo ""
 
 # Run golden tests
 echo "6. Запуск golden tests (перевірка установки)..."
-python test_golden_standalone.py
+python -m hippocampal_ca1_lam.cli
 
 echo ""
 echo "========================================================================"

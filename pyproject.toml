@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hippocampal-ca1-lam"
+version = "2.0.0"
+description = "Production-grade CA1 hippocampus model for AI memory and neuroscience"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "neuron7x" }]
+dependencies = [
+    "numpy>=1.24.0",
+    "scipy>=1.10.0",
+    "scikit-learn>=1.2.0",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-xdist>=3.3.0",
+    "flake8>=6.0.0",
+    "black>=23.0.0",
+    "mypy>=1.5.0",
+    "bandit>=1.7.0",
+    "safety>=2.3.0",
+    "pre-commit>=3.3.0",
+    "sphinx>=7.0.0",
+    "sphinx-rtd-theme>=1.3.0",
+    "line_profiler>=4.0.0",
+    "memory_profiler>=0.61.0",
+    "isort>=5.13.2",
+    "build>=1.2.2",
+    "pip-audit>=2.7.3",
+]
+viz = ["matplotlib>=3.7.0"]
+
+[project.urls]
+Homepage = "https://github.com/neuron7x/Hippocampal-CA1-LAM"
+Documentation = "https://github.com/neuron7x/Hippocampal-CA1-LAM/tree/main/docs"
+Issues = "https://github.com/neuron7x/Hippocampal-CA1-LAM/issues"
+
+[project.scripts]
+ca1-golden = "hippocampal_ca1_lam.cli:main"
+
+[tool.setuptools.packages.find]
+include = [
+    "hippocampal_ca1_lam",
+    "core",
+    "data",
+    "plasticity",
+    "ai_integration",
+    "validation",
+    "scripts",
+]
+exclude = ["tests*", "docs*", "examples*"]

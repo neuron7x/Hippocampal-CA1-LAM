@@ -55,8 +55,8 @@ bash quick_start.sh
 This will:
 1. ✓ Check Python installation
 2. ✓ Create virtual environment
-3. ✓ Install all dependencies
-4. ✓ Run golden tests
+3. ✓ Install the package (editable, extras opt-in via `INSTALL_DEV=1`)
+4. ✓ Run golden tests via `python -m hippocampal_ca1_lam.cli`
 5. ✓ Verify everything works
 
 **Expected output**: `6/6 PASSED ✓` (golden suite)
@@ -114,14 +114,17 @@ python utils/create_release.py
 
 ```bash
 # Install
-pip install -r requirements.txt
+pip install -e .
 
 # Verify
-python test_golden_standalone.py
-# Expected: 6/6 PASSED
+python -m hippocampal_ca1_lam.cli
+# Expected: 6/6 PASSED (golden suite)
 
 # Run demo
 python examples/demo_unified_weights.py
+
+# Optional: full dev toolchain
+pip install -e ".[dev]"
 ```
 
 ### 🔒 Security & QA Checklist
