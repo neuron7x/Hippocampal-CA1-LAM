@@ -1,12 +1,6 @@
-from __future__ import annotations
+import data as _data
 
-import importlib
-import sys
-
-_PKG = importlib.import_module("data")
-sys.modules[__name__] = _PKG
-sys.modules[f"{__name__}.biophysical_parameters"] = importlib.import_module(
-    "data.biophysical_parameters"
-)
-
-__all__ = getattr(_PKG, "__all__", [])
+__path__ = getattr(_data, "__path__", [])
+__spec__ = getattr(_data, "__spec__", None)
+from data import *  # noqa: F401,F403
+__all__ = getattr(_data, "__all__", [])

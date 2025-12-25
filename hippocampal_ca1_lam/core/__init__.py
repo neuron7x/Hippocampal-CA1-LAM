@@ -1,22 +1,6 @@
-from __future__ import annotations
+import core as _core
 
-import importlib
-import sys
-
-_PKG = importlib.import_module("core")
-sys.modules[__name__] = _PKG
-
-for _mod in [
-    "ca1_network",
-    "config",
-    "contracts",
-    "hierarchical_laminar",
-    "invariants",
-    "laminar_structure",
-    "metrics",
-    "neuron_model",
-    "theta_swr_switching",
-]:
-    sys.modules[f"{__name__}.{_mod}"] = importlib.import_module(f"core.{_mod}")
-
-__all__ = getattr(_PKG, "__all__", [])
+__path__ = getattr(_core, "__path__", [])
+__spec__ = getattr(_core, "__spec__", None)
+from core import *  # noqa: F401,F403
+__all__ = getattr(_core, "__all__", [])

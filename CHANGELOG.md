@@ -38,6 +38,9 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ## [Unreleased]
 
+### Changed
+- Raised minimum supported Python version to **3.10** to align with CI and typing (breaking for 3.8/3.9).
+
 ### Planned for 2.1.0
 - JAX backend for GPU
 - Extended validation suite

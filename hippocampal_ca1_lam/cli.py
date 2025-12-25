@@ -24,7 +24,7 @@ def _collect_golden_tests() -> List[TestCase]:
 
 
 def run_golden_suite(args: list[str] | None = None) -> int:
-    """Execute the golden suite with optional listing mode."""
+    """Execute the golden suite with optional listing mode (Python 3.10+ baseline)."""
     parser = argparse.ArgumentParser(description="Hippocampal CA1-LAM golden validation suite")
     parser.add_argument(
         "--list",

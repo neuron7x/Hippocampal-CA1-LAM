@@ -1,12 +1,6 @@
-from __future__ import annotations
+import validation as _validation
 
-import importlib
-import sys
-
-_PKG = importlib.import_module("validation")
-sys.modules[__name__] = _PKG
-
-for _mod in ["golden_tests", "validators"]:
-    sys.modules[f"{__name__}.{_mod}"] = importlib.import_module(f"validation.{_mod}")
-
-__all__ = getattr(_PKG, "__all__", [])
+__path__ = getattr(_validation, "__path__", [])
+__spec__ = getattr(_validation, "__spec__", None)
+from validation import *  # noqa: F401,F403
+__all__ = getattr(_validation, "__all__", [])

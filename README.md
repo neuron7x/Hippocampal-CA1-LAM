@@ -127,6 +127,17 @@ python examples/demo_unified_weights.py
 pip install -e ".[dev]"
 ```
 
+### Import conventions
+
+Prefer the namespaced package to avoid Python path tweaks:
+
+```python
+from hippocampal_ca1_lam import CA1Network
+from hippocampal_ca1_lam.core import config
+```
+
+Legacy top-level modules (`core`, `data`, `plasticity`, `validation`) remain for backward compatibility but will be deprecated once downstreams migrate.
+
 ### 🔒 Security & QA Checklist
 
 Run these before opening a PR to satisfy the merge gates:

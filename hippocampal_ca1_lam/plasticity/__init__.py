@@ -1,12 +1,6 @@
-from __future__ import annotations
+import plasticity as _plasticity
 
-import importlib
-import sys
-
-_PKG = importlib.import_module("plasticity")
-sys.modules[__name__] = _PKG
-
-for _mod in ["calcium_plasticity", "unified_weights"]:
-    sys.modules[f"{__name__}.{_mod}"] = importlib.import_module(f"plasticity.{_mod}")
-
-__all__ = getattr(_PKG, "__all__", [])
+__path__ = getattr(_plasticity, "__path__", [])
+__spec__ = getattr(_plasticity, "__spec__", None)
+from plasticity import *  # noqa: F401,F403
+__all__ = getattr(_plasticity, "__all__", [])
