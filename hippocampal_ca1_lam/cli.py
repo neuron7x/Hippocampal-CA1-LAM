@@ -6,7 +6,7 @@ import argparse
 import sys
 from typing import Callable, List, Tuple
 
-from validation import golden_tests
+from .validation import golden_tests
 
 TestCase = Tuple[str, Callable[[], object]]
 

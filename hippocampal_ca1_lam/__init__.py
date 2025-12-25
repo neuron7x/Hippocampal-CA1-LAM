@@ -7,10 +7,10 @@ provides a single source of truth for the package version.
 
 from __future__ import annotations
 
-from core.ca1_network import CA1Network, SimulationResult
-from core.theta_swr_switching import NetworkState, NetworkStateController, StateTransitionParams
-from data.biophysical_parameters import get_default_parameters
-from plasticity.unified_weights import UnifiedWeightMatrix
+from .core.ca1_network import CA1Network, SimulationResult
+from .core.theta_swr_switching import NetworkState, NetworkStateController, StateTransitionParams
+from .data.biophysical_parameters import get_default_parameters
+from .plasticity.unified_weights import UnifiedWeightMatrix
 
 __all__ = [
     "__version__",
