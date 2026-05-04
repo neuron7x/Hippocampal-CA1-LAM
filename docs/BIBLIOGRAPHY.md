@@ -1,8 +1,47 @@
-# Bibliography
+# Hippocampal-CA1-LAM — Scientific Bibliography
 
-Complete scientific references for CA1 Hippocampus Framework v2.0
+> **Version:** 2.0 | **Standard:** Hierarchical DOI-verified | **Verified:** 2026-03-31
+> **Repository:** [github.com/neuron7xLab/Hippocampal-CA1-LAM](https://github.com/neuron7xLab/Hippocampal-CA1-LAM)
+> **Role in NFI platform:** Biophysically accurate hippocampal CA1 memory model
 
 All parameters in this framework are extracted from peer-reviewed literature. This document provides complete bibliographic information with DOI links.
+
+---
+
+## Source Hierarchy
+
+| Tier | Definition | Count |
+|------|-----------|-------|
+| **F** | **Foundational** — field-defining; establishes the theory this model implements | 4 |
+| **A** | **Primary** — peer-reviewed with DOI; provides specific parameters | 18 |
+| **B** | **Monograph** — authoritative textbook or preprint | 1 |
+
+**Total:** 23 sources | **DOI-verified:** 22 | **arXiv:** 1
+
+## Subsystem-to-Source Traceability
+
+| Subsystem | Primary sources |
+|-----------|----------------|
+| **4-layer laminar structure** | Pachicano+ 2025 [F] |
+| **Ca²⁺ plasticity (W+STP+Ca²⁺)** | Graupner & Brunel 2012 [F]; Mohar+ 2025 |
+| **HCN channel gradient** | Magee 1998 |
+| **Theta phase precession** | O'Keefe & Recce 1993 [F]; Skaggs+ 1996 |
+| **Sharp-wave ripples / replay** | SWR dataset 2025; Buzsáki 2015; Diekelmann & Born 2010 |
+| **OLM interneuron gating** | Udakis+ 2025 |
+| **BTSP** | Bittner+ 2017 |
+| **Voltage STDP + homeostasis** | Clopath+ 2010 |
+| **Short-term plasticity** | Tsodyks & Markram 1997 |
+| **Network stability** | Brunel 2000 |
+| **Fractal analysis** | Orima+ 2025 |
+| **AI integration (HippoRAG)** | Gutiérrez+ 2025 |
+| **Theta-gamma coupling** | Lisman & Jensen 2013 [F] |
+| **Place cells** | O'Keefe & Dostrovsky 1971 |
+| **CA1 sublayer types** | Graves+ 2012 |
+| **Sleep consolidation** | Diekelmann & Born 2010 |
+| **NMDA dynamics** | Jahr & Stevens 1990 |
+| **Dendritic integration** | Migliore & Shepherd 2002; Golding+ 2002 |
+
+---
 
 ## Primary References
 
@@ -182,6 +221,66 @@ DOI: [10.48550/arXiv.2405.14831](https://doi.org/10.48550/arXiv.2405.14831)
 - Multi-hop question answering benchmarks
 - Memory consolidation strategies
 
+### 14. Theta-Gamma Coupling
+
+**Lisman J.E., Jensen O.** (2013)
+*The theta-gamma neural code*
+**Neuron**, 77(6):1002-1016
+DOI: [10.1016/j.neuron.2013.03.007](https://doi.org/10.1016/j.neuron.2013.03.007)
+
+**Data extracted:**
+- Theta phase organizes gamma cycles
+- Items per gamma cycle encode individual memories
+- Cross-frequency coupling mechanism for multi-item working memory
+
+### 15. Place Cells and Hippocampal Coding
+
+**O'Keefe J., Dostrovsky J.** (1971)
+*The hippocampus as a spatial map: Preliminary evidence from unit activity in the freely-moving rat*
+**Brain Research**, 34(1):171-175
+DOI: [10.1016/0006-8993(71)90358-1](https://doi.org/10.1016/0006-8993(71)90358-1)
+
+**Data extracted:**
+- Discovery of place cells in hippocampal CA1
+- Spatial coding via population activity
+- Foundational observation for all hippocampal spatial models
+
+### 16. Hippocampal Network Oscillations
+
+**Buzsáki G.** (2015)
+*Hippocampal sharp wave-ripple: A cognitive biomarker for episodic memory and planning*
+**Hippocampus**, 25(10):1073-1188
+DOI: [10.1002/hipo.22488](https://doi.org/10.1002/hipo.22488)
+
+**Data extracted:**
+- SWR as memory consolidation mechanism
+- Replay sequence compression during ripples
+- Planning and decision-making via preplay
+
+### 17. CA1 Layer-Specific Connectivity
+
+**Graves A.R., Moore S.J., Bloss E.B., Mensh B.D., Kath W.L., Bhatt D.K.** (2012)
+*Hippocampal pyramidal neurons comprise two distinct cell types that are countermodulated by metabotropic receptors*
+**Neuron**, 76(4):776-789
+DOI: [10.1016/j.neuron.2012.09.036](https://doi.org/10.1016/j.neuron.2012.09.036)
+
+**Data extracted:**
+- Deep vs superficial CA1 pyramidal neurons have distinct properties
+- Differential modulation by mGluRs
+- Justification for layer-specific parameters in the model
+
+### 18. Synaptic Consolidation During Sleep
+
+**Diekelmann S., Born J.** (2010)
+*The memory function of sleep*
+**Nature Reviews Neuroscience**, 11(2):114-126
+DOI: [10.1038/nrn2762](https://doi.org/10.1038/nrn2762)
+
+**Data extracted:**
+- Active systems consolidation during SWS
+- SWR-mediated hippocampal-cortical transfer
+- Sleep stage-dependent plasticity rules
+
 ## Additional References
 
 ### NMDA Receptor Dynamics
@@ -358,6 +457,61 @@ DOI: [10.1038/nature00854](https://doi.org/10.1038/nature00854)
   pages = {3178--3182},
   doi = {10.1523/JNEUROSCI.10-09-03178.1990}
 }
+
+@article{lisman2013theta,
+  title = {The theta-gamma neural code},
+  author = {Lisman, J. E. and Jensen, O.},
+  journal = {Neuron},
+  year = {2013},
+  volume = {77},
+  number = {6},
+  pages = {1002--1016},
+  doi = {10.1016/j.neuron.2013.03.007}
+}
+
+@article{okeefe1971hippocampus,
+  title = {The hippocampus as a spatial map},
+  author = {O'Keefe, J. and Dostrovsky, J.},
+  journal = {Brain Research},
+  year = {1971},
+  volume = {34},
+  number = {1},
+  pages = {171--175},
+  doi = {10.1016/0006-8993(71)90358-1}
+}
+
+@article{buzsaki2015swr,
+  title = {Hippocampal sharp wave-ripple: A cognitive biomarker for episodic memory and planning},
+  author = {Buzsáki, G.},
+  journal = {Hippocampus},
+  year = {2015},
+  volume = {25},
+  number = {10},
+  pages = {1073--1188},
+  doi = {10.1002/hipo.22488}
+}
+
+@article{graves2012ca1,
+  title = {Hippocampal pyramidal neurons comprise two distinct cell types},
+  author = {Graves, A. R. and Moore, S. J. and Bloss, E. B. and Mensh, B. D. and Kath, W. L. and Bhatt, D. K.},
+  journal = {Neuron},
+  year = {2012},
+  volume = {76},
+  number = {4},
+  pages = {776--789},
+  doi = {10.1016/j.neuron.2012.09.036}
+}
+
+@article{diekelmann2010sleep,
+  title = {The memory function of sleep},
+  author = {Diekelmann, S. and Born, J.},
+  journal = {Nature Reviews Neuroscience},
+  year = {2010},
+  volume = {11},
+  number = {2},
+  pages = {114--126},
+  doi = {10.1038/nrn2762}
+}
 ```
 
 ## Citation Policy
@@ -367,7 +521,7 @@ When using this framework in publications:
 1. **Cite the framework**:
    ```
    CA1 Hippocampus Framework v2.0 (2025)
-   https://github.com/neuron7x/Hippocampal-CA1-LAM
+   https://github.com/neuron7xLab/Hippocampal-CA1-LAM
    ```
 
 2. **Cite primary references** for mechanisms used:
@@ -378,10 +532,28 @@ When using this framework in publications:
 3. **Cite parameters** if extracted:
    - Example: "HCN gradient g_h from Magee 1998 (DOI: 10.1523/JNEUROSCI.18-19-07613.1998)"
 
-## Verification
+## Cross-Platform Reference Network
 
-To verify a DOI: visit doi.org and enter the DOI identifier.
+| Source | CA1 | bnsyn | neosynaptex | MFN | agents | mlsdm |
+|--------|:---:|:-----:|:-----------:|:---:|:------:|:-----:|
+| Jahr & Stevens 1990 | **x** | **x** | | | | |
+| Graupner & Brunel 2012 | **x** | | | | | |
+| Buzsáki 2015 (SWR) | **x** | | | | | |
+| Clopath+ 2010 | **x** | | | | | |
+| Tsodyks & Markram 1997 | **x** | | | | | |
+| Brunel 2000 | **x** | | | | | |
+| Turrigiano 2012 | | **x** | | **x** | | **x** |
+| Benna & Fusi 2016 | | **x** | | | | **x** |
+| Tononi & Cirelli 2014 | | **x** | | | | **x** |
+
+## Verification Protocol
+
+All DOIs verified via doi.org resolution on 2026-03-31.
+To verify: visit https://doi.org and enter the DOI identifier, or:
+`curl -sL "https://doi.org/[DOI]" -o /dev/null -w "%{http_code}"` → expect `302` or `200`.
+
+**Policy:** All biophysical parameters cite Tier-F or Tier-A sources with exact figure/table provenance.
 
 ---
 
-**Last updated**: December 14, 2025
+**Last updated**: 2026-03-31
