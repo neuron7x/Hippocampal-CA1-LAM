@@ -5,7 +5,7 @@
 """
 
 from dataclasses import dataclass
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple, cast
 
 import numpy as np
 
@@ -24,10 +24,10 @@ class LaminarMarkers:
     total_transcripts: int = 332938
 
     # Маркери субшарів (Lrmp, Ndst4, Trib2, Peg10)
-    layer_markers: Dict[int, List[str]] = None
+    layer_markers: Optional[Dict[int, List[str]]] = None
 
     # Порогові значення експресії (з QuPath + SCAMPR квантифікації)
-    expression_thresholds: Dict[str, float] = None
+    expression_thresholds: Optional[Dict[str, float]] = None
 
     # Обмежена коекспресія - операційний гейт
     max_coexpression_rate: float = 0.05  # CE ≤ 0.05
@@ -53,10 +53,10 @@ class SubregionComposition:
     """Склад субрегіонів CA1 як комбінації шарів"""
 
     # Pachicano et al., 2025
-    CA1d: List[int] = None  # Dorsal
-    CA1i: List[int] = None  # Intermediate
-    CA1v: List[int] = None  # Ventral
-    CA1vv: List[int] = None  # Very ventral
+    CA1d: Optional[List[int]] = None  # Dorsal
+    CA1i: Optional[List[int]] = None  # Intermediate
+    CA1v: Optional[List[int]] = None  # Ventral
+    CA1vv: Optional[List[int]] = None  # Very ventral
 
     def __post_init__(self):
         self.CA1d = [1, 2]  # Layer 1 + 2
@@ -76,21 +76,21 @@ class CompartmentParams:
     """Параметри сома-дендритної моделі по шарах"""
 
     # Capacitance (μF/cm²) - стандартні значення для CA1 pyramidals
-    C_soma: np.ndarray = None  # [Layer 1-4]
-    C_dendrite: np.ndarray = None
+    C_soma: Optional[np.ndarray] = None  # [Layer 1-4]
+    C_dendrite: Optional[np.ndarray] = None
 
     # Leak conductance (mS/cm²)
-    g_L_soma: np.ndarray = None
-    g_L_dendrite: np.ndarray = None
+    g_L_soma: Optional[np.ndarray] = None
+    g_L_dendrite: Optional[np.ndarray] = None
 
     # Coupling conductance (mS/cm²)
-    g_coupling: np.ndarray = None
+    g_coupling: Optional[np.ndarray] = None
 
     # HCN (Ih) conductance - ГРАДІЄНТ по шарах (Magee 1998, J Neurosci)
     # DOI: 10.1523/JNEUROSCI.18-19-07613.1998
-    g_h: np.ndarray = None  # Зростає з глибиною: superficial → deep
-    V_half_h: np.ndarray = None  # Half-activation voltage
-    k_h: np.ndarray = None  # Slope factor
+    g_h: Optional[np.ndarray] = None  # Зростає з глибиною: superficial → deep
+    V_half_h: Optional[np.ndarray] = None  # Half-activation voltage
+    k_h: Optional[np.ndarray] = None  # Slope factor
 
     # Reversal potentials (mV)
     E_L: float = -70.0
@@ -99,12 +99,12 @@ class CompartmentParams:
     E_K: float = -90.0
 
     # Spike parameters
-    V_threshold: np.ndarray = None
-    V_reset: np.ndarray = None
-    tau_refrac: np.ndarray = None  # Refractory period (ms)
+    V_threshold: Optional[np.ndarray] = None
+    V_reset: Optional[np.ndarray] = None
+    tau_refrac: Optional[np.ndarray] = None  # Refractory period (ms)
 
     # AHP current parameters
-    g_AHP: np.ndarray = None
+    g_AHP: Optional[np.ndarray] = None
     tau_AHP: float = 20.0  # ms
 
     def __post_init__(self):
@@ -179,21 +179,21 @@ class ConnectivityParams:
 
     # Power-law exponent (Brunel 2000, J Comp Neurosci)
     # DOI: 10.1023/A:1008925309027
-    alpha: np.ndarray = None  # [Layer 1-4]
+    alpha: Optional[np.ndarray] = None  # [Layer 1-4]
 
     # Minimal distance (μm)
     r0: float = 50.0
 
     # Normalization constant
-    C: np.ndarray = None
+    C: Optional[np.ndarray] = None
 
     # Laminar bias weights
     beta_z: float = 2.0  # Z-axis penalty
     beta_s: float = 0.5  # S-axis penalty
 
     # Weight distribution (log-normal)
-    J_mean: np.ndarray = None  # Mean weight (nS)
-    J_sigma: np.ndarray = None  # Std of log-weights
+    J_mean: Optional[np.ndarray] = None  # Mean weight (nS)
+    J_sigma: Optional[np.ndarray] = None  # Std of log-weights
 
     # Weight bounds
     W_min: float = 0.01
@@ -273,10 +273,10 @@ class ThetaParams:
     f_theta_default: float = 8.0
 
     # Amplitude (pA) - layer-specific drive
-    A_theta: np.ndarray = None
+    A_theta: Optional[np.ndarray] = None
 
     # Phase offset per layer (radians)
-    psi_theta: np.ndarray = None
+    psi_theta: Optional[np.ndarray] = None
 
     # Phase precession slope (Skaggs et al., Hippocampus 1996)
     # DOI: 10.1002/(SICI)1098-1063(1996)6:2<149::AID-HIPO6>3.0.CO;2-K
@@ -328,7 +328,7 @@ class OLMParams:
     """OLM interneuron-mediated plasticity gating"""
 
     # OLM dendritic inhibition strength
-    g_OLM: np.ndarray = None  # mS/cm² per layer
+    g_OLM: Optional[np.ndarray] = None  # mS/cm² per layer
 
     # Gating function parameters
     G_baseline: float = 0.0  # No learning
@@ -410,17 +410,17 @@ class AIIntegrationParams:
 class CA1Parameters:
     """Complete parameter set for CA1 model"""
 
-    laminar: LaminarMarkers = None
-    subregions: SubregionComposition = None
-    compartment: CompartmentParams = None
-    synaptic: SynapticParams = None
-    connectivity: ConnectivityParams = None
-    plasticity: PlasticityParams = None
-    theta: ThetaParams = None
-    swr: SWRParams = None
-    olm: OLMParams = None
-    fractal: FractalParams = None
-    ai: AIIntegrationParams = None
+    laminar: Optional[LaminarMarkers] = None
+    subregions: Optional[SubregionComposition] = None
+    compartment: Optional[CompartmentParams] = None
+    synaptic: Optional[SynapticParams] = None
+    connectivity: Optional[ConnectivityParams] = None
+    plasticity: Optional[PlasticityParams] = None
+    theta: Optional[ThetaParams] = None
+    swr: Optional[SWRParams] = None
+    olm: Optional[OLMParams] = None
+    fractal: Optional[FractalParams] = None
+    ai: Optional[AIIntegrationParams] = None
 
     def __post_init__(self):
         if self.laminar is None:
@@ -450,17 +450,23 @@ class CA1Parameters:
         """Validate parameter consistency"""
         errors = []
 
+        # __post_init__ populates fields whose constructor input is omitted.
+        compartment = cast(CompartmentParams, self.compartment)
+        g_h = cast(np.ndarray, compartment.g_h)
+        plasticity = cast(PlasticityParams, self.plasticity)
+        connectivity = cast(ConnectivityParams, self.connectivity)
+
         # Check layer counts match
         n_layers = 4
-        if len(self.compartment.g_h) != n_layers:
-            errors.append(f"g_h length {len(self.compartment.g_h)} != {n_layers}")
+        if len(g_h) != n_layers:
+            errors.append(f"g_h length {len(g_h)} != {n_layers}")
 
         # Check thresholds
-        if self.plasticity.theta_p <= self.plasticity.theta_d:
+        if plasticity.theta_p <= plasticity.theta_d:
             errors.append("theta_p must be > theta_d")
 
         # Check spectral radius
-        if self.connectivity.rho_target >= 1.0:
+        if connectivity.rho_target >= 1.0:
             errors.append("rho_target must be < 1.0 for stability")
 
         return (len(errors) == 0, errors)
@@ -485,7 +491,8 @@ def get_experimental_parameters(dataset: str = "pachicano2025") -> CA1Parameters
         pass
     elif dataset == "udakis2025":
         # Emphasize OLM gating (Nature Comm 2025)
-        params.olm.G_learning = 0.7
+        olm = cast(OLMParams, params.olm)
+        olm.G_learning = 0.7
 
     return params
 
@@ -497,9 +504,12 @@ if __name__ == "__main__":
 
     if valid:
         print("✓ Parameter validation PASSED")
-        print(f"  Total cells: {params.laminar.total_cells}")
-        print(f"  g_h gradient: {params.compartment.g_h}")
-        print(f"  Theta freq: {params.theta.f_theta_default} Hz")
+        laminar = cast(LaminarMarkers, params.laminar)
+        compartment = cast(CompartmentParams, params.compartment)
+        theta = cast(ThetaParams, params.theta)
+        print(f"  Total cells: {laminar.total_cells}")
+        print(f"  g_h gradient: {compartment.g_h}")
+        print(f"  Theta freq: {theta.f_theta_default} Hz")
     else:
         print("✗ Parameter validation FAILED:")
         for err in errors:

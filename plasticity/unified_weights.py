@@ -10,7 +10,7 @@ Key improvements:
 """
 
 import numpy as np
-from typing import Dict
+from typing import Dict, Optional
 from enum import Enum
 
 
@@ -151,7 +151,7 @@ class UnifiedWeightMatrix:
         # Non-negative
         self.Ca = np.maximum(0, self.Ca)
 
-    def update_plasticity_ca_based(self, M: float = 1.0, G: np.ndarray = None):
+    def update_plasticity_ca_based(self, M: float = 1.0, G: Optional[np.ndarray] = None):
         """
         Ca2+-based LTP/LTD (Graupner-Brunel PNAS 2012)
 
@@ -175,10 +175,7 @@ class UnifiedWeightMatrix:
         eta_p_base = p.eta_p
         eta_d_base = p.eta_d
 
-        # Mask for each input type
-        mask_CA3 = self.source_types == InputSource.CA3.value
         mask_EC = self.source_types == InputSource.EC.value
-        mask_LOCAL = self.source_types == InputSource.LOCAL.value
 
         # EC synapses have 10x lower plasticity (DELTA: stable feedforward)
         eta_p = np.ones((self.N, self.N)) * eta_p_base
@@ -417,6 +414,5 @@ if __name__ == "__main__":
 
     print(f"EC weight change: {np.mean(W_after_EC - W_before_EC):.6f} (should be small)")
     print(f"CA3 weight change: {np.mean(W_after_CA3 - W_before_CA3):.6f} (should be larger)")
-    print(
-        f"Ratio: {np.mean(W_after_CA3 - W_before_CA3) / (np.mean(W_after_EC - W_before_EC) + 1e-8):.2f}"
-    )
+    ratio = np.mean(W_after_CA3 - W_before_CA3) / (np.mean(W_after_EC - W_before_EC) + 1e-8)
+    print(f"Ratio: {ratio:.2f}")

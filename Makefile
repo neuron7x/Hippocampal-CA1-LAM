@@ -4,8 +4,8 @@
 # Usage: make <target>
 # Example: make install, make test, make clean
 
-.PHONY: help install install-dev test test-quick test-unit test-golden \
-        format lint clean clean-all docs deploy benchmark run-example
+.PHONY: help install install-dev install-hooks test test-quick test-unit test-golden \
+        format lint check clean clean-all docs deploy benchmark run-example
 
 # Default target
 help:
@@ -16,6 +16,7 @@ help:
 	@echo "Installation:"
 	@echo "  make install          - Install production dependencies"
 	@echo "  make install-dev      - Install dev dependencies + tools"
+	@echo "  make install-hooks    - Install Git hooks (Python 3.11+)"
 	@echo ""
 	@echo "Testing:"
 	@echo "  make test             - Run all tests (golden + unit)"
@@ -26,7 +27,7 @@ help:
 	@echo "Code Quality:"
 	@echo "  make format           - Auto-format code (black + isort)"
 	@echo "  make lint             - Lint code (flake8 + mypy)"
-	@echo "  make check            - format + lint + test"
+	@echo "  make check            - Read-only lint and tests"
 	@echo ""
 	@echo "Utilities:"
 	@echo "  make clean            - Remove build artifacts"
@@ -48,10 +49,11 @@ install:
 
 install-dev:
 	@echo "📦 Installing development environment..."
-	pip install -r requirements.txt
-	pip install -r requirements-dev.txt
-	pre-commit install
+	python -m pip install -r requirements-dev.txt
 	@echo "✅ Dev environment ready"
+
+install-hooks:
+	pre-commit install
 
 # Testing targets
 test:
@@ -64,7 +66,7 @@ test-quick:
 
 test-unit:
 	@echo "🧪 Running unit tests..."
-	@pytest tests/ -v
+	@python -m pytest tests/ -v
 
 test-golden:
 	@echo "🧪 Running golden tests (verbose)..."
@@ -79,11 +81,15 @@ format:
 
 lint:
 	@echo "🔍 Linting code..."
-	@flake8 . --max-line-length=100 --exclude=venv,venv-dev,build,dist,.git
-	@mypy . --ignore-missing-imports --exclude '/(venv|build|dist)/'
+	@python -m flake8 core data plasticity validation ai_integration oracle setup.py \
+		test_golden_standalone.py scripts tools tests/test_ci_guards.py tests/test_golden_cli.py \
+		tests/test_pr_metadata.py tests/test_ca1_network_api.py tests/test_config.py \
+		tests/test_oracle.py test_oracle_standalone.py
+	@python -m mypy --check-untyped-defs --explicit-package-bases --ignore-missing-imports \
+		core data plasticity validation ai_integration oracle
 	@echo "✅ Linting complete"
 
-check: format lint test
+check: lint test
 	@echo "✅ All checks passed"
 
 # Cleaning targets
@@ -119,7 +125,7 @@ benchmark:
 
 run-example:
 	@echo "🎯 Running basic example..."
-	@python examples/demo_basic_usage.py
+	@PYTHONPATH="$(CURDIR)$${PYTHONPATH:+:$$PYTHONPATH}" python examples/demo_basic_usage.py
 
 # Deployment
 deploy:

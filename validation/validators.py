@@ -11,7 +11,7 @@ Implements all critical validation checks:
 
 import numpy as np
 from sklearn.metrics import mutual_info_score
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 # ============================================================================
 # 1. LAMINAR STRUCTURE VALIDATION
@@ -23,7 +23,7 @@ def validate_laminar_structure(
     depths: np.ndarray,
     transcripts: np.ndarray,
     thresholds: Dict[int, float],
-) -> Dict[str, any]:
+) -> Dict[str, Any]:
     """
     Gate 1: Laminar structure validation
 
@@ -103,7 +103,7 @@ def validate_laminar_structure(
 
 def validate_phase_precession(
     spike_phases: np.ndarray, positions: np.ndarray, min_spikes: int = 20
-) -> Dict[str, any]:
+) -> Dict[str, Any]:
     """
     Gate 2: Phase precession
 
@@ -170,7 +170,7 @@ def validate_phase_precession(
 
 def compute_fractal_dimension(
     events: np.ndarray, epsilon_range: Tuple[float, float] = (0.01, 1.0), n_scales: int = 20
-) -> Dict[str, any]:
+) -> Dict[str, Any]:
     """
     Gate 3: Fractal structure (Minkowski-Bouligand dimension)
 
@@ -193,7 +193,7 @@ def compute_fractal_dimension(
     # Box sizes (log-spaced)
     epsilons = np.logspace(np.log10(epsilon_range[0]), np.log10(epsilon_range[1]), n_scales)
 
-    N_boxes = []
+    box_counts = []
 
     for eps in epsilons:
         # Grid boxes
@@ -204,9 +204,9 @@ def compute_fractal_dimension(
             box_j = int(event[1] / eps)
             boxes.add((box_i, box_j))
 
-        N_boxes.append(len(boxes))
+        box_counts.append(len(boxes))
 
-    N_boxes = np.array(N_boxes)
+    N_boxes = np.array(box_counts)
 
     # Linear regression: log(N) vs log(1/ε)
     log_eps_inv = np.log(1.0 / epsilons)
@@ -270,7 +270,7 @@ def compute_fractal_dimension(
 
 def validate_dynamic_stability(
     W: np.ndarray, firing_rates: np.ndarray, target_rate: float = 5.0
-) -> Dict[str, any]:
+) -> Dict[str, Any]:
     """
     Gate 4: Network stability
 
@@ -320,7 +320,7 @@ def validate_dynamic_stability(
 
 def validate_replay(
     sequence_online: List[int], sequence_replay: List[int], min_correlation: float = 0.3
-) -> Dict[str, any]:
+) -> Dict[str, Any]:
     """
     Gate 5: Replay quality
 

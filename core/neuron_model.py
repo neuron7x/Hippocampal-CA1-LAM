@@ -10,7 +10,7 @@ Based on:
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Optional, Tuple
+from typing import List, Optional, Tuple
 
 import numpy as np
 
@@ -258,8 +258,8 @@ class CA1Population:
             self.neurons.append(neuron)
 
         # Spike history
-        self.spike_times = [[] for _ in range(N)]
-        self.spike_trains = []  # (time, neuron_id) pairs
+        self.spike_times: List[List[float]] = [[] for _ in range(N)]
+        self.spike_trains: List[Tuple[float, int]] = []  # (time, neuron_id) pairs
 
         # Current time
         self.t = 0.0

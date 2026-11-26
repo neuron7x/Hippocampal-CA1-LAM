@@ -300,7 +300,7 @@ class SubregionClassifier:
         s_values = np.array([c.s for c in cells])
         s_edges = np.linspace(0, 1, s_bins + 1)
 
-        subregion_map = {name: [] for name in self.subregion_signatures.keys()}
+        subregion_map: Dict[str, list] = {name: [] for name in self.subregion_signatures}
 
         for i in range(s_bins):
             s_center = (s_edges[i] + s_edges[i + 1]) / 2

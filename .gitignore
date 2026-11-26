@@ -6,3 +6,10 @@ __pycache__/
 htmlcov/
 node_modules/
 *.egg-info/
+
+# Local environments and package outputs
+.venv/
+venv/
+venv-dev/
+build/
+dist/

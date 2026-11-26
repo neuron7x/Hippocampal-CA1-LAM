@@ -1,12 +1,10 @@
 # Hippocampal-CA1-LAM v2.0
 
-**🧠 Production-Grade CA1 Hippocampal Laminar Architecture Model**
+**CA1 Hippocampal Laminar Architecture Research Model**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Tests](https://github.com/neuron7x/Hippocampal-CA1-LAM/actions/workflows/python-tests.yml/badge.svg)](https://github.com/neuron7x/Hippocampal-CA1-LAM/actions/workflows/python-tests.yml)
-
-**Production-grade neurobiological model of CA1 hippocampus for AI memory and computational neuroscience.**
 
 ## 📋 Development Roadmap
 
@@ -24,7 +22,7 @@ We're following a comprehensive **8-phase evolution plan** to build v3.0:
 | 7 | Quality & Release | 📋 Planned |
 | 8 | Community & Impact | 📋 Planned |
 
-**📖 [Full Evolution Plan](docs/EVOLUTION_PLAN.md)** | **🎯 [Current Issues](https://github.com/neuron7x/Hippocampal-CA1-LAM/issues?q=is%3Aissue+is%3Aopen+label%3Aroadmap)** | **📊 [Project Board](https://github.com/neuron7x/Hippocampal-CA1-LAM/projects)**
+**📖 [Full Evolution Plan](docs/EVOLUTION_PLAN.md)** | **🎯 [Current Issues](https://github.com/neuron7x/Hippocampal-CA1-LAM/issues?q=is%3Aissue+is%3Aopen+label%3Aroadmap)**
 
 ### Contributing to the Roadmap
 1. Check the [Evolution Plan](docs/EVOLUTION_PLAN.md) for available tasks
@@ -36,8 +34,8 @@ We're following a comprehensive **8-phase evolution plan** to build v3.0:
 
 ## Overview
 
-Biophysically accurate CA1 model with:
-- 4-layer laminar structure (58,065 cells from Nature 2025)
+The research model includes:
+- Four laminar sublayers parameterized from the 58,065-cell atlas. The simulation size is configurable.
 - Unified W+STP+Ca²⁺ plasticity (Graupner-Brunel PNAS 2012)
 - Theta-SWR state switching with replay detection
 - AI integration (HippoRAG-inspired LLM memory)
@@ -158,11 +156,12 @@ python scripts/benchmark.py --stress-neurons 100000 --stress-steps 5 --stress-co
 - [Architecture](docs/ARCHITECTURE.md)
 - [Testing](docs/TESTING.md)
 - [CI/CD](.github/CI.md)
+- [Retrieval ablation protocol](docs/NECESSITY_ORACLE.md)
 - [Contributing](CONTRIBUTING.md)
 
 ## Scientific Foundation
 
-All parameters from peer-reviewed sources:
+Selected parameter sources:
 - **13 DOI references** (see [Bibliography](docs/BIBLIOGRAPHY.md))
 - **58,065 cells** (Pachicano Nature Comm 2025)
 - **Ca²⁺ thresholds** θ_d=1.0μM, θ_p=2.0μM (Graupner PNAS 2012)
@@ -170,9 +169,11 @@ All parameters from peer-reviewed sources:
 ## Features
 
 ✅ **Public API scaffold** - Minimal CA1Network for quick-start usage  
-✅ **Reproducible** - Seed=42 guarantees identical regression signals  
+✅ **Reproducible regression tests** - The golden suite uses seed 42.
 ✅ **Validated** - 6 deterministic golden tests  
-✅ **Production-Ready** - Type hints, tests, CI/CD, documentation  
+✅ **Research package** - Type hints, tests, CI/CD, and documentation.
+
+The public `CA1Network` scaffold emits synthetic activity. The circuit primitives and retrieval tests support implementation claims within their measured scope. Electrophysiological validation remains open.
 
 ## Citation
 

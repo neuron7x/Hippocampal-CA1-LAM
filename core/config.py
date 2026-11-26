@@ -20,6 +20,8 @@ from __future__ import annotations
 
 import json
 from dataclasses import asdict, dataclass, field
+from math import isfinite
+from numbers import Integral
 from pathlib import Path
 from typing import Any, Dict, List, Union
 
@@ -239,43 +241,67 @@ def validate_config(config: ExperimentConfig) -> List[str]:
     errors: List[str] = []
     core = config.core
 
+    def finite(name: str, value: float) -> bool:
+        # Integers are finite even if they cannot be converted to a machine float.
+        if isinstance(value, Integral):
+            return True
+        try:
+            if isfinite(value):
+                return True
+        except (TypeError, ValueError, OverflowError):
+            # Untrusted JSON/YAML values are not constrained by type annotations.
+            pass
+        errors.append(f"{name} must be a finite number")
+        return False
+
     # Validate positive values
-    if core.n_neurons <= 0:
+    if finite("n_neurons", core.n_neurons) and core.n_neurons <= 0:
         errors.append(f"n_neurons must be positive, got {core.n_neurons}")
 
-    if core.dt <= 0:
+    if finite("dt", core.dt) and core.dt <= 0:
         errors.append(f"dt must be positive, got {core.dt}")
 
-    if core.duration_ms <= 0:
+    if finite("duration_ms", core.duration_ms) and core.duration_ms <= 0:
         errors.append(f"duration_ms must be positive, got {core.duration_ms}")
 
     # Validate ranges
-    if not (0 < core.connection_probability <= 1):
+    if finite("connection_probability", core.connection_probability) and not (
+        0 < core.connection_probability <= 1
+    ):
         errors.append(
             f"connection_probability must be in (0, 1], " f"got {core.connection_probability}"
         )
 
-    if not (0 < core.spectral_radius_target < 1):
+    if finite("spectral_radius_target", core.spectral_radius_target) and not (
+        0 < core.spectral_radius_target < 1
+    ):
         errors.append(
             f"spectral_radius_target must be in (0, 1), " f"got {core.spectral_radius_target}"
         )
 
     # Validate weight bounds
-    if core.weight_min >= core.weight_max:
+    weight_min_finite = finite("weight_min", core.weight_min)
+    weight_max_finite = finite("weight_max", core.weight_max)
+    if weight_min_finite and weight_max_finite and core.weight_min >= core.weight_max:
         errors.append(
             f"weight_min ({core.weight_min}) must be < " f"weight_max ({core.weight_max})"
         )
 
-    if core.weight_min < 0:
+    if weight_min_finite and core.weight_min < 0:
         errors.append(f"weight_min must be non-negative, got {core.weight_min}")
 
     # Validate theta frequency
-    if not (1 <= core.theta_frequency <= 20):
+    if finite("theta_frequency", core.theta_frequency) and not 1 <= core.theta_frequency <= 20:
         errors.append(f"theta_frequency should be in [1, 20] Hz, " f"got {core.theta_frequency}")
 
     # Validate n_layers
-    if core.n_layers not in (2, 3, 4):
+    if finite("n_layers", core.n_layers) and core.n_layers not in (2, 3, 4):
         errors.append(f"n_layers must be 2, 3, or 4, got {core.n_layers}")
+
+    finite("seed", core.seed)
+    finite("learning_rate", core.learning_rate)
+    finite("weight_decay", core.weight_decay)
+    finite("checkpoint_interval", config.checkpoint_interval)
 
     return errors
 

@@ -26,9 +26,9 @@ echo ""
 
 # Check Python
 echo "1. Перевірка Python..."
-if ! command -v python3 &> /dev/null; then
-    echo "❌ Python 3 не знайдено!"
-    echo "   Встановіть Python 3.8+ з https://www.python.org/downloads/"
+if ! python3 -c 'import sys; sys.exit(sys.version_info < (3, 11))' 2>/dev/null; then
+    echo "❌ Потрібен Python 3.11 або новіший."
+    echo "   Встановіть Python 3.11+ з https://www.python.org/downloads/"
     exit 1
 fi
 

@@ -1,7 +1,7 @@
 # Hippocampal-CA1-LAM — Scientific Bibliography
 
 > **Version:** 2.0 | **Standard:** Hierarchical DOI-verified | **Verified:** 2026-03-31
-> **Repository:** [github.com/neuron7xLab/Hippocampal-CA1-LAM](https://github.com/neuron7xLab/Hippocampal-CA1-LAM)
+> **Repository:** [github.com/neuron7x/Hippocampal-CA1-LAM](https://github.com/neuron7x/Hippocampal-CA1-LAM)
 > **Role in NFI platform:** Biophysically accurate hippocampal CA1 memory model
 
 All parameters in this framework are extracted from peer-reviewed literature. This document provides complete bibliographic information with DOI links.
@@ -65,7 +65,7 @@ DOI: [10.1038/s41467-025-66613-y](https://doi.org/10.1038/s41467-025-66613-y)
 **Graupner M., Brunel N.** (2012)  
 *Calcium-based plasticity model explains sensitivity of synaptic changes to spike pattern, rate, and dendritic location*  
 **Proceedings of the National Academy of Sciences**, 109(10):3991-3996  
-DOI: [10.1073/pnas.1109359109](https://doi.org/10.1073/pnas.1109359109)
+DOI: [10.1073/pnas.1109359109](https://api.crossref.org/works/10.1073/pnas.1109359109) (Crossref record)
 
 **Parameters extracted:**
 - τ_Ca = 20 ms (calcium time constant, Fig 2A)
@@ -93,7 +93,7 @@ DOI: [10.1038/s41593-025-01923-4](https://doi.org/10.1038/s41593-025-01923-4)
 **Magee J.C.** (1998)  
 *Dendritic hyperpolarization-activated currents modify the integrative properties of hippocampal CA1 pyramidal neurons*  
 **Journal of Neuroscience**, 18(19):7613-7624  
-DOI: [10.1523/JNEUROSCI.18-19-07613.1998](https://doi.org/10.1523/JNEUROSCI.18-19-07613.1998)
+DOI: [10.1523/JNEUROSCI.18-19-07613.1998](https://api.crossref.org/works/10.1523/JNEUROSCI.18-19-07613.1998) (Crossref record)
 
 **Data extracted:**
 - HCN conductance gradient: g_h increases with depth (patch-clamp recordings, Fig 4)
@@ -106,7 +106,7 @@ DOI: [10.1523/JNEUROSCI.18-19-07613.1998](https://doi.org/10.1523/JNEUROSCI.18-1
 **O'Keefe J., Recce M.L.** (1993)  
 *Phase relationship between hippocampal place units and the EEG theta rhythm*  
 **Hippocampus**, 3(3):317-330  
-DOI: [10.1002/hipo.450030307](https://doi.org/10.1002/hipo.450030307)
+DOI: [10.1002/hipo.450030307](https://api.crossref.org/works/10.1002/hipo.450030307) (Crossref record)
 
 **Data extracted:**
 - Theta frequency range: 4-12 Hz
@@ -116,7 +116,7 @@ DOI: [10.1002/hipo.450030307](https://doi.org/10.1002/hipo.450030307)
 **Skaggs W.E., McNaughton B.L., Wilson M.A., Barnes C.A.** (1996)  
 *Theta phase precession in hippocampal neuronal populations and the compression of temporal sequences*  
 **Hippocampus**, 6(2):149-172  
-DOI: [10.1002/(SICI)1098-1063(1996)6:2<149::AID-HIPO6>3.0.CO;2-K](https://doi.org/10.1002/(SICI)1098-1063(1996)6:2<149::AID-HIPO6>3.0.CO;2-K)
+DOI: [10.1002/(SICI)1098-1063(1996)6:2<149::AID-HIPO6>3.0.CO;2-K](https://api.crossref.org/works/10.1002/%28SICI%291098-1063%281996%296%3A2%3C149%3A%3AAID-HIPO6%3E3.0.CO%3B2-K) (Crossref record)
 
 **Additional data:**
 - Temporal compression during theta cycles
@@ -152,7 +152,7 @@ DOI: [10.1038/s41467-025-64859-0](https://doi.org/10.1038/s41467-025-64859-0)
 **Bittner K.C., Grienberger C., Vaidya S.P., Milstein A.D., Macklin J.J., Suh J., Tonegawa S., Magee J.C.** (2017)  
 *Behavioral time scale synaptic plasticity underlies CA1 place fields*  
 **Science**, 357(6355):1033-1036  
-DOI: [10.1126/science.aan3846](https://doi.org/10.1126/science.aan3846)
+DOI: [10.1126/science.aan3846](https://api.crossref.org/works/10.1126/science.aan3846) (Crossref record)
 
 **Data extracted:**
 - Eligibility trace time constant: τ_e ≈ 1000 ms
@@ -176,7 +176,7 @@ DOI: [10.1038/nn.2479](https://doi.org/10.1038/nn.2479)
 **Tsodyks M.V., Markram H.** (1997)  
 *The neural code between neocortical pyramidal neurons depends on neurotransmitter release probability*  
 **Proceedings of the National Academy of Sciences**, 94(2):719-723  
-DOI: [10.1073/pnas.94.2.719](https://doi.org/10.1073/pnas.94.2.719)
+DOI: [10.1073/pnas.94.2.719](https://api.crossref.org/works/10.1073/pnas.94.2.719) (Crossref record)
 
 **Data extracted:**
 - Facilitation time constant: τ_F ≈ 100 ms
@@ -250,7 +250,7 @@ DOI: [10.1016/0006-8993(71)90358-1](https://doi.org/10.1016/0006-8993(71)90358-1
 **Buzsáki G.** (2015)
 *Hippocampal sharp wave-ripple: A cognitive biomarker for episodic memory and planning*
 **Hippocampus**, 25(10):1073-1188
-DOI: [10.1002/hipo.22488](https://doi.org/10.1002/hipo.22488)
+DOI: [10.1002/hipo.22488](https://api.crossref.org/works/10.1002/hipo.22488) (Crossref record)
 
 **Data extracted:**
 - SWR as memory consolidation mechanism
@@ -288,8 +288,7 @@ DOI: [10.1038/nrn2762](https://doi.org/10.1038/nrn2762)
 **Jahr C.E., Stevens C.F.** (1990)  
 *Voltage dependence of NMDA-activated macroscopic conductances predicted by single-channel kinetics*  
 **Journal of Neuroscience**, 10(9):3178-3182  
-DOI: [10.1523/JNEUROSCI.10-09-03178.1990](https://doi.org/10.1523/JNEUROSCI.10-09-03178.1990)  
-PubMed: https://pubmed.ncbi.nlm.nih.gov/1697902/
+DOI: [10.1523/JNEUROSCI.10-09-03178.1990](https://api.crossref.org/works/10.1523/JNEUROSCI.10-09-03178.1990) (Crossref record)
 
 **Mg²⁺ block parameters:**
 - [Mg²⁺] = 1.0 mM
@@ -521,7 +520,7 @@ When using this framework in publications:
 1. **Cite the framework**:
    ```
    CA1 Hippocampus Framework v2.0 (2025)
-   https://github.com/neuron7xLab/Hippocampal-CA1-LAM
+   https://github.com/neuron7x/Hippocampal-CA1-LAM
    ```
 
 2. **Cite primary references** for mechanisms used:

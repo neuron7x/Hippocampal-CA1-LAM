@@ -3,23 +3,14 @@
 #
 # Usage: bash scripts/run_all_tests.sh
 
-set -e
+set -euo pipefail
+
+cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.."
 
 echo "========================================================================"
 echo "🧪 HIPPOCAMPAL-CA1-LAM - COMPREHENSIVE TEST SUITE"
 echo "========================================================================"
 echo ""
-
-# Check if in virtual environment
-if [[ -z "$VIRTUAL_ENV" ]]; then
-    echo "⚠ Віртуальне середовище не активне"
-    echo "   Активуйте: source venv/bin/activate"
-    read -p "Продовжити без venv? (y/n) " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        exit 1
-    fi
-fi
 
 START_TIME=$(date +%s)
 
@@ -28,8 +19,8 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo "TEST 1/4: Golden Tests (Reproducibility & Stability)"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
-python test_golden_standalone.py
-GOLDEN_RESULT=$?
+GOLDEN_RESULT=0
+python test_golden_standalone.py || GOLDEN_RESULT=$?
 echo ""
 
 # Test 2: Unit Tests
@@ -38,14 +29,8 @@ echo "TEST 2/4: Unit Tests"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
-if command -v pytest &> /dev/null; then
-    pytest tests/ -v --tb=short
-    UNIT_RESULT=$?
-else
-    echo "⚠ pytest не встановлено, використовую python unittest"
-    python -m unittest discover tests/ -v
-    UNIT_RESULT=$?
-fi
+UNIT_RESULT=0
+python -m pytest tests/ -v --tb=short || UNIT_RESULT=$?
 echo ""
 
 # Test 3: Import Tests
@@ -63,7 +48,7 @@ python -c "from core.neuron_model import TwoCompartmentNeuron; print('✓ core.n
 python -c "from core.theta_swr_switching import NetworkStateController; print('✓ core.theta_swr_switching')" || IMPORT_RESULT=1
 python -c "from plasticity.unified_weights import UnifiedWeightMatrix; print('✓ plasticity.unified_weights')" || IMPORT_RESULT=1
 python -c "from ai_integration.memory_module import LLMWithCA1Memory; print('✓ ai_integration.memory_module')" || IMPORT_RESULT=1
-python -c "from validation.validators import validate_network_stability; print('✓ validation.validators')" || IMPORT_RESULT=1
+python -c "from validation import validate_dynamic_stability; print('✓ validation.validators')" || IMPORT_RESULT=1
 
 if [ $IMPORT_RESULT -eq 0 ]; then
     echo ""
@@ -82,14 +67,9 @@ echo ""
 
 EXAMPLES_RESULT=0
 
-if [ -f "examples/demo_basic_usage.py" ]; then
-    echo "Запуск demo_basic_usage.py (перші 10 секунд)..."
-    timeout 10s python examples/demo_basic_usage.py || true
-    echo "✓ demo_basic_usage.py виконано"
-else
-    echo "⚠ examples/demo_basic_usage.py не знайдено"
-    EXAMPLES_RESULT=1
-fi
+echo "Запуск demo_basic_usage.py (ліміт 60 секунд)..."
+PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}" timeout 60s python examples/demo_basic_usage.py \
+    || EXAMPLES_RESULT=$?
 echo ""
 
 # Calculate duration
@@ -123,7 +103,7 @@ fi
 if [ $EXAMPLES_RESULT -eq 0 ]; then
     echo "✅ Examples: PASSED"
 else
-    echo "⚠ Examples: PARTIAL (check manually)"
+    echo "❌ Examples: FAILED (exit $EXAMPLES_RESULT)"
 fi
 
 echo ""
@@ -131,9 +111,9 @@ echo "Duration: ${DURATION}s"
 echo ""
 
 # Final result
-if [ $GOLDEN_RESULT -eq 0 ] && [ $UNIT_RESULT -eq 0 ] && [ $IMPORT_RESULT -eq 0 ]; then
+if (( GOLDEN_RESULT == 0 && UNIT_RESULT == 0 && IMPORT_RESULT == 0 && EXAMPLES_RESULT == 0 )); then
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo "✅ ALL TESTS PASSED - PRODUCTION READY"
+    echo "✅ ALL TESTS PASSED"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     exit 0
 else

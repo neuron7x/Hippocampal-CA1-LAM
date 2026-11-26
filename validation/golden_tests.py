@@ -11,6 +11,8 @@ This ensures:
 Run: python -m pytest golden_tests.py -v
 """
 
+import sys
+
 import numpy as np
 
 # Set global seed
@@ -83,7 +85,8 @@ def test_laminar_inference_golden():
     assert all(100 < count < 400 for count in layer_counts), f"Unbalanced layers: {layer_counts}"
 
     print(
-        f"✓ Laminar inference: I(L;z)={metrics['mutual_information']:.3f}, CE={metrics['coexpression_rate']:.3f}"
+        f"✓ Laminar inference: I(L;z)={metrics['mutual_information']:.3f}, "
+        f"CE={metrics['coexpression_rate']:.3f}"
     )
 
 
@@ -401,7 +404,12 @@ GOLDEN_REFERENCE = {
 # RUN ALL TESTS
 # ============================================================================
 
-if __name__ == "__main__":
+
+def main() -> int:
+    if not __debug__:
+        print("Golden tests require Python assertions to be enabled.", file=sys.stderr)
+        return 1
+
     print("=" * 70)
     print("GOLDEN TEST SUITE - CA1 HIPPOCAMPUS")
     print("=" * 70)
@@ -441,3 +449,8 @@ if __name__ == "__main__":
         print("⚠ Check implementation for regressions")
 
     print(f"{'='*70}\n")
+    return int(failed != 0)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

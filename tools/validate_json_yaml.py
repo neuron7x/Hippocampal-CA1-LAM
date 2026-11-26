@@ -6,7 +6,7 @@ Validates all JSON and YAML files in the repository for correct syntax.
 Additionally validates GitHub Issue Form files for required structure.
 
 This script uses only Python standard library for JSON.
-For YAML, it attempts to use PyYAML if available, otherwise skips YAML validation.
+YAML validation requires PyYAML.
 
 Exit codes:
   0 - All files valid
@@ -22,6 +22,7 @@ import json
 import os
 import subprocess
 import sys
+from pathlib import Path
 
 # Type hints: Using built-in generics for Python 3.9+ compatibility
 
@@ -35,24 +36,23 @@ except ImportError:
 
 
 def get_git_tracked_files(repo_path: str) -> list[str]:
-    """Get list of git-tracked files in the repository."""
-    try:
+    """List tracked files in a checkout, or all source files in an archive."""
+    root = Path(repo_path).resolve()
+    if any(os.path.lexists(path / ".git") for path in (root, *root.parents)):
         result = subprocess.run(
-            ["git", "ls-files"], cwd=repo_path, capture_output=True, text=True, check=True
+            ["git", "ls-files", "-z"], cwd=root, capture_output=True, check=True
         )
-        stdout = result.stdout.strip()
-        if not stdout:
-            return []
-        return [os.path.join(repo_path, f) for f in stdout.split("\n") if f]
-    except subprocess.CalledProcessError:
-        # Fallback: walk directory
-        files = []
-        for root, _, filenames in os.walk(repo_path):
-            if ".git" in root:
-                continue
-            for filename in filenames:
-                files.append(os.path.join(root, filename))
-        return files
+        return [str(root / os.fsdecode(path)) for path in result.stdout.split(b"\0") if path]
+
+    def raise_walk_error(exc: OSError) -> None:
+        raise exc
+
+    files = []
+    for directory, subdirectories, filenames in os.walk(root, onerror=raise_walk_error):
+        if ".git" in subdirectories:
+            subdirectories.remove(".git")
+        files.extend(os.path.join(directory, name) for name in filenames)
+    return files
 
 
 def validate_json_file(filepath: str) -> list[str]:
@@ -63,7 +63,7 @@ def validate_json_file(filepath: str) -> list[str]:
             json.load(f)
     except json.JSONDecodeError as e:
         errors.append(f"JSON parse error: line {e.lineno}, column {e.colno}: {e.msg}")
-    except OSError as e:
+    except (OSError, UnicodeError) as e:
         errors.append(f"Cannot read file: {e}")
     return errors
 
@@ -71,7 +71,7 @@ def validate_json_file(filepath: str) -> list[str]:
 def validate_yaml_file(filepath: str) -> list[str]:
     """Validate a YAML file. Returns list of error messages."""
     if not YAML_AVAILABLE:
-        return []  # Skip if PyYAML not available
+        return ["PyYAML is required to validate YAML"]
 
     errors = []
     try:
@@ -80,7 +80,7 @@ def validate_yaml_file(filepath: str) -> list[str]:
             yaml.safe_load(f)
     except yaml.YAMLError as e:
         errors.append(f"YAML parse error: {e}")
-    except OSError as e:
+    except (OSError, UnicodeError) as e:
         errors.append(f"Cannot read file: {e}")
     return errors
 
@@ -120,7 +120,7 @@ def validate_issue_form(filepath: str, content: dict) -> list[str]:
 def validate_yaml_with_structure(filepath: str, repo_path: str) -> list[str]:
     """Validate YAML file and check Issue Form structure if applicable."""
     if not YAML_AVAILABLE:
-        return []
+        return ["PyYAML is required to validate YAML"]
 
     errors = []
     try:
@@ -129,18 +129,14 @@ def validate_yaml_with_structure(filepath: str, repo_path: str) -> list[str]:
     except yaml.YAMLError as e:
         errors.append(f"YAML parse error: {e}")
         return errors
-    except OSError as e:
+    except (OSError, UnicodeError) as e:
         errors.append(f"Cannot read file: {e}")
         return errors
 
     # Check if this is an Issue Form file
-    rel_path = os.path.relpath(filepath, repo_path)
-    if rel_path.startswith(".github/ISSUE_TEMPLATE/") and rel_path.endswith(".yml"):
-        # Skip config.yml which is not an issue form
-        basename = os.path.basename(filepath)
-        if basename != "config.yml":
-            form_errors = validate_issue_form(filepath, content)
-            errors.extend(form_errors)
+    rel_path = Path(os.path.relpath(filepath, repo_path))
+    if rel_path.parts[:2] == (".github", "ISSUE_TEMPLATE") and rel_path.stem != "config":
+        errors.extend(validate_issue_form(filepath, content))
 
     return errors
 
@@ -154,15 +150,22 @@ def main() -> int:
         print(f"Error: {repo_path} is not a directory", file=sys.stderr)
         return 1
 
-    print(f"Validating JSON and YAML files in {repo_path}...")
     if not YAML_AVAILABLE:
-        print("Warning: PyYAML not installed. YAML validation will be skipped.")
-    print()
+        print("Error: PyYAML is required to validate YAML", file=sys.stderr)
+        return 1
 
-    files = get_git_tracked_files(repo_path)
+    print(f"Validating JSON and YAML files in {repo_path}...\n")
+    try:
+        files = get_git_tracked_files(repo_path)
+    except (OSError, subprocess.CalledProcessError) as exc:
+        print(f"Error: cannot list configuration files: {exc}", file=sys.stderr)
+        return 1
 
-    json_files = [f for f in files if f.endswith(".json")]
-    yaml_files = [f for f in files if f.endswith(".yml") or f.endswith(".yaml")]
+    json_files = [f for f in files if f.lower().endswith(".json")]
+    yaml_files = [f for f in files if f.lower().endswith((".yml", ".yaml"))]
+    if not json_files and not yaml_files:
+        print("Error: no JSON or YAML files found", file=sys.stderr)
+        return 1
 
     total_errors = 0
     files_with_errors = 0

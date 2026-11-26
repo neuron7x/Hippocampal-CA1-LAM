@@ -24,7 +24,9 @@ except ImportError as exc:  # pragma: no cover - surfaced in CI
 
 
 WORKFLOW_DIR = Path(".github/workflows")
-SHA_PATTERN = re.compile(r"^[0-9a-fA-F]{40}$")
+SHA_PATTERN = re.compile(r"[0-9a-fA-F]{40}")
+DOCKER_DIGEST_PATTERN = re.compile(r"[^\s@]+@sha256:[0-9a-f]{64}")
+BOOLEAN_TAG = "tag:yaml.org,2002:bool"
 RUNNER_PATH_PATTERN = re.compile(
     r"(/__w/)|(\${{\s*runner\.temp\s*}})|(\$RUNNER_TEMP)|(\${RUNNER_TEMP})",
     re.IGNORECASE,
@@ -32,16 +34,17 @@ RUNNER_PATH_PATTERN = re.compile(
 CHMOD_PATTERN = re.compile(r"\b(?:sudo\s+)?(?:chmod|chown)\b", re.IGNORECASE)
 
 
-def load_yaml(path: Path) -> dict[str, Any] | None:
-    try:
-        with path.open("r", encoding="utf-8") as handle:
-            return yaml.safe_load(handle)
-    except yaml.YAMLError as exc:
-        print(f"{path}:1:1 YAML parse error: {exc}")
-        return None
-    except OSError as exc:
-        print(f"{path}:1:1 Cannot read file: {exc}")
-        return None
+class WorkflowLoader(yaml.SafeLoader):
+    """Resolve true/false as booleans while keeping bare workflow keys as strings."""
+
+
+WorkflowLoader.yaml_implicit_resolvers = {
+    first: [(tag, pattern) for tag, pattern in rules if tag != BOOLEAN_TAG]
+    for first, rules in yaml.SafeLoader.yaml_implicit_resolvers.items()
+}
+WorkflowLoader.add_implicit_resolver(
+    BOOLEAN_TAG, re.compile(r"^(?:true|false)$", re.IGNORECASE), "tTfF"
+)
 
 
 def find_line_number(lines: list[str], needle: str) -> int:
@@ -51,84 +54,78 @@ def find_line_number(lines: list[str], needle: str) -> int:
     return 1
 
 
-def find_trigger_line(lines: list[str], trigger: str) -> int:
-    pattern = re.compile(rf"^\s*-?\s*{re.escape(trigger)}\b", re.IGNORECASE)
-    for idx, line in enumerate(lines, start=1):
-        stripped = line.lstrip()
-        if stripped.startswith("#"):
-            continue
-        if pattern.search(stripped):
-            return idx
-    return 1
-
-
 def is_pinned(uses_value: str) -> bool:
     if uses_value.startswith("./"):
-        # Local composite actions are trusted to be reviewed as part of the repo
-        return True
+        return len(uses_value) > 2
     if uses_value.startswith("docker://"):
-        return "@sha256:" in uses_value
-    if "@" not in uses_value:
-        return False
-    ref = uses_value.split("@", 1)[1]
-    return bool(SHA_PATTERN.fullmatch(ref))
+        return bool(DOCKER_DIGEST_PATTERN.fullmatch(uses_value.removeprefix("docker://")))
+    action, _, ref = uses_value.partition("@")
+    return bool(action and SHA_PATTERN.fullmatch(ref))
 
 
 def extract_triggers(on_field: Any) -> set[str]:
-    triggers: set[str] = set()
     if isinstance(on_field, str):
-        triggers.add(on_field)
-    elif isinstance(on_field, list):
-        for item in on_field:
-            if isinstance(item, str):
-                triggers.add(item)
-    elif isinstance(on_field, dict):
-        triggers.update(on_field.keys())
-    return triggers
+        return {on_field}
+    if isinstance(on_field, (list, dict)) and all(isinstance(item, str) for item in on_field):
+        return set(on_field)
+    return set()
 
 
 def check_workflow(path: Path) -> list[str]:
-    issues: list[str] = []
-    content = path.read_text(encoding="utf-8").splitlines()
-    data = load_yaml(path)
-    if data is None:
-        return issues if issues else [f"{path}:1:1 Failed to parse workflow"]
+    try:
+        content = path.read_text(encoding="utf-8")
+        data = yaml.load(content, Loader=WorkflowLoader)
+    except (OSError, UnicodeError, yaml.YAMLError) as exc:
+        return [f"{path}:1:1 Cannot read workflow: {exc}"]
+    if not isinstance(data, dict):
+        return [f"{path}:1:1 Workflow must be a mapping"]
 
-    # Enforce explicit permissions
-    if not isinstance(data, dict) or "permissions" not in data:
+    lines = content.splitlines()
+    issues: list[str] = []
+    if "permissions" not in data:
         issues.append(f"{path}:1:1 Missing top-level permissions block")
 
-    # Block pull_request_target usage
-    triggers = extract_triggers(data.get("on", {})) if isinstance(data, dict) else set()
+    triggers = extract_triggers(data.get("on"))
+    if not triggers:
+        issues.append(f"{path}:1:1 Missing or invalid workflow triggers")
     if "pull_request_target" in triggers:
-        line_no = find_trigger_line(content, "pull_request_target")
+        line_no = find_line_number(lines, "pull_request_target")
         issues.append(f"{path}:{line_no}: pull_request_target trigger is disallowed")
 
-    # Validate jobs/steps for pinned actions and chmod/chown
-    jobs = data.get("jobs", {}) if isinstance(data, dict) else {}
-    if isinstance(jobs, dict):
-        for job in jobs.values():
-            if not isinstance(job, dict):
-                continue
-            steps = job.get("steps", [])
-            if not isinstance(steps, list):
-                continue
-            for step in steps:
-                if not isinstance(step, dict):
-                    continue
-                uses_value = step.get("uses")
-                if isinstance(uses_value, str) and not is_pinned(uses_value):
-                    line_no = find_line_number(content, uses_value)
-                    issues.append(f"{path}:{line_no}: action '{uses_value}' is not pinned to a SHA")
+    jobs = data.get("jobs")
+    if not isinstance(jobs, dict) or not jobs:
+        return issues + [f"{path}:1:1 Workflow must declare at least one job"]
 
-                run_value = step.get("run")
-                if isinstance(run_value, str):
-                    for line in run_value.splitlines():
-                        if CHMOD_PATTERN.search(line) and RUNNER_PATH_PATTERN.search(line):
-                            line_no = find_line_number(content, line.strip())
-                            issues.append(
-                                f"{path}:{line_no}: disallowed chmod/chown on runner workspace/temp"
-                            )
+    def check_uses(entry: dict) -> None:
+        if "uses" not in entry:
+            return
+        value = entry["uses"]
+        if not isinstance(value, str) or not is_pinned(value):
+            line_no = find_line_number(lines, str(value))
+            issues.append(f"{path}:{line_no}: action or workflow {value!r} is not pinned to a SHA")
+
+    for job_id, job in jobs.items():
+        if not isinstance(job, dict):
+            issues.append(f"{path}:1:1 Job {job_id!r} must be a mapping")
+            continue
+        check_uses(job)
+        steps = job.get("steps", [])
+        if not isinstance(steps, list):
+            issues.append(f"{path}:1:1 Job {job_id!r} steps must be a list")
+            continue
+        for step in steps:
+            if not isinstance(step, dict):
+                issues.append(f"{path}:1:1 Job {job_id!r} step must be a mapping")
+                continue
+            check_uses(step)
+            run_value = step.get("run")
+            if isinstance(run_value, str):
+                for line in run_value.splitlines():
+                    if CHMOD_PATTERN.search(line) and RUNNER_PATH_PATTERN.search(line):
+                        line_no = find_line_number(lines, line.strip())
+                        issues.append(
+                            f"{path}:{line_no}: disallowed chmod/chown on runner workspace/temp"
+                        )
 
     return issues
 
@@ -139,6 +136,10 @@ def main() -> int:
         return 1
 
     workflow_files = sorted(WORKFLOW_DIR.glob("*.yml")) + sorted(WORKFLOW_DIR.glob("*.yaml"))
+
+    if not workflow_files:
+        print("No GitHub Actions workflow files found", file=sys.stderr)
+        return 1
 
     violations: list[str] = []
     for wf in workflow_files:
