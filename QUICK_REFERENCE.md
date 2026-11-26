@@ -110,7 +110,7 @@ python test_golden_standalone.py
 **Рішення**: `chmod +x *.sh` + повторити
 
 **Проблема**: Python не знайдено  
-**Рішення**: Встановити Python 3.8+ з python.org
+**Рішення**: Встановити Python 3.11+ з python.org
 
 **Проблема**: Тести не проходять  
 **Рішення**: `pip install -r requirements.txt --force-reinstall`

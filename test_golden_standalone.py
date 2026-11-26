@@ -4,12 +4,8 @@ Run: python test_golden_standalone.py
 """
 
 import sys
-from pathlib import Path
 
 import numpy as np
-
-# Setup path
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
 GOLDEN_SEED = 42
 
@@ -172,7 +168,6 @@ def test_input_specific():
     connectivity[0, 1] = True  # CA3
     connectivity[0, 2] = True  # EC
 
-    layer_assignments = np.zeros(N, dtype=int)
     initial_weights = np.ones((N, N))
 
     source_types = np.full((N, N), InputSource.LOCAL.value, dtype=object)
@@ -305,7 +300,12 @@ def test_reproducibility():
 # RUN ALL
 # ============================================================================
 
-if __name__ == "__main__":
+
+def main() -> int:
+    if not __debug__:
+        print("Golden tests require Python assertions to be enabled.", file=sys.stderr)
+        return 1
+
     print("=" * 70)
     print("GOLDEN TEST SUITE - CA1 HIPPOCAMPUS")
     print("=" * 70)
@@ -354,3 +354,8 @@ if __name__ == "__main__":
         print(f"✗ {failed} TESTS FAILED")
 
     print(f"{'='*70}\n")
+    return int(failed != 0)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

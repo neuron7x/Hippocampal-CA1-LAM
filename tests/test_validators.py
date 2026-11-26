@@ -361,9 +361,9 @@ class TestCA1Validator:
 
     def test_results_stored(self, validator, full_model_data):
         """Test results are stored in validator"""
-        validator.run_all_gates(full_model_data)
+        result = validator.run_all_gates(full_model_data)
 
-        assert validator.results == validator.results
+        assert validator.results == result
         assert len(validator.results) > 0
 
 

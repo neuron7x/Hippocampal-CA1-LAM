@@ -15,7 +15,7 @@ Key improvements:
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Literal, Optional, Tuple, Union, overload
 
 import numpy as np
 
@@ -77,7 +77,7 @@ class NetworkStateController:
         self._previous_state = self.state
 
         # State history
-        self.state_history = []
+        self.state_history: List[NetworkState] = []
 
         # Neuromodulation
         self.ACh_level = self.p.ACh_theta
@@ -230,7 +230,7 @@ class ReplayDetector:
         self.baseline_rate = 0.0
         self.in_candidate = False
         self.candidate_start = 0.0
-        self.candidate_spikes = []
+        self.candidate_spikes: List[Tuple[float, int]] = []
 
     def update_baseline(self, spike_count: int, window: float = 100.0):
         """Update baseline rate (during theta)"""
@@ -330,9 +330,23 @@ class ReplayDetector:
 # ============================================================================
 
 
+@overload
+def validate_replay_vs_template(
+    replay_sequence: List[int],
+    template_sequence: List[int],
+    method: Literal["spearman", "jaccard"] = "spearman",
+) -> Tuple[float, float]: ...
+
+
+@overload
+def validate_replay_vs_template(
+    replay_sequence: List[int], template_sequence: List[int], method: str
+) -> Optional[Tuple[float, float]]: ...
+
+
 def validate_replay_vs_template(
     replay_sequence: List[int], template_sequence: List[int], method: str = "spearman"
-) -> Tuple[float, float]:
+) -> Optional[Tuple[float, float]]:
     """
     Validate replay against template sequence
 
@@ -344,6 +358,7 @@ def validate_replay_vs_template(
     Returns:
         correlation: Sequence similarity metric
         p_value: Statistical significance
+        None for an unsupported method when at least three neurons overlap.
     """
     # Find common neurons
     common = set(replay_sequence) & set(template_sequence)
@@ -367,15 +382,16 @@ def validate_replay_vs_template(
     elif method == "jaccard":
         # Jaccard similarity of top-k
         k = min(5, len(common))
-        top_r = set(sorted(rank_replay, key=rank_replay.get)[:k])
-        top_t = set(sorted(rank_template, key=rank_template.get)[:k])
+        top_r = set(sorted(rank_replay, key=rank_replay.__getitem__)[:k])
+        top_t = set(sorted(rank_template, key=rank_template.__getitem__)[:k])
         jaccard = len(top_r & top_t) / len(top_r | top_t)
         return jaccard, 0.0  # No p-value for Jaccard
+    return None
 
 
 def compute_replay_metrics(
     replay_events: List[ReplayEvent], template_sequences: List[List[int]]
-) -> Dict[str, float]:
+) -> Dict[str, Union[float, np.floating]]:
     """
     Compute replay quality metrics
 

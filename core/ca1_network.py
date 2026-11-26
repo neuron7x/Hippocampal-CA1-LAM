@@ -95,10 +95,10 @@ class CA1Network:
         spikes = self._last_result.spikes
         t = self._last_result.time
 
-        spike_times, neuron_ids = np.nonzero(spikes)
+        spike_times_by_neuron = [t[spikes[:, neuron]] for neuron in range(self.N)]
         plt.eventplot(
-            positions=t[spike_times],
-            lineoffsets=neuron_ids,
+            positions=spike_times_by_neuron,
+            lineoffsets=list(range(self.N)),
             linelengths=0.8,
             colors="black",
         )

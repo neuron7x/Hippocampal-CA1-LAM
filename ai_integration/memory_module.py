@@ -16,7 +16,7 @@ Mechanisms:
 
 import json
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
@@ -114,7 +114,9 @@ class CA1MemoryModule:
 
         return key
 
-    def store(self, h_t: np.ndarray, v_t: np.ndarray, novelty: float = 1.0) -> int:
+    def store(
+        self, h_t: np.ndarray, v_t: np.ndarray, novelty: float = 1.0
+    ) -> Union[int, np.signedinteger]:
         """
         Store event in memory
 
@@ -139,6 +141,7 @@ class CA1MemoryModule:
         )
 
         # Find slot
+        slot_id: Union[int, np.signedinteger]
         if self.n_stored < self.p.memory_size:
             # Fill empty slot
             slot_id = self.n_stored
@@ -172,21 +175,21 @@ class CA1MemoryModule:
         q_key = self.encode_event(q_t, include_phase=False)
 
         # Compute similarities
-        similarities = []
-        valid_indices = []
+        similarity_scores = []
+        populated_slots = []
 
         for i, entry in enumerate(self.memory):
             if entry is not None:
                 sim = np.dot(q_key, entry.key)
-                similarities.append(sim)
-                valid_indices.append(i)
+                similarity_scores.append(sim)
+                populated_slots.append(i)
 
-        if not similarities:
+        if not similarity_scores:
             # No memories
             return np.zeros(self.p.d_model), []
 
-        similarities = np.array(similarities)
-        valid_indices = np.array(valid_indices)
+        similarities = np.array(similarity_scores)
+        valid_indices = np.array(populated_slots)
 
         # Top-k
         k = min(top_k, len(similarities))
@@ -394,7 +397,7 @@ class LLMWithCA1Memory:
             rng: Optional numpy random generator for reproducibility
         """
         self.memory = CA1MemoryModule(params, rng=rng)
-        self.position_history = []  # For novelty computation
+        self.position_history: List[np.ndarray] = []  # For novelty computation
 
     def process_step(self, h_t: np.ndarray, v_t: np.ndarray, position: Optional[np.ndarray] = None):
         """

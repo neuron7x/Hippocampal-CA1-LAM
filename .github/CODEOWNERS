@@ -10,7 +10,10 @@
 # Security configurations
 SECURITY.md @neuron7x
 .gitleaks.toml @neuron7x
-.github/markdown-link-check-config.json @neuron7x
+.github/CODEOWNERS @neuron7x
+.github/dependabot.yml @neuron7x
+ci/ @neuron7x
+scripts/ @neuron7x
 
 # Security and validation tools
 tools/ @neuron7x

@@ -8,7 +8,7 @@
 
 Перед початком переконайтеся, що у вас є:
 
-- ✅ **Python 3.10 або новіше** ([завантажити](https://www.python.org/downloads/))
+- ✅ **Python 3.11 або новіше** ([завантажити](https://www.python.org/downloads/))
 - ✅ **Git** ([завантажити](https://git-scm.com/downloads)) - опційно, для GitHub
 - ✅ **Terminal/Command Prompt** - вбудовано в OS
 - ✅ **4 GB RAM** (рекомендовано 16 GB)
@@ -24,7 +24,7 @@ python3 --version
 python --version
 ```
 
-Має бути Python 3.10 або новіше.
+Має бути Python 3.11 або новіше.
 
 ---
 
@@ -348,7 +348,7 @@ python utils/create_release.py            # Створити реліз
 
 Перевірте що все працює:
 
-- [ ] Python 3.10+ встановлено
+- [ ] Python 3.11+ встановлено
 - [ ] Віртуальне середовище створено
 - [ ] Залежності встановлені
 - [ ] Golden tests проходять (6/6)

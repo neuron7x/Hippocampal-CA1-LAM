@@ -14,7 +14,7 @@ Complete installation instructions for all platforms.
 ### Recommended
 
 - **OS**: Ubuntu 22.04 LTS or macOS 13+
-- **Python**: 3.10+
+- **Python**: 3.11+
 - **RAM**: 16 GB (for large simulations)
 - **Disk**: 2 GB
 

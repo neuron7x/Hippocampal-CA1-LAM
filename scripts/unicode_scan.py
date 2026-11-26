@@ -2,8 +2,8 @@
 """
 Unicode security scanner for Trojan Source and invisible control characters.
 
-Scans git-tracked text files for bidirectional controls, zero-width characters,
-and any other Unicode format characters (category Cf) that are not allowlisted.
+Scans git-tracked text files for dangerous control characters, bidi controls,
+zero-width characters and other non-allowlisted Unicode format characters (Cf).
 It reuses the base constants from tools/unicode_lint while enforcing the
 security gate's stricter Cf detection.
 
@@ -30,30 +30,20 @@ except ImportError as exc:  # pragma: no cover - surfaced in CI
     raise SystemExit(f"Unable to import tools/unicode_lint: {exc}") from exc
 
 
-TARGET_EXTENSIONS = set(unicode_lint.TEXT_EXTENSIONS).union({".gitignore"})
-
-# Bidirectional control characters (CVE-2021-42574)
-BIDI_CODEPOINTS = set(unicode_lint.BIDI_CHARS)
-
-# Zero-width and invisible characters (adds U+2060 WORD JOINER to the base set)
-ZERO_WIDTH_CODEPOINTS = set(unicode_lint.ZERO_WIDTH_CHARS) | {0x2060}
+DANGEROUS_CODEPOINTS = unicode_lint.DANGEROUS_CHARS | {0x2060}  # WORD JOINER
 
 # Allowlisted Unicode format characters (none by default)
 ALLOWLIST_CF: set[int] = set()
 
 
 def get_tracked_files() -> list[str]:
-    """Return git-tracked files."""
-    try:
-        result = subprocess.run(["git", "ls-files"], capture_output=True, text=True, check=True)
-    except subprocess.CalledProcessError as exc:  # pragma: no cover - git absent
-        print(f"Error: git ls-files failed: {exc}", file=sys.stderr)
-        return []
-    return [line.strip() for line in result.stdout.splitlines() if line.strip()]
+    """Return paths relative to the current directory."""
+    result = subprocess.run(["git", "ls-files", "-z"], capture_output=True, check=True)
+    return [os.fsdecode(path) for path in result.stdout.split(b"\0") if path]
 
 
 def is_target_file(path: str) -> bool:
-    return os.path.splitext(path)[1] in TARGET_EXTENSIONS
+    return Path(path).name == ".gitignore" or unicode_lint.should_scan_file(path)
 
 
 def highlight_snippet(line: str, column_index: int) -> str:
@@ -72,8 +62,7 @@ def scan_line(path: str, line: str, line_no: int) -> Iterable[str]:
         category = unicodedata.category(ch)
 
         if (
-            codepoint in BIDI_CODEPOINTS
-            or codepoint in ZERO_WIDTH_CODEPOINTS
+            codepoint in DANGEROUS_CODEPOINTS
             or (category == "Cf" and codepoint not in ALLOWLIST_CF)
         ):
             name = unicodedata.name(ch, "<unknown>")
@@ -95,12 +84,20 @@ def scan_file(path: str) -> list[str]:
 
 
 def main() -> int:
-    repo_files = get_tracked_files()
-    findings: list[str] = []
+    try:
+        repo_files = get_tracked_files()
+    except (OSError, subprocess.CalledProcessError) as exc:
+        print(f"Error: git ls-files failed: {exc}", file=sys.stderr)
+        return 1
 
-    for file_path in repo_files:
-        if is_target_file(file_path):
-            findings.extend(scan_file(file_path))
+    targets = [path for path in repo_files if is_target_file(path)]
+    if not targets:
+        print("Error: no tracked text files found", file=sys.stderr)
+        return 1
+
+    findings: list[str] = []
+    for file_path in targets:
+        findings.extend(scan_file(file_path))
 
     if findings:
         print("Detected prohibited Unicode characters:")
@@ -108,7 +105,7 @@ def main() -> int:
             print(finding)
         return 1
 
-    print("No prohibited Unicode characters found.")
+    print(f"No prohibited Unicode characters found in {len(targets)} tracked files.")
     return 0
 
 

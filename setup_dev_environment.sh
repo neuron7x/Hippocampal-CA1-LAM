@@ -12,8 +12,8 @@ echo "========================================================================"
 echo ""
 
 # Check Python
-if ! command -v python3 &> /dev/null; then
-    echo "❌ Python 3 не знайдено!"
+if ! python3 -c 'import sys; sys.exit(sys.version_info < (3, 11))' 2>/dev/null; then
+    echo "❌ Потрібен Python 3.11 або новіший."
     exit 1
 fi
 

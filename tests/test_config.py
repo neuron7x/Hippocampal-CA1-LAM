@@ -128,9 +128,72 @@ class TestConfigValidation:
 
         assert any("weight_min" in e and "weight_max" in e for e in errors)
 
+    @pytest.mark.parametrize("value", [float("nan"), float("inf"), float("-inf")])
+    @pytest.mark.parametrize(
+        "name",
+        [
+            "n_neurons",
+            "n_layers",
+            "seed",
+            "dt",
+            "duration_ms",
+            "connection_probability",
+            "weight_min",
+            "weight_max",
+            "spectral_radius_target",
+            "learning_rate",
+            "weight_decay",
+            "theta_frequency",
+        ],
+    )
+    def test_nonfinite_core_number_fails(self, name: str, value: float) -> None:
+        config = ExperimentConfig.from_dict({"core": {name: value}})
+
+        assert validate_config(config) == [f"{name} must be a finite number"]
+
+    def test_nonfinite_checkpoint_interval_fails(self) -> None:
+        config = ExperimentConfig.from_dict({"checkpoint_interval": float("inf")})
+
+        assert validate_config(config) == ["checkpoint_interval must be a finite number"]
+
+    def test_reports_nonnumeric_values_and_unrelated_range_errors(self) -> None:
+        config = ExperimentConfig.from_dict(
+            {"core": {"dt": "0.1", "weight_max": None, "weight_min": -1.0}}
+        )
+
+        assert validate_config(config) == [
+            "dt must be a finite number",
+            "weight_max must be a finite number",
+            "weight_min must be non-negative, got -1.0",
+        ]
+
+    def test_finite_boundary_values_and_large_integer_seed_pass(self) -> None:
+        config = ExperimentConfig(
+            core=CoreConfig(
+                seed=10**400, weight_min=0, connection_probability=1, theta_frequency=20
+            )
+        )
+
+        assert validate_config(config) == []
+
 
 class TestConfigIO:
     """Test configuration I/O."""
+
+    @pytest.mark.parametrize(
+        ("filename", "contents", "field"),
+        [
+            ("config.yaml", "core: {weight_min: .nan}", "weight_min"),
+            ("config.json", '{"core": {"duration_ms": 1e400}}', "duration_ms"),
+        ],
+    )
+    def test_loaded_nonfinite_values_fail_validation(
+        self, tmp_path: Path, filename: str, contents: str, field: str
+    ) -> None:
+        path = tmp_path / filename
+        path.write_text(contents, encoding="utf-8")
+
+        assert validate_config(load_config(path)) == [f"{field} must be a finite number"]
 
     def test_save_and_load_json(self) -> None:
         """Config saves and loads from JSON."""

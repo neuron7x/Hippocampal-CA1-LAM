@@ -14,7 +14,7 @@ Based on:
 """
 
 from dataclasses import dataclass
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import numpy as np
 from scipy.sparse import csr_matrix
@@ -33,7 +33,7 @@ class CellDataHier:
     z: float  # Depth (laminar axis)
     s: float  # Longitudinal axis
     transcripts: np.ndarray  # [4] counts
-    neighbors: List[int] = None  # Neighbor cell IDs for MRF
+    neighbors: Optional[List[int]] = None  # Neighbor cell IDs for MRF
 
 
 class HierarchicalLaminarModel:
@@ -73,7 +73,7 @@ class HierarchicalLaminarModel:
         self.layer_prior = np.ones(n_layers) / n_layers
 
         # Animal-specific slopes (will be learned)
-        self.beta_animals = {}  # {animal_id: [n_layers, n_markers]}
+        self.beta_animals: Dict[int, np.ndarray] = {}  # {animal_id: [n_layers, n_markers]}
 
     def mu(self, layer: int, marker: int, z: float, s: float, animal_id: int) -> float:
         """
@@ -127,12 +127,13 @@ class HierarchicalLaminarModel:
         Returns:
             Log prior contribution
         """
-        if cells[cell_idx].neighbors is None or len(cells[cell_idx].neighbors) == 0:
+        neighbors = cells[cell_idx].neighbors
+        if neighbors is None or len(neighbors) == 0:
             return 0.0
 
         # Sum of neighbor probabilities for this layer
         neighbor_agreement = 0.0
-        for neighbor_idx in cells[cell_idx].neighbors:
+        for neighbor_idx in neighbors:
             neighbor_agreement += q[neighbor_idx, layer]
 
         return self.lambda_mrf * neighbor_agreement
