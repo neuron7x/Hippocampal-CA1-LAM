@@ -31,6 +31,7 @@ class MemoryEntry:
     timestamp: float  # Time of encoding
     novelty: float  # Novelty at encoding [0, 1]
     access_count: int = 0  # Number of retrievals
+    source_h: Optional[np.ndarray] = None  # Hidden state used to encode the key
 
 
 class CA1MemoryModule:
@@ -100,14 +101,15 @@ class CA1MemoryModule:
         Returns:
             key: [key_dim] normalized key
         """
-        # Linear projection
+        theta_phase = self.theta_phase if include_phase else None
+        return self._encode_at_phase(h_t, theta_phase)
+
+    def _encode_at_phase(self, h_t: np.ndarray, theta_phase: Optional[float]) -> np.ndarray:
         key = self.W_encoder @ h_t
 
-        # Add phase encoding (optional)
-        if include_phase and self.p.use_phase_key:
-            # Replace last 2 dims with cos/sin phase
-            key[-2] = np.cos(self.theta_phase)
-            key[-1] = np.sin(self.theta_phase)
+        if theta_phase is not None and self.p.use_phase_key:
+            key[-2] = np.cos(theta_phase)
+            key[-1] = np.sin(theta_phase)
 
         # Normalize
         key = key / (np.linalg.norm(key) + 1e-8)
@@ -138,6 +140,7 @@ class CA1MemoryModule:
             theta_phase=self.theta_phase,
             timestamp=0.0,  # Will be set externally
             novelty=novelty,
+            source_h=h_t.copy(),
         )
 
         # Find slot
@@ -155,7 +158,11 @@ class CA1MemoryModule:
         return slot_id
 
     def retrieve(
-        self, q_t: np.ndarray, top_k: Optional[int] = None
+        self,
+        q_t: np.ndarray,
+        top_k: Optional[int] = None,
+        *,
+        theta_phase: Optional[float] = None,
     ) -> Tuple[np.ndarray, List[int]]:
         """
         Retrieve top-k similar memories
@@ -163,6 +170,7 @@ class CA1MemoryModule:
         Args:
             q_t: [d_model] Query (LLM hidden state)
             top_k: Number of memories to retrieve
+            theta_phase: Optional query phase in radians. Omit for phase-blind retrieval.
 
         Returns:
             retrieved: [d_model] Fused retrieved content
@@ -171,8 +179,9 @@ class CA1MemoryModule:
         if top_k is None:
             top_k = self.p.top_k
 
-        # Encode query
-        q_key = self.encode_event(q_t, include_phase=False)
+        if theta_phase is not None and self.p.use_phase_key and not np.isfinite(theta_phase):
+            raise ValueError("theta_phase must be finite")
+        q_key = self._encode_at_phase(q_t, theta_phase)
 
         # Compute similarities
         similarity_scores = []
@@ -274,11 +283,20 @@ class CA1MemoryModule:
 
         Returns:
             replayed_indices: List of memory indices replayed
+
+        Raises:
+            ValueError: A stored key lacks a source state for re-encoding.
         """
         valid_entries = [(i, m) for i, m in enumerate(self.memory) if m is not None]
 
-        if not valid_entries:
+        if not valid_entries or n_episodes == 0:
             return []
+
+        sources = []
+        for index, entry in valid_entries:
+            if entry.source_h is None:
+                raise ValueError(f"cannot replay: stored key is missing source_h at slot {index}")
+            sources.append((entry, entry.source_h))
 
         # Select episodes
         if selection_mode == "novelty":
@@ -299,16 +317,22 @@ class CA1MemoryModule:
                 len(valid_entries), size=min(n_episodes, len(valid_entries)), replace=False
             )
 
-        replayed = [valid_entries[i][0] for i in selected_idx]
+        replayed = [valid_entries[i] for i in selected_idx]
+        if not replayed:
+            return []
 
-        # Simulate replay (update weights via Ca²⁺-based learning)
-        # In full implementation, this would run actual plasticity updates
-        for idx in replayed:
-            entry = self.memory[idx]
-            # Hebbian-like update: strengthen key encoding
-            self.W_encoder += self.eta * np.outer(entry.key, entry.value[: self.p.d_model])
+        # The encoder expects d_model coordinates. Decode values stored in a smaller space.
+        for _, entry in replayed:
+            update_vector = entry.value[: self.p.d_model]
+            if update_vector.size < self.p.d_model:
+                update_vector = self.W_decoder @ entry.value
+            self.W_encoder += self.eta * np.outer(entry.key, update_vector)
 
-        return replayed
+        # Every stored key shares the final encoder, including entries not selected for replay.
+        for entry, source_h in sources:
+            entry.key = self._encode_at_phase(source_h, entry.theta_phase)
+
+        return [index for index, _ in replayed]
 
     def save(self, filepath: str):
         """Save memory to disk"""
@@ -330,6 +354,9 @@ class CA1MemoryModule:
                         "timestamp": entry.timestamp,
                         "novelty": entry.novelty,
                         "access_count": entry.access_count,
+                        "source_h": entry.source_h.tolist()
+                        if entry.source_h is not None
+                        else None,
                     }
                 )
             else:
@@ -351,6 +378,7 @@ class CA1MemoryModule:
         self.memory = []
         for entry_data in data["memory"]:
             if entry_data is not None:
+                source_h = entry_data.get("source_h")
                 entry = MemoryEntry(
                     key=np.array(entry_data["key"]),
                     value=np.array(entry_data["value"]),
@@ -358,6 +386,7 @@ class CA1MemoryModule:
                     timestamp=entry_data["timestamp"],
                     novelty=entry_data["novelty"],
                     access_count=entry_data["access_count"],
+                    source_h=np.array(source_h) if source_h is not None else None,
                 )
                 self.memory.append(entry)
             else:

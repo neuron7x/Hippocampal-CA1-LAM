@@ -81,11 +81,12 @@ format:
 
 lint:
 	@echo "🔍 Linting code..."
-	@python -m flake8 core data plasticity validation ai_integration setup.py \
+	@python -m flake8 core data plasticity validation ai_integration oracle setup.py \
 		test_golden_standalone.py scripts tools tests/test_ci_guards.py tests/test_golden_cli.py \
-		tests/test_pr_metadata.py tests/test_ca1_network_api.py tests/test_config.py
+		tests/test_pr_metadata.py tests/test_ca1_network_api.py tests/test_config.py \
+		tests/test_oracle.py test_oracle_standalone.py
 	@python -m mypy --check-untyped-defs --explicit-package-bases --ignore-missing-imports \
-		core data plasticity validation ai_integration
+		core data plasticity validation ai_integration oracle
 	@echo "✅ Linting complete"
 
 check: lint test

@@ -49,6 +49,7 @@ setup(
     entry_points={
         "console_scripts": [
             "ca1-test=test_golden_standalone:main",
+            "ca1-oracle=oracle.run_oracle:main",
         ],
     },
 )

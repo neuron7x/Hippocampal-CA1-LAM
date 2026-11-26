@@ -2,7 +2,7 @@
 
 `CI gate` succeeds when the Python matrix, static policy checks, and Git history scan all report success for the run's commit. Missing, skipped, cancelled, and failed results fail the gate. Every PR into `main` and every push to `main` receives a run without path filters. Matrix entries install independently resolved, hash-locked CI environments on Linux x86-64.
 
-- The Python 3.11–3.13 matrix runs `make test`, builds a wheel and source distribution, installs the wheel, executes `ca1-test` outside the checkout, and deserializes the repository's example YAML configuration through the installed package.
+- The Python 3.11–3.13 matrix runs `make test`, builds a wheel and source distribution, installs the wheel, executes `ca1-test` outside the checkout, deserializes the repository's example YAML configuration, and captures installed oracle reports for all three phase contexts.
 - Static checks cover Python packages and CI tooling, workflow policy, tracked JSON/YAML, tracked Unicode, and Markdown file links and anchors. The dependency audit checks all three locks and writes CycloneDX reports. Gitleaks scans the checked-out Git history and redacts findings.
 - `Validate PR metadata` reruns on description edits. It accepts the repository's PR template and requires verification evidence in its own section.
 - CodeQL advanced setup and external Markdown URLs have their own statuses. External URL checks run on `main`, on schedule, and on demand. HTTP errors and timeouts fail the external job. CodeQL requires enabled code scanning and available Actions runners in the canonical repository.

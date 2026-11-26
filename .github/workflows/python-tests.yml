@@ -66,10 +66,14 @@ jobs:
           config="$PWD/configs/base.yaml"
           cd "$RUNNER_TEMP"
           "$GITHUB_WORKSPACE/.venv/bin/ca1-test"
+          for context in matched absent opposite; do
+            "$GITHUB_WORKSPACE/.venv/bin/ca1-oracle" --seeds 24 --phase-context "$context" \
+              > "$GITHUB_WORKSPACE/dist/oracle-$context.txt"
+          done
           "$GITHUB_WORKSPACE/$python" -I -c \
             'import sys; from core.config import load_config; load_config(sys.argv[1])' "$config"
           cd "$GITHUB_WORKSPACE/dist"
-          sha256sum -- *.whl *.tar.gz > SHA256SUMS
+          sha256sum -- *.whl *.tar.gz oracle-*.txt > SHA256SUMS
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: ${{ !cancelled() }}
         with:

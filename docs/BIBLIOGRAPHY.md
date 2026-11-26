@@ -1,7 +1,7 @@
 # Hippocampal-CA1-LAM — Scientific Bibliography
 
 > **Version:** 2.0 | **Standard:** Hierarchical DOI-verified | **Verified:** 2026-03-31
-> **Repository:** [github.com/neuron7xLab/Hippocampal-CA1-LAM](https://github.com/neuron7xLab/Hippocampal-CA1-LAM)
+> **Repository:** [github.com/neuron7x/Hippocampal-CA1-LAM](https://github.com/neuron7x/Hippocampal-CA1-LAM)
 > **Role in NFI platform:** Biophysically accurate hippocampal CA1 memory model
 
 All parameters in this framework are extracted from peer-reviewed literature. This document provides complete bibliographic information with DOI links.
@@ -520,7 +520,7 @@ When using this framework in publications:
 1. **Cite the framework**:
    ```
    CA1 Hippocampus Framework v2.0 (2025)
-   https://github.com/neuron7xLab/Hippocampal-CA1-LAM
+   https://github.com/neuron7x/Hippocampal-CA1-LAM
    ```
 
 2. **Cite primary references** for mechanisms used:
